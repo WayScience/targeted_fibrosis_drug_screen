@@ -14,9 +14,13 @@ For this dataset, the Cell Painting staining switches the cytoplasmic RNA/nucleo
 - Mitochondria
 - F-actin
 
-![example_platemap](./metadata/platemap_fig/example_platemap.png)
+![example_platemap1_6](./metadata/platemap_fig/example_platemap1_6.png)
 
-> This plate map layout is the same for all 7 plates, but with different compounds. 
+> This plate map layout is the same for plates 1 through 6, but with different compounds.
+
+![example_platemap7](./metadata/platemap_fig/example_platemap7.png)
+
+> This plate map layout specifically for plate 7, and also has different compounds than the other plates.
 
 ## Environments
 
