@@ -11,43 +11,81 @@ if (!dir.exists(output_dir)) {
 }
 
 # path to one platemap file since all have same layout but different compounds
-platemap_file <- file.path("./target_screen_plate1.csv") 
+platemap_file_full <- file.path("./Target_Selective_Library_Screen_Plate_1.csv")
+platemap_file_partial <- file.path("./Target_Selective_Library_Screen_Plate_11.csv") 
 
-# Directory for example platemap figure
-output_fig <- file.path(output_dir, "example_platemap.png")
+# Directory for example platemap figures
+output_fig_full_plates <- file.path(output_dir, "example_platemap_full_plates.png")
+output_fig_partial_plate <- file.path(output_dir, "example_platemap_partial_plate.png")
 
-platemap_df <- readr::read_csv(
-    platemap_file,
+platemap_df_full <- readr::read_csv(
+    platemap_file_full,
     col_types = readr::cols(.default = "c")
 )
 
 # Add new column for "condition" to plot on platemap for DMSO versus compound
-platemap_df <- platemap_df %>%
+platemap_df_full <- platemap_df_full %>%
     mutate(condition = ifelse(treatment == "DMSO", "DMSO", 
-                              ifelse(grepl("^UCD", treatment), "compound", NA)))
+                              ifelse(grepl("^S", treatment), "compound", NA)))
 
-print(dim(platemap_df))
-head(platemap_df)
+print(dim(platemap_df_full))
+head(platemap_df_full)
 
-plate_replicate_gg <-
+platemap_df_partial <- readr::read_csv(
+    platemap_file_partial,
+    col_types = readr::cols(.default = "c")
+)
+
+# Add new column for "condition" to plot on platemap for DMSO versus compound
+platemap_df_partial <- platemap_df_partial %>%
+    mutate(condition = ifelse(treatment == "DMSO", "DMSO", 
+                              ifelse(grepl("^S", treatment), "compound", NA)))
+
+print(dim(platemap_df_partial))
+head(platemap_df_partial)
+
+plates_full_gg <-
     platetools::raw_map(
-        data = platemap_df$condition, # nolint
-        well = platemap_df$well_position,
+        data = platemap_df_full$condition, # nolint
+        well = platemap_df_full$well_position,
         plate = 96,
         size = 8
     ) +
-    ggtitle("Platemap layout for all plates") +
-    theme(plot.title = element_text(hjust = 0.75, size = 15, face = "bold")) +
-    ggplot2::geom_point(aes(shape = platemap_df$cell_type)) +
+    ggtitle("Platemap layout for plates 1 through 10 (full)") +
+    theme(plot.title = element_text(size = 15, face = "bold")) +
+    ggplot2::geom_point(aes(shape = platemap_df_full$cell_type)) +
     ggplot2::scale_shape_discrete(name = "Cell Type") +
     ggplot2::scale_fill_discrete(name = "Treatment")
 
 ggsave(
-    output_fig,
-    plate_replicate_gg,
+    output_fig_full_plates,
+    plates_full_gg,
     dpi = 500,
     height = 3.5,
     width = 6
 )
 
-plate_replicate_gg
+plates_full_gg
+
+plates_partial_gg <-
+    platetools::raw_map(
+        data = platemap_df_partial$condition, # nolint
+        well = platemap_df_partial$well_position,
+        plate = 96,
+        size = 8
+    ) +
+    ggtitle("Platemap layout for plate 11 (partial)") +
+    theme(plot.title = element_text(size = 15, face = "bold")) +
+    ggplot2::geom_point(aes(shape = platemap_df_partial$cell_type)) +
+    ggplot2::scale_shape_discrete(name = "Cell Type") +
+    ggplot2::scale_fill_discrete(name = "Treatment")
+
+ggsave(
+    output_fig_partial_plate,
+    plates_partial_gg,
+    dpi = 500,
+    height = 3.5,
+    width = 6
+)
+
+plates_partial_gg
