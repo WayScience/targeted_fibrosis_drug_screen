@@ -4,7 +4,7 @@ In this repository, we perform image analysis and image-based profiling on a car
 
 ## Plate map details
 
-There are a total of 7 plates with 550 compound treatments and two controls (DMSO treated failing and healthy cells).
+There are a total of 11 plates with 550 compound treatments and two controls (DMSO treated failing and healthy cells).
 
 For this dataset, the Cell Painting staining switches the cytoplasmic RNA/nucleoli stain for a specific F-action stain:
 
@@ -14,14 +14,13 @@ For this dataset, the Cell Painting staining switches the cytoplasmic RNA/nucleo
 - Mitochondria
 - F-actin
 
-![example_platemap1_6](./metadata/platemap_fig/example_platemap1_6.png)
+![example_platemap_full](./metadata/platemap_fig/example_platemap_full_plates.png)
 
-> This plate map layout is the same for plates 1 through 6, but with different compounds.
+> This plate map layout is the same for plates 1 through 11.
 
-![example_platemap7](./metadata/platemap_fig/example_platemap7.png)
+![example_platemap_partial](./metadata/platemap_fig/example_platemap_partial_plate.png)
 
-> This plate map layout specifically for plate 7, and also has different compounds than the other plates.
-
+> This plate map layout specifically for plate 11 which is a partial plate.
 ## Environments
 
 We utilize ___ environments for our repository.
