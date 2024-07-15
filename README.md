@@ -4,8 +4,9 @@ In this repository, we perform image analysis and image-based profiling on a car
 
 ## Plate map details
 
-There are a total of 44 plates with 550 compound treatments and two controls (DMSO treated failing and healthy cells).
 There are 11 plate map layouts, with 4 replicates per layout.
+There are a total of 44 plates with 550 compound treatments and two controls (DMSO treated failing and healthy cells).
+We include another positive control using TGFRi on the 11th platemap layout (transforming growth factor beta inhibitor or TGF-β inhibitor).
 
 For this dataset, the Cell Painting staining switches the cytoplasmic RNA/nucleoli stain for a specific F-action stain:
 
