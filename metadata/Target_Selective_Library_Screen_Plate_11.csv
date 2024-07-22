@@ -37,7 +37,11 @@ E,6,E06,19,failing,dilated_cardiomyopathy,UCD-0159649
 E,7,E07,19,failing,dilated_cardiomyopathy,UCD-0159657
 E,8,E08,19,failing,dilated_cardiomyopathy,DMSO
 E,11,E11,19,failing,dilated_cardiomyopathy,DMSO
-F,2,F02,19,failing,dilated_cardiomyopathy,TGFRi
-F,5,F05,19,failing,dilated_cardiomyopathy,TGFRi
-F,8,F08,19,failing,dilated_cardiomyopathy,TGFRi
-F,11,F11,19,failing,dilated_cardiomyopathy,TGFRi
+F,2,F02,7,healthy,NA,TGFRi
+F,5,F05,7,healthy,NA,TGFRi
+F,8,F08,7,healthy,NA,TGFRi
+F,11,F11,7,healthy,NA,TGFRi
+G,2,G02,19,failing,dilated_cardiomyopathy,TGFRi
+G,5,G05,19,failing,dilated_cardiomyopathy,TGFRi
+G,8,G08,19,failing,dilated_cardiomyopathy,TGFRi
+G,11,G11,19,failing,dilated_cardiomyopathy,TGFRi
