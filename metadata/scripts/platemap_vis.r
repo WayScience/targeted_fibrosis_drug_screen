@@ -26,7 +26,9 @@ platemap_df_full <- readr::read_csv(
 # Add new column for "condition" to plot on platemap for DMSO versus compound
 platemap_df_full <- platemap_df_full %>%
     mutate(condition = ifelse(treatment == "DMSO", "DMSO", 
-                              ifelse(grepl("^S", treatment), "compound", NA)))
+                              ifelse(grepl("^UCD", treatment), "compound", 
+                                    ifelse(treatment == "TGFRi", "TGFRi", NA))))
+
 
 print(dim(platemap_df_full))
 head(platemap_df_full)
@@ -39,7 +41,9 @@ platemap_df_partial <- readr::read_csv(
 # Add new column for "condition" to plot on platemap for DMSO versus compound
 platemap_df_partial <- platemap_df_partial %>%
     mutate(condition = ifelse(treatment == "DMSO", "DMSO", 
-                              ifelse(grepl("^S", treatment), "compound", NA)))
+                              ifelse(grepl("^UCD", treatment), "compound", 
+                                    ifelse(treatment == "TGFRi", "TGFRi", NA))))
+
 
 print(dim(platemap_df_partial))
 head(platemap_df_partial)
@@ -78,7 +82,10 @@ plates_partial_gg <-
     theme(plot.title = element_text(size = 15, face = "bold")) +
     ggplot2::geom_point(aes(shape = platemap_df_partial$cell_type)) +
     ggplot2::scale_shape_discrete(name = "Cell Type") +
-    ggplot2::scale_fill_discrete(name = "Treatment")
+    ggplot2::scale_fill_manual(name = "Treatment",
+                               values = c("compound" = "#F8766D", 
+                                          "DMSO" = "#00BFC4",
+                                          "TGFRi" = "#7CAE00")) # Assign the default colors to match the previous full platemap layouts
 
 ggsave(
     output_fig_partial_plate,
@@ -89,3 +96,4 @@ ggsave(
 )
 
 plates_partial_gg
+
