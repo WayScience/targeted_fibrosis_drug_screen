@@ -1,3 +1,19 @@
+# PROJECT SPECIFIC IGNORED FILES
+#######################################
+# Ignore corrected images (too large)
+Corrected_Images*
+
+# Ignore CellProfiler pipeline files since they are added during notebook processing
+pipeline*
+
+# Ignore log files
+logs*
+
+# Ignore SQLite outputs from CellProfiler (too large and too many)
+cp_output*
+
+# PYTHON SPECIFIC IGNORED FILES
+#######################################
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
