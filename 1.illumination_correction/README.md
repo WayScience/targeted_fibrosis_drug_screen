@@ -1,4 +1,4 @@
-# Illumination correction
+# Illumination correction & whole image quality control (QC)
 
 In this module, we apply the CellProfiler illumination correction pipeline from the [cellpainting_predicts_cardiac_fibroblasts](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis) repository.
 We will download the most recent version of the cppipe file.
@@ -12,8 +12,8 @@ The pipeline that we will be utilizing performs two tasks:
 
 ### Whole image QC
 
-In the `cellpainting_predicts_cardiac_fibrosis` repository, whole image quality thresholds were already calculated using one plate as an anchor.
-Specifically, blur and saturation features extracted for the nuclei and Golgi/plasma membrane channels are used to detect poor quality images.
+In the `cellpainting_predicts_cardiac_fibrosis` repository, whole image quality thresholds were already calculated using single-cells from only one plate as an anchor or base to use for all other plates of single-cell data.
+Specifically, blur and saturation features extracted for the nuclei and Golgi/plasma membrane channels are used to detect poor quality images as these channels looked to contain the most issues and did best at detecting over-saturated image sets.
 In the [evaluation notebook](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis/blob/main/1.preprocessing_data/1.evaluate_qc.ipynb), a z-scoring method is applied to determine the thresholds in which an image is outside the bounds of being good quality.
 
 These thresholds are added into the illumination correction CellProfiler pipeline under the `FlagImages` module.

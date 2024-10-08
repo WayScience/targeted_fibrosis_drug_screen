@@ -1,7 +1,7 @@
-library(dplyr)
-library(stringr)
-library(ggplot2)
-library(platetools)
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(stringr))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(platetools))
 
 # Function to extract well and FOV information and return summarized results for each folder
 extract_well_fov_from_folder <- function(folder_path) {
@@ -51,10 +51,10 @@ create_platemap <- function(counts_per_well, folder_name, output_dir) {
     plate = 96,                                 # 96-well plate format
     size = 8                                    # Size of the well points
   ) +
-    ggtitle(paste("Platemap of FOV Count Per Well in", folder_name)) +
+    ggtitle(paste("Platemap of passed QC FOV count per well in", folder_name)) +
     theme(plot.title = element_text(size = 10, face = "bold")) +
     scale_fill_gradient(
-      name = "FOV Count",                       # Gradient color scale for FOV count
+      name = "Passed QC\nFOV count",                       # Gradient color scale for FOV count
       low = "#ffffff",                          # White for low count
       high = "#00008B"                          # Dark blue for high count (hex code for dark blue)
     )
