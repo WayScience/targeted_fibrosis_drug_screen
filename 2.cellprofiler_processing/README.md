@@ -4,7 +4,7 @@ In this module, we apply the CellProfiler processing/analysis pipeline from the 
 We will download the most recent version of the cppipe file.
 After careful manual evaluation of the segmentation parameters on this dataset, we decided to update the parameters in the dataset after downloading slightly to get better segmentation results.
 
-## Perform analysis on date
+## Perform analysis on data
 
 To perform segmentation and extract morphological features, run the bash script [perform_processing.sh](./perform_processing.sh) using the command below:
 
