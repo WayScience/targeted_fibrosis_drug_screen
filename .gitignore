@@ -12,6 +12,12 @@ logs*
 # Ignore SQLite outputs from CellProfiler (too large and too many)
 cp_output*
 
+# Ignore CytoTable related logs
+runinfo*
+
+# Ignore preprocessed parquet files since they are too large for GitHub
+3.preprocessing_features/data*
+
 # PYTHON SPECIFIC IGNORED FILES
 #######################################
 # Byte-compiled / optimized / DLL files

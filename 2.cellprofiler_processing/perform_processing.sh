@@ -2,7 +2,7 @@
 
 # initialize the correct shell for your machine to allow conda to work (see README for note on shell names)
 conda init bash
-# activate the main conda environment
+# activate the CellProfiler environment
 conda activate fibrosis_cp_env
 
 # convert Jupyter notebook(s) to script
