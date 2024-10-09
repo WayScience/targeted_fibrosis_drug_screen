@@ -79,12 +79,23 @@ print("All plates have been converted with cytotable!")
 
 
 # # Load in converted profiles to update
+# 
+# We will rename some of the columns (e.g., location centroids and cell count per FOV) to include Metadata prefix.
 
 # In[4]:
 
 
 # Directory with converted profiles
 converted_dir = pathlib.Path(f"{output_dir}/converted_profiles")
+
+# List of columns to update with the "Metadata_" prefix
+metadata_columns_to_update = [
+    "Nuclei_Location_Center_X",
+    "Nuclei_Location_Center_Y",
+    "Cells_Location_Center_X",
+    "Cells_Location_Center_Y",
+    "Image_Count_Cells"
+]
 
 for file_path in converted_dir.iterdir():
     # Load the DataFrame from the Parquet file
@@ -95,37 +106,15 @@ for file_path in converted_dir.iterdir():
 
     # Rearrange columns and add "Metadata" prefix in one line
     df = df[
-        [
-            "Nuclei_Location_Center_X",
-            "Nuclei_Location_Center_Y",
-            "Cells_Location_Center_X",
-            "Cells_Location_Center_Y",
-            "Image_Count_Cells",
-        ]
+        metadata_columns_to_update
         + [
             col
             for col in df.columns
-            if col
-            not in [
-                "Nuclei_Location_Center_X",
-                "Nuclei_Location_Center_Y",
-                "Cells_Location_Center_X",
-                "Cells_Location_Center_Y",
-                "Image_Count_Cells",
-            ]
+            if col not in metadata_columns_to_update
         ]
     ].rename(
         columns=lambda col: (
-            "Metadata_" + col
-            if col
-            in [
-                "Nuclei_Location_Center_X",
-                "Nuclei_Location_Center_Y",
-                "Cells_Location_Center_X",
-                "Cells_Location_Center_Y",
-                "Image_Count_Cells",
-            ]
-            else col
+            "Metadata_" + col if col in metadata_columns_to_update else col
         )
     )
 
