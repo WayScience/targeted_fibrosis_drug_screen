@@ -31,6 +31,7 @@ We utilize three environments for our repository.
 1. [CellProfiler environment](./cellprofiler_env.yml): This environment installs CellProfiler, which we use for the illumination correction and feature extraction modules.
 2. [R environment](./r_fibrosis_env.yml): This environment is specific to R, which we use for generating figures.
 3. [Preprocessing environment](./preprocessing_env.yml): This environment installs preprocessing softwares (pycytominer, CytoTable, coSMicQC) to format the morphological readouts as single-cell profiles.
+4. [Machine learning environment](./machine_learning_env.yml): This environment is used in the module for applying the pre-trained model on the data and evaluating the results for "hits" that could be reversing fibrosis.
 
 These environments can be installed either via conda or mamba.
 Below is an example of how to install via the terminal.
