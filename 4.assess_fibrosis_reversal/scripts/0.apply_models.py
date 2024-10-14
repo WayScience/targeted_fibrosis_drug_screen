@@ -16,9 +16,11 @@ import requests
 
 from io import BytesIO
 import pandas as pd
+import pyarrow.parquet as pq
 from joblib import load
 
 import sys
+
 sys.path.append("../utils")
 from training_utils import get_X_y_data
 
@@ -38,11 +40,11 @@ def download_file(github_url: str, save_dir: pathlib.Path) -> None:
     """
     response = requests.get(github_url)
     response.raise_for_status()  # Raise an error for bad responses (4xx, 5xx)
-    
+
     file_name = github_url.split("/")[-1]
     file_path = save_dir / file_name
     file_path.write_bytes(response.content)
-    
+
     print(f"File downloaded successfully to {file_path}")
     return file_path.resolve(strict=True)
 
@@ -86,11 +88,11 @@ response.raise_for_status()  # Ensure the request was successful
 # Convert the response content into a BytesIO object for pandas to read
 parquet_file = BytesIO(response.content)
 
-# Load the Parquet file into a pandas dataframe
-df = pd.read_parquet(parquet_file)
+# Use pyarrow to read only the schema (column names) from the Parquet file
+schema = pq.read_schema(parquet_file)
 
-# Get the column names that do not start with "Metadata"
-model_features = [col for col in df.columns if not col.startswith("Metadata")]
+# Extract columns that do not start with "Metadata"
+model_features = [col for col in schema.names if not col.startswith("Metadata")]
 
 # Output the number of columns to check if it matches correctly
 print(len(model_features))
@@ -105,7 +107,7 @@ print(len(model_features))
 prob_dir = pathlib.Path("./prob_data")
 prob_dir.mkdir(exist_ok=True)
 
-# Directory with normalized plate datasets  
+# Directory with normalized plate datasets
 data_dir = pathlib.Path("../3.preprocessing_features/data/single_cell_profiles")
 
 # Use rglob to search for files with the suffix *_sc_normalized.parquet
@@ -130,7 +132,7 @@ plate_data_dict = {}
 # Loop through and process each parquet file
 for parquet_file in parquet_files:
     # Extract the plate name from the file name
-    plate_name = parquet_file.name.split('_')[0]
+    plate_name = parquet_file.name.split("_")[0]
     print(f"Processing plate: {plate_name}")
 
     # Load the Parquet file
@@ -158,7 +160,9 @@ for parquet_file in parquet_files:
     plate_data_dict[plate_name] = {"model_df": model_df}
 
     # Print info about the processed DataFrame
-    print(f"Number of unique treatments in {plate_name}: {df['Metadata_treatment'].nunique()}")
+    print(
+        f"Number of unique treatments in {plate_name}: {df['Metadata_treatment'].nunique()}"
+    )
     print(f"Shape of the model DataFrame: {model_df.shape}")
 
 
@@ -167,13 +171,13 @@ for parquet_file in parquet_files:
 # In[7]:
 
 
-# Create an empty DataFrame to store the results
-combined_prob_df = pd.DataFrame()
+# Create a list to store probability DataFrames from each loop iteration
+prob_dfs = []
 
 # Loop through each model in the models directory
 for model_path in models_dir.iterdir():
     model_type = model_path.stem.split("_")[5]  # Get the model type
-    
+
     # Process each plate's data from the plate_data_dict
     for plate_name, info in plate_data_dict.items():
         print(f"Extracting {model_type} probabilities from {plate_name} data...")
@@ -204,55 +208,68 @@ for model_path in models_dir.iterdir():
         prob_df = pd.DataFrame(predicted_probs, columns=model.classes_)
 
         # Update column names in prob_df using the dictionary and add suffix "_probas"
-        prob_df.columns = [label_dict[col] + '_probas' for col in prob_df.columns]
+        prob_df.columns = [label_dict[col] + "_probas" for col in prob_df.columns]
 
         # Add a new column called predicted_label for each row
-        prob_df['predicted_label'] = prob_df.apply(lambda row: row.idxmax()[:-7], axis=1)
+        prob_df["predicted_label"] = prob_df.apply(
+            lambda row: row.idxmax()[:-7], axis=1
+        )
 
         # Select metadata columns from the data
-        metadata_columns = data_df.filter(like='Metadata_')
+        metadata_columns = data_df.filter(like="Metadata_")
 
         # Combine metadata columns with predicted probabilities DataFrame based on index
         prob_df = prob_df.join(metadata_columns)
 
         # Add a new column for model_type
-        prob_df['model_type'] = model_type
-        
-        # Append the probability DataFrame to the combined DataFrame
-        combined_prob_df = pd.concat([combined_prob_df, prob_df], ignore_index=True)
+        prob_df["model_type"] = model_type
 
-# Save combined prob data
+        # Append the DataFrame to the list instead of combining immediately
+        prob_dfs.append(prob_df)
+
+# Combine all DataFrames from the list into a single DataFrame after the loop
+combined_prob_df = pd.concat(prob_dfs, ignore_index=True)
+
+# Save combined probability data
 combined_prob_df.to_csv(f"{prob_dir}/combined_batch_1_predicted_proba.csv", index=False)
 
+
+# ## Display counts for correctly predicted cells across the cell types
 
 # In[8]:
 
 
 # Filter rows where Metadata_treatment is 'DMSO'
-dmso_rows = combined_prob_df[combined_prob_df['Metadata_treatment'] == 'DMSO']
-
-# Select only the desired columns
-selected_columns = ['Failing_probas', 'Healthy_probas', 'predicted_label', 'Metadata_cell_type']
-dmso_rows_filtered = dmso_rows[selected_columns]
-
-# Display the filtered DataFrame
-dmso_rows_filtered.head(100)
-
-
-# In[9]:
-
+dmso_rows = combined_prob_df[combined_prob_df["Metadata_treatment"] == "DMSO"]
 
 # Calculate counts and percentage of correct predictions for each Metadata_cell_type
-result_counts = dmso_rows_filtered.groupby('Metadata_cell_type').apply(
-    lambda x: pd.Series({
-        'correct_count': (x['predicted_label'] == x['Metadata_cell_type']).sum(),
-        'fail_count': (x['predicted_label'] != x['Metadata_cell_type']).sum(),
-        'total_count': x.shape[0]
-    })
-).reset_index()
+result_counts = (
+    dmso_rows.groupby("Metadata_cell_type")
+    .apply(
+        lambda x: pd.Series(
+            {
+                "correct_count": (
+                    x["predicted_label"] == x["Metadata_cell_type"]
+                ).sum(),
+                "fail_count": (x["predicted_label"] != x["Metadata_cell_type"]).sum(),
+                "total_count": x.shape[0],
+            }
+        )
+    )
+    .reset_index()
+)
 
 # Calculate the percentage of correct predictions
-result_counts['percentage_correct'] = (result_counts['correct_count'] / result_counts['total_count']) * 100
+result_counts["percentage_correct"] = (
+    result_counts["correct_count"] / result_counts["total_count"]
+) * 100
+
+# Print the number of correctly predicted cells with percentage for each Metadata_cell_type
+for idx, row in result_counts.iterrows():
+    print(
+        f"{row['Metadata_cell_type']}: {row['correct_count']} correct predictions out of "
+        f"{row['total_count']} cells ({row['percentage_correct']:.2f}%)"
+    )
 
 # Display the results
 result_counts

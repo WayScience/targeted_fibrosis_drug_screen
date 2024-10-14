@@ -20,5 +20,3 @@ dependencies:
 - conda-forge::pyarrow
 - pip:
   - pycytominer
-
-

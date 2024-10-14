@@ -35,6 +35,7 @@ def get_X_y_data(
 
     # If shuffle is True, shuffled the columns independently for the feature space for training a model
     if shuffle == True:
+        X = X.copy()  # Avoid in-place modification of the original data
         for column in X.T:
             np.random.shuffle(column)
 
