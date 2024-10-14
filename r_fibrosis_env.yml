@@ -4,8 +4,6 @@ channels:
 dependencies:
   - conda-forge::jupyter
   - conda-forge::jupyterlab
-  - conda-forge::ipykernel
-  - conda-forge::python<=3.11
   - conda-forge::r-irkernel
   - conda-forge::nb_conda_kernels
   - conda-forge::widgetsnbextension
@@ -18,6 +16,7 @@ dependencies:
   - conda-forge::r-ggplot2
   - conda-forge::r-ggrepel
   - conda-forge::r-gridextra
+  - conda-forge::r-ggridges
   - conda-forge::r-devtools
   - conda-forge::r-reshape2
   - conda-forge::r-cowplot

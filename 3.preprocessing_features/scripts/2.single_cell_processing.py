@@ -22,14 +22,14 @@ from pycytominer import annotate, normalize, feature_select
 
 
 # Path to dir with cleaned data from single-cell QC
-converted_dir = pathlib.Path("./data/converted_profiles")
+converted_dir = pathlib.Path("./data/cleaned_profiles")
 
 # output path for single-cell profiles 
 output_dir = pathlib.Path("./data/single_cell_profiles")
 output_dir.mkdir(parents=True, exist_ok=True)  
 
 # Extract the plate names from the file name
-plate_names = [file.stem.replace("_converted", "") for file in converted_dir.glob("*.parquet")]
+plate_names = [file.stem.split("_")[0] for file in converted_dir.glob("*.parquet")]
 
 # path for platemap directory
 platemap_dir = pathlib.Path("../metadata/")
@@ -54,7 +54,7 @@ barcode_platemap_df = pd.read_csv(pathlib.Path(f"{platemap_dir}/barcode_platemap
 # Create plate info dictionary
 plate_info_dictionary = {
     name: {
-        "profile_path": (converted_dir / f"{name}_converted.parquet").resolve(
+        "profile_path": (converted_dir / f"{name}_cleaned.parquet").resolve(
             strict=True
         ),
         "platemap_path": (

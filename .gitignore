@@ -18,6 +18,13 @@ runinfo*
 # Ignore preprocessed parquet files since they are too large for GitHub
 3.preprocessing_features/data*
 
+# Ignore vscode specific files
+.vscode*
+
+# Ignore model files/folders as though are downloaded in the notebook
+label_encoder*
+models*
+
 # PYTHON SPECIFIC IGNORED FILES
 #######################################
 # Byte-compiled / optimized / DLL files
