@@ -11,8 +11,8 @@ if (!dir.exists(output_dir)) {
 }
 
 # path to one platemap file since all have same layout but different compounds
-platemap_file_full <- file.path("./Target_Selective_Library_Screen_Plate_1.csv")
-platemap_file_partial <- file.path("./Target_Selective_Library_Screen_Plate_11.csv") 
+platemap_file_full <- file.path("./original_platemaps/Target_Selective_Library_Screen_Plate_1.csv")
+platemap_file_partial <- file.path("./original_platemaps/Target_Selective_Library_Screen_Plate_11.csv") 
 
 # Directory for example platemap figures
 output_fig_full_plates <- file.path(output_dir, "example_platemap_full_plates.png")

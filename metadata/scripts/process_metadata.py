@@ -15,12 +15,10 @@ import pandas as pd
 
 # setting up working directory and where the pathway_platemap file paths
 original_platemaps_path = pathlib.Path("./original_platemaps").resolve(strict=True)
-pathways_path = pathlib.Path("./pathways_platemap.csv").resolve(strict=True)
+pathways_path = (original_platemaps_path / "pathways_platemap.csv").resolve(strict=True)
 
 # setting all the platemap paths
-all_platemap_paths = list(
-    original_platemaps_path.glob("Target_Selective_Library_Screen_*.csv")
-)
+all_platemap_paths = list(original_platemaps_path.glob("Target_Selective_Library_Screen_*.csv"))
 
 # creating output directory
 updated_platemaps_dir = pathlib.Path("./updated_platemaps")
