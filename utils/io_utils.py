@@ -1,14 +1,16 @@
 """
-This module provides functions for loading, writing, and modifying files in this data 
-repository. It centralizes input/output operations, ensuring efficient and consistent 
+This module provides functions for loading, writing, and modifying files in this data
+repository. It centralizes input/output operations, ensuring efficient and consistent
 handling of data files throughout the project.
 """
+
 import pathlib
 from collections import defaultdict
 import pandas as pd
 
+
 def load_barcodes(barcode_path: str | pathlib.Path) -> dict:
-    """ Load barcode data from a given file and organize it into batches.
+    """Load barcode data from a given file and organize it into batches.
 
     This function reads barcode data, groups it by the 'platemap_file' column, and
     organizes the grouped data into batches. Each batch is assigned a unique batch ID
