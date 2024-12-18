@@ -4,8 +4,12 @@
 # In[1]:
 
 
+import sys
 import pathlib
 import pandas as pd
+
+sys.path.append("../")
+from utils import io_utils
 
 
 # Setting up paths
@@ -13,9 +17,14 @@ import pandas as pd
 # In[2]:
 
 
+# setting tag for files that have been augmented with pathway data
+tag = "with_pathways"
 # setting up working directory and where the pathway_platemap file paths
 original_platemaps_path = pathlib.Path("./original_platemaps").resolve(strict=True)
 pathways_path = (original_platemaps_path / "pathways_platemap.csv").resolve(strict=True)
+
+# settting original barcode path
+barcode_path = (original_platemaps_path / "barcode_platemap.csv").resolve(strict=True)
 
 # setting all the platemap paths
 all_platemap_paths = list(original_platemaps_path.glob("Target_Selective_Library_Screen_*.csv"))
@@ -23,6 +32,9 @@ all_platemap_paths = list(original_platemaps_path.glob("Target_Selective_Library
 # creating output directory
 updated_platemaps_dir = pathlib.Path("./updated_platemaps")
 updated_platemaps_dir.mkdir(exist_ok=True)
+
+# update barcode output path
+updated_barcode_path = (updated_platemaps_dir / "updated_barcode_platemap.csv").resolve()
 
 
 # This process adds pathway metadata to experimental platemaps to provide more biological context for single-cell image-based profiles. Here's how it works:
@@ -43,7 +55,6 @@ for platemap_path in all_platemap_paths:
     # Example: Extract prefix and plate ID, then append a "with_moa" tag
     prefix = platemap_path.stem.rsplit("_", 2)[0]
     plate_id = platemap_path.stem.split("_", 4)[-1]
-    tag = "with_moa"
     outname = f"{prefix}_{plate_id}_{tag}.csv"
 
     # Load the current platemap into a DataFrame
@@ -75,4 +86,36 @@ for platemap_path in all_platemap_paths:
 
     # Save the augmented platemap with MOA information to the output directory
     merged_df.to_csv(updated_platemaps_dir / outname, index=False)
+
+
+# In[4]:
+
+
+# Load the original barcode metadata
+barcodes = io_utils.load_barcodes(barcode_path=barcode_path)
+
+# Initialize a list to store the updated barcode entries
+updated_barcodes = []
+
+# Iterate through each batch and its associated plates in the barcode metadata
+for batch_id, batch_profiles in barcodes.items():
+    # Generate the updated platemap name with the new tag
+    updated_platemap_name = f"{list(batch_profiles.keys())[0]}_{tag}"
+
+    # Iterate through all profiles associated with the current batch of plates
+    for profile_names in batch_profiles.values():
+        for profile_name in profile_names:
+            # Append the updated profile-barcode mapping
+            updated_barcodes.append([profile_name, updated_platemap_name])
+
+# Convert the updated barcode list into a DataFrame
+updated_barcodes_df = pd.DataFrame(
+    updated_barcodes, columns=["plate_barcode", "platemap_file"]
+)
+
+# Save dataframe into the module specific result folder
+updated_barcodes_df.to_csv(updated_barcode_path, index=False)
+
+# Display new barcode file
+updated_barcodes_df.head()
 
