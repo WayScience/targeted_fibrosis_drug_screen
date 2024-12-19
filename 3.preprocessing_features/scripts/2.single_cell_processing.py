@@ -32,7 +32,7 @@ output_dir.mkdir(parents=True, exist_ok=True)
 plate_names = [file.stem.split("_")[0] for file in converted_dir.glob("*.parquet")]
 
 # path for platemap directory
-platemap_dir = pathlib.Path("../metadata/")
+platemap_dir = pathlib.Path("../metadata/original_platemaps/")
 
 # operations to perform for feature selection
 feature_select_ops = [
