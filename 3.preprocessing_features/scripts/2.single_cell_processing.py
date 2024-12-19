@@ -12,9 +12,7 @@ import pathlib
 import pprint
 
 import pandas as pd
-
-from pycytominer import annotate, normalize, feature_select
-
+from pycytominer import annotate, feature_select, normalize
 
 # ## Set paths and variables
 
@@ -24,22 +22,22 @@ from pycytominer import annotate, normalize, feature_select
 # Path to dir with cleaned data from single-cell QC
 converted_dir = pathlib.Path("./data/cleaned_profiles")
 
-# output path for single-cell profiles 
+# output path for single-cell profiles
 output_dir = pathlib.Path("./data/single_cell_profiles")
-output_dir.mkdir(parents=True, exist_ok=True)  
+output_dir.mkdir(parents=True, exist_ok=True)
 
 # Extract the plate names from the file name
 plate_names = [file.stem.split("_")[0] for file in converted_dir.glob("*.parquet")]
 
 # path for platemap directory
-platemap_dir = pathlib.Path("../metadata/original_platemaps/")
+platemap_dir = pathlib.Path("../metadata/updated_platemaps/")
 
 # operations to perform for feature selection
 feature_select_ops = [
     "variance_threshold",
     "correlation_threshold",
     "blocklist",
-    "drop_na_columns"
+    "drop_na_columns",
 ]
 
 
@@ -49,7 +47,9 @@ feature_select_ops = [
 
 
 # Load the barcode_platemap file
-barcode_platemap_df = pd.read_csv(pathlib.Path(f"{platemap_dir}/barcode_platemap.csv"))
+barcode_platemap_df = pd.read_csv(
+    pathlib.Path(f"{platemap_dir}/updated_barcode_platemap.csv").resolve()
+)
 
 # Create plate info dictionary
 plate_info_dictionary = {
@@ -76,9 +76,15 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 for plate, info in plate_info_dictionary.items():
     print(f"Performing pycytominer pipeline for {plate}")
-    output_annotated_file = str(pathlib.Path(f"{output_dir}/{plate}_sc_annotated.parquet"))
-    output_normalized_file = str(pathlib.Path(f"{output_dir}/{plate}_sc_normalized.parquet"))
-    output_feature_select_file = str(pathlib.Path(f"{output_dir}/{plate}_sc_feature_selected.parquet"))
+    output_annotated_file = str(
+        pathlib.Path(f"{output_dir}/{plate}_sc_annotated.parquet")
+    )
+    output_normalized_file = str(
+        pathlib.Path(f"{output_dir}/{plate}_sc_normalized.parquet")
+    )
+    output_feature_select_file = str(
+        pathlib.Path(f"{output_dir}/{plate}_sc_feature_selected.parquet")
+    )
 
     profile_df = pd.read_parquet(info["profile_path"])
     platemap_df = pd.read_csv(info["platemap_path"])
@@ -113,7 +119,7 @@ for plate, info in plate_info_dictionary.items():
         output_file=output_normalized_file,
         output_type="parquet",
     )
-    
+
     print("Performing feature selection for", plate, "...")
     # Step 3: Feature selection
     feature_select(
@@ -121,9 +127,11 @@ for plate, info in plate_info_dictionary.items():
         operation=feature_select_ops,
         na_cutoff=0,
         output_file=output_feature_select_file,
-        output_type="parquet"
+        output_type="parquet",
     )
-    print(f"Annotation, normalization, and feature selection have been performed for {plate}")
+    print(
+        f"Annotation, normalization, and feature selection have been performed for {plate}"
+    )
 
 
 # In[5]:
@@ -134,4 +142,3 @@ test_df = pd.read_parquet(output_feature_select_file)
 
 print(test_df.shape)
 test_df.head(2)
-
