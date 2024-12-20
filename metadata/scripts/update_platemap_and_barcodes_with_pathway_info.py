@@ -4,13 +4,13 @@
 # In[1]:
 
 
-import sys
 import pathlib
+import sys
+
 import pandas as pd
 
 sys.path.append("../")
 from utils import io_utils
-
 
 # Setting up paths
 
@@ -27,18 +27,22 @@ pathways_path = (original_platemaps_path / "pathways_platemap.csv").resolve(stri
 barcode_path = (original_platemaps_path / "barcode_platemap.csv").resolve(strict=True)
 
 # setting all the platemap paths
-all_platemap_paths = list(original_platemaps_path.glob("Target_Selective_Library_Screen_*.csv"))
+all_platemap_paths = list(
+    original_platemaps_path.glob("Target_Selective_Library_Screen_*.csv")
+)
 
 # creating output directory
 updated_platemaps_dir = pathlib.Path("./updated_platemaps")
 updated_platemaps_dir.mkdir(exist_ok=True)
 
 # update barcode output path
-updated_barcode_path = (updated_platemaps_dir / "updated_barcode_platemap.csv").resolve()
+updated_barcode_path = (
+    updated_platemaps_dir / "updated_barcode_platemap.csv"
+).resolve()
 
 
 # This process adds pathway metadata to experimental platemaps to provide more biological context for single-cell image-based profiles. Here's how it works:
-# 
+#
 # 1. Pathway metadata, which includes treatment identifiers, well positions, and pathway information, is filtered for each specific plate.
 # 2. This filtered metadata is merged with the platemap, linking treatments and well positions to their corresponding pathways.
 # 3. The final augmented platemaps offer a clear view that connects experimental treatments to their associated pathways.
@@ -74,6 +78,10 @@ for platemap_path in all_platemap_paths:
         right_on=["UCD ID", "Well"],
         how="left",
     )
+
+    # Drop the UCD ID and Well columns after the merge
+    # contains identical information within the platemap
+    merged_df = merged_df.drop(columns=["UCD ID", "Well"])
 
     # Ensure no rows or columns in the original platemap were modified during the merge
     # This checks that only the added MOA information changes the dataframe,
@@ -118,4 +126,3 @@ updated_barcodes_df.to_csv(updated_barcode_path, index=False)
 
 # Display new barcode file
 updated_barcodes_df.head()
-

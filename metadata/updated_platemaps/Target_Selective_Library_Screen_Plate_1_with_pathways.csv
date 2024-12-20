@@ -1,61 +1,61 @@
-WellRow,WellCol,well_position,heart_number,cell_type,heart_failure_type,treatment,UCD ID,Well,Pathway
-B,2,B02,7,healthy,,DMSO,DMSO,B02,
-B,3,B03,19,failing,dilated_cardiomyopathy,UCD-0159256,UCD-0159256,B03,Apoptosis
-B,4,B04,19,failing,dilated_cardiomyopathy,UCD-0001766,UCD-0001766,B04,Angiogenesis
-B,5,B05,7,healthy,,DMSO,DMSO,B05,
-B,6,B06,19,failing,dilated_cardiomyopathy,UCD-0159262,UCD-0159262,B06,Others
-B,7,B07,19,failing,dilated_cardiomyopathy,UCD-0001915,UCD-0001915,B07,Others
-B,8,B08,7,healthy,,DMSO,DMSO,B08,
-B,9,B09,19,failing,dilated_cardiomyopathy,UCD-0001783,UCD-0001783,B09,Others
-B,10,B10,19,failing,dilated_cardiomyopathy,UCD-0159279,UCD-0159279,B10,Others
-B,11,B11,7,healthy,,DMSO,DMSO,B11,
-C,2,C02,19,failing,dilated_cardiomyopathy,UCD-0159283,UCD-0159283,C02,Endocrinology & Hormones
-C,3,C03,19,failing,dilated_cardiomyopathy,UCD-0001040,UCD-0001040,C03,Endocrinology & Hormones
-C,4,C04,19,failing,dilated_cardiomyopathy,UCD-0018091,UCD-0018091,C04,GPCR & G Protein
-C,5,C05,19,failing,dilated_cardiomyopathy,UCD-0000450,UCD-0000450,C05,Neuronal Signaling
-C,6,C06,19,failing,dilated_cardiomyopathy,UCD-0159257,UCD-0159257,C06,DNA Damage
-C,7,C07,19,failing,dilated_cardiomyopathy,UCD-0001810,UCD-0001810,C07,DNA Damage
-C,8,C08,19,failing,dilated_cardiomyopathy,UCD-0159263,UCD-0159263,C08,Others
-C,9,C09,19,failing,dilated_cardiomyopathy,UCD-0159269,UCD-0159269,C09,Others
-C,10,C10,19,failing,dilated_cardiomyopathy,UCD-0159273,UCD-0159273,C10,Others
-C,11,C11,19,failing,dilated_cardiomyopathy,UCD-0017907,UCD-0017907,C11,Others
-D,2,D02,19,failing,dilated_cardiomyopathy,UCD-0159284,UCD-0159284,D02,Stem Cells &  Wnt
-D,3,D03,19,failing,dilated_cardiomyopathy,UCD-0017999,UCD-0017999,D03,Endocrinology & Hormones
-D,4,D04,19,failing,dilated_cardiomyopathy,UCD-0000721,UCD-0000721,D04,Neuronal Signaling
-D,5,D05,19,failing,dilated_cardiomyopathy,UCD-0001014,UCD-0001014,D05,Neuronal Signaling
-D,6,D06,19,failing,dilated_cardiomyopathy,UCD-0159258,,,
-D,7,D07,19,failing,dilated_cardiomyopathy,UCD-0159261,UCD-0159261,D07,Others
-D,8,D08,19,failing,dilated_cardiomyopathy,UCD-0159264,UCD-0159264,D08,Neuronal Signaling
-D,9,D09,19,failing,dilated_cardiomyopathy,UCD-0001775,UCD-0001775,D09,Others
-D,10,D10,19,failing,dilated_cardiomyopathy,UCD-0159274,UCD-0159274,D10,Others
-D,11,D11,19,failing,dilated_cardiomyopathy,UCD-0001792,UCD-0001792,D11,Others
-E,2,E02,19,failing,dilated_cardiomyopathy,DMSO,DMSO,E02,
-E,3,E03,19,failing,dilated_cardiomyopathy,UCD-0159285,UCD-0159285,E03,DNA Damage
-E,4,E04,19,failing,dilated_cardiomyopathy,UCD-0159289,UCD-0159289,E04,Metabolism
-E,5,E05,19,failing,dilated_cardiomyopathy,DMSO,DMSO,E05,
-E,6,E06,19,failing,dilated_cardiomyopathy,UCD-0018179,UCD-0018179,E06,MAPK
-E,7,E07,19,failing,dilated_cardiomyopathy,UCD-0001016,UCD-0001016,E07,Neuronal Signaling
-E,8,E08,19,failing,dilated_cardiomyopathy,DMSO,DMSO,E08,
-E,9,E09,19,failing,dilated_cardiomyopathy,UCD-0001804,,,
-E,10,E10,19,failing,dilated_cardiomyopathy,UCD-0018207,UCD-0018207,E10,Neuronal Signaling
-E,11,E11,19,failing,dilated_cardiomyopathy,DMSO,DMSO,E11,
-F,2,F02,19,failing,dilated_cardiomyopathy,UCD-0001844,UCD-0001844,F02,Others
-F,3,F03,19,failing,dilated_cardiomyopathy,UCD-0159270,UCD-0159270,F03,Others
-F,4,F04,19,failing,dilated_cardiomyopathy,UCD-0159275,UCD-0159275,F04,Others
-F,5,F05,19,failing,dilated_cardiomyopathy,UCD-0001800,UCD-0001800,F05,Others
-F,6,F06,19,failing,dilated_cardiomyopathy,UCD-0001613,UCD-0001613,F06,Endocrinology & Hormones
-F,7,F07,19,failing,dilated_cardiomyopathy,UCD-0001921,UCD-0001921,F07,Epigenetics
-F,8,F08,19,failing,dilated_cardiomyopathy,UCD-0159290,UCD-0159290,F08,PI3K/Akt/mTOR
-F,9,F09,19,failing,dilated_cardiomyopathy,UCD-0159293,UCD-0159293,F09,Others
-F,10,F10,19,failing,dilated_cardiomyopathy,UCD-0001808,UCD-0001808,F10,MAPK
-F,11,F11,19,failing,dilated_cardiomyopathy,UCD-0001801,UCD-0001801,F11,Endocrinology & Hormones
-G,2,G02,19,failing,dilated_cardiomyopathy,UCD-0159265,UCD-0159265,G02,Neuronal Signaling
-G,3,G03,19,failing,dilated_cardiomyopathy,UCD-0159271,UCD-0159271,G03,Others
-G,4,G04,19,failing,dilated_cardiomyopathy,UCD-0001835,UCD-0001835,G04,Others
-G,5,G05,19,failing,dilated_cardiomyopathy,UCD-0159280,UCD-0159280,G05,Others
-G,6,G06,19,failing,dilated_cardiomyopathy,UCD-0159286,UCD-0159286,G06,Others
-G,7,G07,19,failing,dilated_cardiomyopathy,UCD-0018131,UCD-0018131,G07,Angiogenesis
-G,8,G08,19,failing,dilated_cardiomyopathy,UCD-0001024,UCD-0001024,G08,Neuronal Signaling
-G,9,G09,19,failing,dilated_cardiomyopathy,UCD-0001829,UCD-0001829,G09,PI3K/Akt/mTOR
-G,10,G10,19,failing,dilated_cardiomyopathy,UCD-0159259,UCD-0159259,G10,PI3K/Akt/mTOR
-G,11,G11,19,failing,dilated_cardiomyopathy,UCD-0001842,UCD-0001842,G11,Neuronal Signaling
+WellRow,WellCol,well_position,heart_number,cell_type,heart_failure_type,treatment,Pathway
+B,2,B02,7,healthy,,DMSO,
+B,3,B03,19,failing,dilated_cardiomyopathy,UCD-0159256,Apoptosis
+B,4,B04,19,failing,dilated_cardiomyopathy,UCD-0001766,Angiogenesis
+B,5,B05,7,healthy,,DMSO,
+B,6,B06,19,failing,dilated_cardiomyopathy,UCD-0159262,Others
+B,7,B07,19,failing,dilated_cardiomyopathy,UCD-0001915,Others
+B,8,B08,7,healthy,,DMSO,
+B,9,B09,19,failing,dilated_cardiomyopathy,UCD-0001783,Others
+B,10,B10,19,failing,dilated_cardiomyopathy,UCD-0159279,Others
+B,11,B11,7,healthy,,DMSO,
+C,2,C02,19,failing,dilated_cardiomyopathy,UCD-0159283,Endocrinology & Hormones
+C,3,C03,19,failing,dilated_cardiomyopathy,UCD-0001040,Endocrinology & Hormones
+C,4,C04,19,failing,dilated_cardiomyopathy,UCD-0018091,GPCR & G Protein
+C,5,C05,19,failing,dilated_cardiomyopathy,UCD-0000450,Neuronal Signaling
+C,6,C06,19,failing,dilated_cardiomyopathy,UCD-0159257,DNA Damage
+C,7,C07,19,failing,dilated_cardiomyopathy,UCD-0001810,DNA Damage
+C,8,C08,19,failing,dilated_cardiomyopathy,UCD-0159263,Others
+C,9,C09,19,failing,dilated_cardiomyopathy,UCD-0159269,Others
+C,10,C10,19,failing,dilated_cardiomyopathy,UCD-0159273,Others
+C,11,C11,19,failing,dilated_cardiomyopathy,UCD-0017907,Others
+D,2,D02,19,failing,dilated_cardiomyopathy,UCD-0159284,Stem Cells &  Wnt
+D,3,D03,19,failing,dilated_cardiomyopathy,UCD-0017999,Endocrinology & Hormones
+D,4,D04,19,failing,dilated_cardiomyopathy,UCD-0000721,Neuronal Signaling
+D,5,D05,19,failing,dilated_cardiomyopathy,UCD-0001014,Neuronal Signaling
+D,6,D06,19,failing,dilated_cardiomyopathy,UCD-0159258,
+D,7,D07,19,failing,dilated_cardiomyopathy,UCD-0159261,Others
+D,8,D08,19,failing,dilated_cardiomyopathy,UCD-0159264,Neuronal Signaling
+D,9,D09,19,failing,dilated_cardiomyopathy,UCD-0001775,Others
+D,10,D10,19,failing,dilated_cardiomyopathy,UCD-0159274,Others
+D,11,D11,19,failing,dilated_cardiomyopathy,UCD-0001792,Others
+E,2,E02,19,failing,dilated_cardiomyopathy,DMSO,
+E,3,E03,19,failing,dilated_cardiomyopathy,UCD-0159285,DNA Damage
+E,4,E04,19,failing,dilated_cardiomyopathy,UCD-0159289,Metabolism
+E,5,E05,19,failing,dilated_cardiomyopathy,DMSO,
+E,6,E06,19,failing,dilated_cardiomyopathy,UCD-0018179,MAPK
+E,7,E07,19,failing,dilated_cardiomyopathy,UCD-0001016,Neuronal Signaling
+E,8,E08,19,failing,dilated_cardiomyopathy,DMSO,
+E,9,E09,19,failing,dilated_cardiomyopathy,UCD-0001804,
+E,10,E10,19,failing,dilated_cardiomyopathy,UCD-0018207,Neuronal Signaling
+E,11,E11,19,failing,dilated_cardiomyopathy,DMSO,
+F,2,F02,19,failing,dilated_cardiomyopathy,UCD-0001844,Others
+F,3,F03,19,failing,dilated_cardiomyopathy,UCD-0159270,Others
+F,4,F04,19,failing,dilated_cardiomyopathy,UCD-0159275,Others
+F,5,F05,19,failing,dilated_cardiomyopathy,UCD-0001800,Others
+F,6,F06,19,failing,dilated_cardiomyopathy,UCD-0001613,Endocrinology & Hormones
+F,7,F07,19,failing,dilated_cardiomyopathy,UCD-0001921,Epigenetics
+F,8,F08,19,failing,dilated_cardiomyopathy,UCD-0159290,PI3K/Akt/mTOR
+F,9,F09,19,failing,dilated_cardiomyopathy,UCD-0159293,Others
+F,10,F10,19,failing,dilated_cardiomyopathy,UCD-0001808,MAPK
+F,11,F11,19,failing,dilated_cardiomyopathy,UCD-0001801,Endocrinology & Hormones
+G,2,G02,19,failing,dilated_cardiomyopathy,UCD-0159265,Neuronal Signaling
+G,3,G03,19,failing,dilated_cardiomyopathy,UCD-0159271,Others
+G,4,G04,19,failing,dilated_cardiomyopathy,UCD-0001835,Others
+G,5,G05,19,failing,dilated_cardiomyopathy,UCD-0159280,Others
+G,6,G06,19,failing,dilated_cardiomyopathy,UCD-0159286,Others
+G,7,G07,19,failing,dilated_cardiomyopathy,UCD-0018131,Angiogenesis
+G,8,G08,19,failing,dilated_cardiomyopathy,UCD-0001024,Neuronal Signaling
+G,9,G09,19,failing,dilated_cardiomyopathy,UCD-0001829,PI3K/Akt/mTOR
+G,10,G10,19,failing,dilated_cardiomyopathy,UCD-0159259,PI3K/Akt/mTOR
+G,11,G11,19,failing,dilated_cardiomyopathy,UCD-0001842,Neuronal Signaling

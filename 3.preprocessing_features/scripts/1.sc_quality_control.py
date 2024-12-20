@@ -34,7 +34,6 @@
 # In[1]:
 
 
-import logging
 import pathlib
 import pandas as pd
 import matplotlib.pyplot as plt
