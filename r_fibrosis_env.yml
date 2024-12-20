@@ -26,3 +26,4 @@ dependencies:
   - conda-forge::r-png
   - conda-forge::r-arrow
   - conda-forge::r-magick
+  - conda-forge::pre-commit=4.0
