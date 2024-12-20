@@ -18,5 +18,6 @@ dependencies:
 - conda-forge::umap-learn
 - conda-forge::matplotlib
 - conda-forge::pyarrow
+- conda-forge::pre-commit=4.0
 - pip:
   - pycytominer
