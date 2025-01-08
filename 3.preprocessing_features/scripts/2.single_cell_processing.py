@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # # Process single cell profiles
 
@@ -141,4 +140,5 @@ for plate, info in plate_info_dictionary.items():
 test_df = pd.read_parquet(output_feature_select_file)
 
 print(test_df.shape)
+print("Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")])
 test_df.head(2)

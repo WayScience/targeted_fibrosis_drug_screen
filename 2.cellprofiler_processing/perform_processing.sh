@@ -10,4 +10,3 @@ jupyter nbconvert --to script --output-dir=scripts/ *.ipynb
 
 # run Python script for CellProfiler segmentation and feature extraction
 python scripts/cp_analysis.py
-

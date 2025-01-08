@@ -12,3 +12,4 @@ jupyter nbconvert --to script --output-dir=scripts/ *.ipynb
 python scripts/0.convert_cytotable.py
 python scripts/1.sc_quality_control.py
 python scripts/2.single_cell_processing.py
+python scripts/3.aggregate_single_cells.py

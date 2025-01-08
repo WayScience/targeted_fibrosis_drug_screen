@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # # Apply final and shuffled models to the data
-# 
+#
 # We will be extracting the healthy and failing probabilities for each single-cell into a parquet file to use for figure generation in the next notebook.
 
 # ## Import libraries
@@ -11,19 +10,16 @@
 
 
 import pathlib
-import pprint
-import requests
-
+import sys
 from io import BytesIO
+
 import pandas as pd
 import pyarrow.parquet as pq
+import requests
 from joblib import load
-
-import sys
 
 sys.path.append("../utils")
 from training_utils import get_X_y_data
-
 
 # ## Set function to download files from GitHub
 
@@ -273,4 +269,3 @@ for idx, row in result_counts.iterrows():
 
 # Display the results
 result_counts
-
