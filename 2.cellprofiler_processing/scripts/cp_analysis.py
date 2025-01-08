@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # # CellProfiler segmentation and feature extraction
-# 
+#
 # Note: We name this notebook as `analysis` to follow similar conventions set by CellProfiler.
 
 # ## Import libraries
@@ -12,13 +11,12 @@
 
 import pathlib
 import pprint
-import requests
-
 import sys
+
+import requests
 
 sys.path.append("../utils")
 import cp_parallel
-
 
 # ## Set paths and variables
 
@@ -74,15 +72,15 @@ path_to_pipeline = file_path.resolve(strict=True)
 
 
 # ## Update the `Threshold correction factor` when segmenting nuclei and cells from the original file
-# 
+#
 # When manually evaluating how the parameters are working with this dataset, I noticed some issues with the segmentation:
-# 
+#
 # 1. Under-segmentation of whole cells
 # 2. Segmentation of nuclei from empty images
-# 
-# Both of these segmentation parameters are updated from their original value to 0.5 to be more "lenient" per the documentation, but I have found it improves both of these issues. 
+#
+# Both of these segmentation parameters are updated from their original value to 0.5 to be more "lenient" per the documentation, but I have found it improves both of these issues.
 # Segmentation is never perfect but this makes a improvement from eye.
-# 
+#
 # Note: The code below is hardcoded to change the parameters from a specific integer. This currently is what works, we will look to make this more generalizable in the future.
 
 # In[4]:
@@ -90,7 +88,7 @@ path_to_pipeline = file_path.resolve(strict=True)
 
 # Read and modify the file
 path_to_pipeline = file_path.resolve(strict=True)
-with open(path_to_pipeline, 'r') as file:
+with open(path_to_pipeline) as file:
     lines = file.readlines()
 
 # Variables to keep track of where we are in the file
@@ -106,27 +104,27 @@ with open(path_to_pipeline, 'w') as file:
         if "IdentifySecondaryObjects" in line:
             in_identify_secondary_objects = True
             in_identify_primary_objects = False  # Ensure we're only in one section at a time
-        
+
         # Check if we're in the IdentifyPrimaryObjects section
         if "IdentifyPrimaryObjects" in line:
             in_identify_primary_objects = True
             in_identify_secondary_objects = False  # Ensure we're only in one section at a time
-        
+
         # If in the IdentifySecondaryObjects section and find the Threshold correction factor
         if in_identify_secondary_objects and "Threshold correction factor" in line:
             # Replace the value of the threshold correction factor (optimize segmentation for cells)
             line = line.replace("0.8", "0.5")
             threshold_correction_factor_found_secondary = True
-        
+
         # If in the IdentifyPrimaryObjects section and find the Threshold correction factor
         if in_identify_primary_objects and "Threshold correction factor" in line:
             # Replace the value of the threshold correction factor (prevent non-existent nuclei from being segmented)
             line = line.replace("0.9", "0.3")
             threshold_correction_factor_found_primary = True
-        
+
         # Write the line back to the file
         file.write(line)
-        
+
         # Exit sections after processing the Threshold correction factor
         if in_identify_secondary_objects and threshold_correction_factor_found_secondary:
             in_identify_secondary_objects = False
@@ -160,7 +158,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 
 # ## Run CellProfiler analysis on all plates
-# 
+#
 # **Note:** This code cell will not be run in this notebook due to the instability of jupyter notebooks compared to running as a python script. All CellProfiler SQLite outputs will have the same name but outputted into their respective plate folder (due to parallelization).
 
 # In[ ]:
@@ -169,4 +167,3 @@ pprint.pprint(plate_info_dictionary, indent=4)
 cp_parallel.run_cellprofiler_parallel(
     plate_info_dictionary=plate_info_dictionary, run_name=run_name
 )
-

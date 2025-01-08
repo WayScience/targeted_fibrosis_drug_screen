@@ -8,14 +8,14 @@ import multiprocessing
 import os
 import pathlib
 import subprocess
-from concurrent.futures import ProcessPoolExecutor, Future
+from concurrent.futures import Future, ProcessPoolExecutor
 from typing import List
 
 from errors.exceptions import MaxWorkerError
 
 
 def results_to_log(
-    results: List[subprocess.CompletedProcess], log_dir: pathlib.Path, run_name: str
+    results: list[subprocess.CompletedProcess], log_dir: pathlib.Path, run_name: str
 ) -> None:
     """
     This function will take the list of subprocess.results from a CellProfiler parallelization run and
@@ -127,7 +127,7 @@ def run_cellprofiler_parallel(
     executor = ProcessPoolExecutor(max_workers=num_processes)
 
     # creates a list of futures that are each CellProfiler process for each plate
-    futures: List[Future] = [
+    futures: list[Future] = [
         executor.submit(
             subprocess.run,
             args=command,
@@ -137,7 +137,7 @@ def run_cellprofiler_parallel(
     ]
 
     # the list of CompletedProcesses holds all the information from the CellProfiler run
-    results: List[subprocess.CompletedProcess] = [future.result() for future in futures]
+    results: list[subprocess.CompletedProcess] = [future.result() for future in futures]
 
     print("All processes have been completed!")
 

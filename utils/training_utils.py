@@ -2,11 +2,11 @@
 This utility file contains the function to load in training data as final or shuffled to be used in training a machine learning model.
 """
 
-import numpy as np
-import pandas as pd
 import pathlib
 from typing import Tuple
 
+import numpy as np
+import pandas as pd
 
 # set numpy seed to make random operations (shuffling data) reproducible
 np.random.seed(0)
@@ -14,7 +14,7 @@ np.random.seed(0)
 
 def get_X_y_data(
     df: pd.DataFrame, label: str, shuffle: bool = False
-) -> Tuple[np.array, np.array]:
+) -> tuple[np.array, np.array]:
     """Get X (feature space) and labels (predicting class) from pandas Data frame
 
     Args:
@@ -44,7 +44,7 @@ def get_X_y_data(
 
 def load_data(
     path_to_data: pathlib.Path, label: str, shuffle: bool = False
-) -> Tuple[np.array, np.array]:
+) -> tuple[np.array, np.array]:
     """Load in data from a path as X (feature space) and labels (predicting class)
 
     Args:

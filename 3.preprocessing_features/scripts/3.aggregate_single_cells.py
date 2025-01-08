@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # ## Aggregating feature-selected single cells
-# 
-# In this notebook, we process single-cell feature-selected profiles to generate compound-level aggregated profiles for each plate using the pycytominer. 
-# The single-cell profiles are grouped by treatment (Metadata_treatment) and are saved as Parquet files in the aggregated_profiles directory. 
+#
+# In this notebook, we process single-cell feature-selected profiles to generate compound-level aggregated profiles for each plate using the pycytominer.
+# The single-cell profiles are grouped by treatment (Metadata_treatment) and are saved as Parquet files in the aggregated_profiles directory.
 # These aggregated profiles provide concise and interpretable data for downstream analysis at the compound level.
 
 # ## Import libraries
@@ -14,11 +13,10 @@
 
 import pathlib
 import pprint
-import pandas as pd
 import random
 
+import pandas as pd
 from pycytominer import aggregate, annotate
-
 
 # ## Set paths and variables
 
@@ -136,4 +134,3 @@ print(
     "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
 )
 test_df.head(2)
-

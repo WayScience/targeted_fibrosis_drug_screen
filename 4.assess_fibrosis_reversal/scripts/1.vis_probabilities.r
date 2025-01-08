@@ -201,7 +201,7 @@ for (plate in plate_names) {
   # Filter cell counts for the current plate
   plate_cell_counts <- cell_counts_df %>%
     filter(Metadata_Plate == plate)
-  
+
   # Merge the cell counts with the selected pathway map
   merged_df <- pathway_map_selected %>%
     left_join(plate_cell_counts, by = c("Well" = "Metadata_Well"))  # Specify the join condition
@@ -210,7 +210,7 @@ for (plate in plate_names) {
   merged_df <- merged_df %>%
     mutate(Single_Cell_Count = ifelse(is.na(Single_Cell_Count), 0, Single_Cell_Count))
 
-    
+
   # Fill NA in Metadata_Plate with the current plate name
   merged_df <- merged_df %>%
     mutate(Metadata_Plate = ifelse(is.na(Metadata_Plate), plate, Metadata_Plate))
@@ -222,10 +222,10 @@ for (plate in plate_names) {
 
 # Loop through each plate dataframe and generate the platemap
 for (plate_name in names(plate_dataframes)) {
-  
+
   # Get the dataframe for the current plate
   plate_df <- plate_dataframes[[plate_name]]
-  
+
   # Generate the plate map using platetools::raw_map
   platemap <- platetools::raw_map(
     data = plate_df$Single_Cell_Count,  # The single-cell counts
@@ -236,8 +236,8 @@ for (plate_name in names(plate_dataframes)) {
     ggtitle(paste("Platemap of single-cell count per well in plate\n", plate_name, "after single-cell QC")) +
     theme(plot.title = element_text(size = 10, face = "bold")) +
     scale_fill_gradient(
-      name = "Single-cell\ncount", 
-      low = "white", high = "red", 
+      name = "Single-cell\ncount",
+      low = "white", high = "red",
       limits = c(0, max(plate_df$Single_Cell_Count, na.rm = TRUE)),
   ) +
     theme(
@@ -245,7 +245,7 @@ for (plate_name in names(plate_dataframes)) {
       legend.title = element_text(size = 12),  # Adjust the legend title size here
       legend.text = element_text(size = 12)    # Optionally adjust legend text size
   )
-  
+
   # Save the plot with the required naming convention
   ggsave(
     filename = paste0(platemaps_dir, "/", batch_var, "_", plate_name, "_sc_counts.png"),

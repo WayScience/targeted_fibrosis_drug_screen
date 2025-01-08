@@ -2,8 +2,8 @@
 In this module, we have functions that has to do with providing utilts for our
 """
 import pandas as pd
-
 from pycytominer.cyto_utils import infer_cp_features
+
 
 def split_meta_and_features(
     profile: pd.DataFrame,

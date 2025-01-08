@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # # Process single cell profiles
 
@@ -12,9 +11,7 @@ import pathlib
 import pprint
 
 import pandas as pd
-
-from pycytominer import annotate, normalize, feature_select
-
+from pycytominer import annotate, feature_select, normalize
 
 # ## Set paths and variables
 
@@ -145,4 +142,3 @@ test_df = pd.read_parquet(output_feature_select_file)
 print(test_df.shape)
 print("Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")])
 test_df.head(2)
-
