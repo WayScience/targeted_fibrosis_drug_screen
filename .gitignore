@@ -25,6 +25,9 @@ runinfo*
 label_encoder*
 models*
 
+# Ignore bash scripts to run full modules
+run_training_data.sh
+
 # PYTHON SPECIFIC IGNORED FILES
 #######################################
 # Byte-compiled / optimized / DLL files
