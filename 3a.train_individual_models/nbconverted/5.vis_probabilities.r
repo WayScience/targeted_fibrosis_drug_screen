@@ -1,0 +1,159 @@
+suppressPackageStartupMessages(suppressWarnings(library(ggplot2))) # plotting
+suppressPackageStartupMessages(suppressWarnings(library(dplyr))) # data manipulation
+suppressPackageStartupMessages(suppressWarnings(library(ggridges))) # ridge line plots
+suppressPackageStartupMessages(suppressWarnings(library(RColorBrewer))) # color palettes
+suppressPackageStartupMessages(suppressWarnings(library(arrow))) # parquet files
+
+# Specify the path for the figures directory
+figures_dir <- "./figures"
+
+# Create the figures directory if it doesn't exist
+if (!dir.exists(figures_dir)) {
+  dir.create(figures_dir, recursive = TRUE)
+}
+
+# Load in the probabilities
+combined_probabilities_path <- file.path(
+    "./performance_metrics/batch1_compound_predictions.parquet"
+)
+
+# Read in the data from the parquet file
+combined_probabilities_df <- arrow::read_parquet(
+    combined_probabilities_path
+)
+
+# Load the plate name mapping file
+plate_name_mapping_path <- file.path(
+    "./batch1_plate_name_mapping.csv"
+)
+
+plate_name_mapping <- read.csv(plate_name_mapping_path)
+
+# Map the model_name to the new name
+combined_probabilities_df <- combined_probabilities_df %>%
+    left_join(plate_name_mapping, by = c("model_name" = "original")) %>%
+    mutate(model_name = ifelse(!is.na(mapped), mapped, model_name)) %>%
+    select(-mapped)
+
+# Display dimensions and a preview of the data
+dim(combined_probabilities_df)
+head(combined_probabilities_df, 2)
+
+# Custom color palette inspired by Dark2
+custom_palette <- c(
+  "#1b9e77",
+  "#d95f02",
+  "#7570b3",
+  "#e7298a",
+  "#66a61e",
+  "#e6ab02",
+  "#a6761d",
+  "#667665",
+  "#b3b3b3",
+  "#8dd3c7",
+  "#fb8072"
+)
+
+# Filter out shuffle models
+filtered_df <- combined_probabilities_df %>% filter(model_type != "shuffled")
+
+# Step 1: Calculate the median Healthy_probas for each treatment (you can use mean instead)
+treatment_order <- filtered_df %>%
+  group_by(Metadata_treatment) %>%
+  summarise(median_healthy_proba = median(predicted_probas)) %>%
+  arrange(desc(median_healthy_proba))  # Sort in descending order of median
+
+# Step 2: Reorder the 'Metadata_treatment' factor levels in reverse order for top-to-bottom plotting
+filtered_df <- filtered_df %>%
+  mutate(Metadata_treatment = factor(Metadata_treatment, levels = rev(treatment_order$Metadata_treatment)))
+
+# Step 3: Create the ridge plot with reordered treatments
+height <- 15
+width <- 24
+options(repr.plot.width = width, repr.plot.height = height)
+
+# Create a ridge plot excluding DMSO and using all other treatments on the y-axis
+ridge_plot_non_DMSO <- ggplot(filtered_df, aes(x = predicted_probas, y = Metadata_treatment, fill = Metadata_Pathway)) +
+  geom_density_ridges(alpha = 0.7, scale = 2.25, rel_min_height = 0.01, bandwidth = 0.1) +  # Ridges colored by Pathway
+  geom_vline(xintercept = 1, linetype = "dashed", color = "black") +
+  scale_x_continuous(breaks = seq(0, 1, 0.5)) +
+  labs(x = "Probability of healthy prediction", y = "Treatment", color = "Pathway") +  # Update axis labels
+  scale_fill_manual(values = custom_palette) +  # Use the custom color palette
+  theme_bw() +
+  theme(
+    legend.position = "right",  # Position the legend on the right
+    legend.title = element_text("Pathway", size = 22),
+    axis.text = element_text(size = 22),
+    axis.text.x = element_text(size = 22),
+    axis.title = element_text(size = 24),
+    strip.text = element_text(size = 18),
+    strip.background = element_rect(
+      colour = "black",
+      fill = "#fdfff4"
+    ),
+    legend.text = element_text(size = 18),  # Adjust legend text size if needed
+    legend.key.size = unit(1.5, "lines")  # Adjust the size of the legend keys
+  ) +
+  facet_wrap(~ model_name, ncol = 5)  # Facet by model applied
+
+# Save figure
+ggsave(paste0(figures_dir, "/treatments_only_ridge_plot.png"), ridge_plot_non_DMSO, height = height, width = width, dpi = 500)
+
+ridge_plot_non_DMSO
+
+# Custom color palette inspired by Dark2 (includes one more color for a pathway missing in above plot)
+custom_palette <- c(
+  "#1b9e77",
+  "#d95f02",
+  "#7570b3",
+  "#e7298a",
+  "#66a61e",
+  "#984ea3",
+  "#e6ab02",
+  "#a6761d",
+  "#667665",
+  "#b3b3b3",
+  "#8dd3c7",
+  "#fb8072"
+)
+
+# Calculate the median predicted probability and cell count per compound per model
+summary_data <- filtered_df %>%
+    group_by(Metadata_treatment, model_name) %>%
+    summarise(
+        median_predicted_proba = median(predicted_probas),
+        cell_count = n(),
+        .groups = "drop"
+    ) %>%
+    left_join(
+        filtered_df %>% distinct(Metadata_treatment, Metadata_Pathway),
+        by = "Metadata_treatment"
+    )
+
+height <- 10
+width <- 14
+options(repr.plot.width = width, repr.plot.height = height)
+
+# Generate scatterplot for probability and cell count
+count_probas_plot <- ggplot(summary_data, aes(x = cell_count, y = median_predicted_proba, color = Metadata_Pathway, shape = model_name)) +
+    geom_point(size = 4, alpha = 0.7) +
+    scale_color_manual(values = custom_palette) +  # Use the custom color palette
+    labs(
+        x = "Cell count",
+        y = "Median predicted probability",
+        color = "Treatment",
+        shape = "Trained model"
+    ) +
+    theme_bw() +
+    theme(
+        legend.position = "right",
+        legend.title = element_text(size = 16),
+        axis.text = element_text(size = 14),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14)
+    )
+
+# Save the scatterplot
+ggsave(paste0(figures_dir, "/batch1_median_proba_vs_cell_count_compounds.png"), count_probas_plot, height = height, width = width, dpi = 500)
+
+count_probas_plot
