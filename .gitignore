@@ -1,5 +1,8 @@
 # PROJECT SPECIFIC IGNORED FILES
 #######################################
+# Ignore any files within the "in-progress" folder
+in_progress*
+
 # Ignore corrected images (too large)
 Corrected_Images*
 
@@ -24,6 +27,9 @@ runinfo*
 # Ignore model files/folders as though are downloaded in the notebook
 label_encoder*
 models*
+
+# Ignore bash scripts to run full modules
+run_training_data.sh
 
 # PYTHON SPECIFIC IGNORED FILES
 #######################################
