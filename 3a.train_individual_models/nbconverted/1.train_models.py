@@ -146,7 +146,9 @@ print(class_mapping)
 
 # ## Train the models
 # 
-# **Note:** We will be using RandomizedSearchCV to hyperparameterize the model since that is how the original model was trained and we want to remain consistent.
+# These hyperparameters are set based on the model training from the [`cellpainting_predicts_cardiac_fibrosis` repository](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis). 
+# The following model training code is derived from the [model training notebook](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis/blob/main/5.machine_learning/0.train_logistic_regression/1.train_models.ipynb).
+# We will be using RandomizedSearchCV to hyperparameterize the model since that is how the original model was trained and we want to remain consistent.
 
 # ### Set up the model and hyper parameter method
 

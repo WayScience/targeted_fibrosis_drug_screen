@@ -16,10 +16,7 @@
 import pathlib
 import sys
 
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import seaborn as sns
 from joblib import load
 from sklearn.metrics import precision_recall_curve
 
@@ -145,6 +142,8 @@ print(combined_train_test_df.shape)
 combined_train_test_df.head(2)
 
 
+# ## Apply the individual plate models to the three other plates in the batch (considered holdout)
+
 # In[5]:
 
 
@@ -243,14 +242,16 @@ print(combined_holdout_df.shape)
 combined_holdout_df.head(2)
 
 
-# In[6]:
+# ## Apply the combined model to the testing dataset split by plate to evaluate performance
+
+# In[ ]:
 
 
 # Label being predicted
 label = "Metadata_cell_type"
 
 # Initialize results dictionary
-pr_results = {}
+combined_model_split_test_results = {}
 
 # Only process the combined_batch1 data
 paths = plates_dict["combined_batch1"]
@@ -289,7 +290,7 @@ for plate, dataset in test_groups:
 
         # Store results as individual rows (one per precision-recall pair)
         for actual, pred_prob, p, r, treatment in zip(y, y_scores, precision, recall, metadata_treatment):
-            pr_results[plate].append({
+            combined_model_split_test_results[plate].append({
                 "model_type": model_name,
                 "dataset": f"test_{plate}",
                 "actual_label": actual,
@@ -301,12 +302,12 @@ for plate, dataset in test_groups:
             })
             
 # Convert results to dataframes
-pr_results_dfs = {
+combined_model_split_test_results_dfs = {
     plate: pd.DataFrame(data) for plate, data in pr_results.items()
 }
 
 # Combine all results into one dataframe
-combined_test_df = pd.concat(pr_results_dfs.values(), ignore_index=True)
+combined_test_df = pd.concat(combined_model_split_test_results_dfs.values(), ignore_index=True)
 
 # Check the output
 print(combined_test_df.shape)

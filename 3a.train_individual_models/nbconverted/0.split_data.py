@@ -21,7 +21,8 @@ from sklearn.model_selection import train_test_split
 
 
 # Set random state for the whole notebook to ensure reproducibility
-random.seed(0)
+random_state=0
+random.seed(random_state)
 
 # Path to directory with feature selected profiles
 path_to_feature_selected_data = pathlib.Path(
@@ -53,9 +54,6 @@ pprint.pprint(feature_selected_dfs_dict, indent=4)
 
 # In[4]:
 
-
-# Set random state as 0 (same as the rest of the notebook)
-random_state = 0
 
 # Set the ratio of the test data to 30% (training data will be 70%)
 test_ratio = 0.30
@@ -108,9 +106,6 @@ combined_df.head()
 
 # In[6]:
 
-
-# Set random state as 0 (same as the rest of the notebook)
-random_state = 0
 
 # Set the ratio of the test data to 30% (training data will be 70%)
 test_ratio = 0.30
