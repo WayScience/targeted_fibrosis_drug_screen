@@ -3,6 +3,7 @@ suppressPackageStartupMessages(suppressWarnings(library(dplyr))) # data manipula
 suppressPackageStartupMessages(suppressWarnings(library(ggridges))) # ridge line plots
 suppressPackageStartupMessages(suppressWarnings(library(RColorBrewer))) # color palettes
 suppressPackageStartupMessages(suppressWarnings(library(arrow))) # parquet files
+suppressPackageStartupMessages(suppressWarnings(library(ggrepel))) # add names to plots
 
 # Specify the path for the figures directory
 figures_dir <- "./figures"
@@ -117,7 +118,6 @@ custom_palette <- c(
   "#fb8072"
 )
 
-# Calculate the median predicted probability and cell count per compound per model
 summary_data <- filtered_df %>%
     group_by(Metadata_treatment, model_name) %>%
     summarise(
@@ -128,7 +128,11 @@ summary_data <- filtered_df %>%
     left_join(
         filtered_df %>% distinct(Metadata_treatment, Metadata_Pathway),
         by = "Metadata_treatment"
+    ) %>%
+    mutate(
+        high_count_and_proba = cell_count > 750 & median_predicted_proba > 0.75
     )
+
 
 height <- 10
 width <- 14
@@ -137,6 +141,8 @@ options(repr.plot.width = width, repr.plot.height = height)
 # Generate scatterplot for probability and cell count
 count_probas_plot <- ggplot(summary_data, aes(x = cell_count, y = median_predicted_proba, color = Metadata_Pathway, shape = model_name)) +
     geom_point(size = 4, alpha = 0.7) +
+    geom_text_repel(data = subset(summary_data, high_count_and_proba == TRUE), aes(label = Metadata_treatment), 
+                    size = 5, box.padding = 0.35, point.padding = 0.5, max.overlaps = 20, show.legend = FALSE) +  # Add labels
     scale_color_manual(values = custom_palette) +  # Use the custom color palette
     labs(
         x = "Cell count",
