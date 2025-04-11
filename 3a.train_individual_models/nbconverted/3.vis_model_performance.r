@@ -144,6 +144,7 @@ holdout_combined_model_curves <- ggplot(filtered_data, aes(x = recall, y = preci
         linetype = "Model type"
     ) +
     theme_bw() +
+    ylim(0,1) +
     theme(
         text = element_text(size = 16),  # Increase font size for all text
         axis.title = element_text(size = 18),  # Increase font size for axis titles
