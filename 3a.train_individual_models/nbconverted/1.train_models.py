@@ -2,6 +2,8 @@
 # coding: utf-8
 
 # ## Train machine learning models to predict failing or healthy cell status
+# 
+# Each model will be trained on an individual plate or all plates from a batch combined.
 
 # ## Import libraries
 
@@ -16,6 +18,7 @@ import warnings
 import numpy as np
 import pandas as pd
 from joblib import dump
+from sklearn.base import clone
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold
@@ -63,11 +66,11 @@ training_indices_dir.mkdir(exist_ok=True, parents=True)
 
 # Load in all training files as dataframes and store them under 'orig_train_df'
 training_data_dfs_dict = {
-    '_'.join(parts[:2]) if parts[0] == "combined" else parts[0]: {
+    "_".join(parts[:2]) if parts[0] == "combined" else parts[0]: {
         "orig_train_df": pd.read_parquet(file)
     }
     for file in training_files
-    if (parts := pathlib.Path(file).stem.split('_'))
+    if (parts := pathlib.Path(file).stem.split("_"))
 }
 
 # Pretty print the dictionary
@@ -89,7 +92,9 @@ for plate, info in training_data_dfs_dict.items():
 
     # Export sample indices used in training the model to a new one-column CSV file
     output_file = f"{training_indices_dir}/{plate}_training_data_indices.csv"
-    pd.DataFrame(downsample_df.index, columns=["Index"]).to_csv(output_file, index=False)
+    pd.DataFrame(downsample_df.index, columns=["Index"]).to_csv(
+        output_file, index=False
+    )
 
     print(f"CSV file created at {output_file} with {len(downsample_df.index)} entries.")
 
@@ -108,7 +113,7 @@ le = LabelEncoder()
 for plate, info in training_data_dfs_dict.items():
     # Get downsampled dataframe
     downsample_df = info["downsample_train_df"]
-    
+
     # Get not shuffled training data from downsampled df (e.g., "final")
     X_train, y_train = get_X_y_data(df=downsample_df, label=label, shuffle=False)
 
@@ -184,12 +189,14 @@ random_search_params = {
 }
 
 
+# ### Train final and shuffled models per plate and combined batch
+
 # In[7]:
 
 
 # Initialize Logistic Regression and RandomizedSearchCV
-final_logreg = LogisticRegression(**logreg_params)
-final_random_search = RandomizedSearchCV(final_logreg, **random_search_params)
+logreg = LogisticRegression(**logreg_params)
+random_search = RandomizedSearchCV(logreg, **random_search_params)
 
 # Loop through the training data dictionary for both non-shuffled and shuffled data
 for plate, info in training_data_dfs_dict.items():
@@ -205,32 +212,37 @@ for plate, info in training_data_dfs_dict.items():
             warnings.filterwarnings(
                 "ignore", category=ConvergenceWarning, module="sklearn"
             )
-
-            # Train the model for non-shuffled training data
-            print(f"Training final model for {plate} features (non-shuffled)...")
+            ########################################################
+            # Train the model for non-shuffled (final) training data
+            ########################################################
+            print(f"Training model for {plate} features (final)...")
+            final_random_search = clone(random_search)
             final_random_search.fit(X_train, y_train)
             print(
-                f"Optimal parameters for {plate} features (non-shuffled):",
+                f"Optimal parameters for {plate} features (final):",
                 final_random_search.best_params_,
             )
 
-            # Save the final model for non-shuffled data using joblib
+            # Save the model for non-shuffled/final data using joblib
             final_model_filename = model_dir / f"{plate}_final_downsample.joblib"
             dump(final_random_search.best_estimator_, final_model_filename)
             print(f"Model saved as: {final_model_filename}")
 
+            ########################################################
             # Train the model for shuffled training data
-            print(f"Training final model for {plate} features (shuffled)...")
-            final_random_search.fit(X_shuffled_train, y_shuffled_train)
+            ########################################################
+            print(f"Training model for {plate} features (shuffled)...")
+            shuffled_random_search = clone(random_search)
+            shuffled_random_search.fit(X_shuffled_train, y_shuffled_train)
             print(
                 f"Optimal parameters for {plate} features (shuffled):",
-                final_random_search.best_params_,
+                shuffled_random_search.best_params_,
             )
 
             # Save the final model for shuffled data using joblib
             shuffled_final_model_filename = (
                 model_dir / f"{plate}_shuffled_downsample.joblib"
             )
-            dump(final_random_search.best_estimator_, shuffled_final_model_filename)
+            dump(shuffled_random_search.best_estimator_, shuffled_final_model_filename)
             print(f"Model saved as: {shuffled_final_model_filename}")
 

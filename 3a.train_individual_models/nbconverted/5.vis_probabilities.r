@@ -3,6 +3,7 @@ suppressPackageStartupMessages(suppressWarnings(library(dplyr))) # data manipula
 suppressPackageStartupMessages(suppressWarnings(library(ggridges))) # ridge line plots
 suppressPackageStartupMessages(suppressWarnings(library(RColorBrewer))) # color palettes
 suppressPackageStartupMessages(suppressWarnings(library(arrow))) # parquet files
+suppressPackageStartupMessages(suppressWarnings(library(ggrepel))) # add names to plots
 
 # Specify the path for the figures directory
 figures_dir <- "./figures"
@@ -101,6 +102,27 @@ ggsave(paste0(figures_dir, "/treatments_only_ridge_plot.png"), ridge_plot_non_DM
 
 ridge_plot_non_DMSO
 
+# Get the median probability and total cell counts per compound for only the combined model
+summary_data <- filtered_df %>%
+    filter(model_name == "combined_batch1") %>%
+    group_by(Metadata_treatment) %>%
+    summarise(
+        median_predicted_proba = median(predicted_probas),
+        cell_count = n(),
+        .groups = "drop"
+    ) %>%
+    left_join(
+        filtered_df %>% distinct(Metadata_treatment, Metadata_Pathway),
+        by = "Metadata_treatment"
+    ) %>%
+    mutate(
+        high_count_and_proba = cell_count > 300 & median_predicted_proba > 0.7
+    )
+
+# Display the summary data
+dim(summary_data)
+head(summary_data, 2)
+
 # Custom color palette inspired by Dark2 (includes one more color for a pathway missing in above plot)
 custom_palette <- c(
   "#1b9e77",
@@ -117,43 +139,115 @@ custom_palette <- c(
   "#fb8072"
 )
 
-# Calculate the median predicted probability and cell count per compound per model
-summary_data <- filtered_df %>%
-    group_by(Metadata_treatment, model_name) %>%
-    summarise(
-        median_predicted_proba = median(predicted_probas),
-        cell_count = n(),
-        .groups = "drop"
-    ) %>%
-    left_join(
-        filtered_df %>% distinct(Metadata_treatment, Metadata_Pathway),
-        by = "Metadata_treatment"
+height <- 10
+width <- 14
+options(repr.plot.width = width, repr.plot.height = height)
+
+# Generate scatterplot for probability and cell count
+count_probas_plot <- ggplot(summary_data, aes(x = cell_count, y = median_predicted_proba, color = Metadata_Pathway)) +
+    geom_point(size = 4, alpha = 0.7) +
+    geom_text_repel(data = subset(summary_data, high_count_and_proba == TRUE), aes(label = Metadata_treatment), 
+                    size = 6, box.padding = 0.35, point.padding = 0.5, max.overlaps = 20, show.legend = FALSE) +  # Add labels
+    scale_color_manual(values = custom_palette) +  # Use the custom color palette
+    labs(
+        x = "Cell count",
+        y = "Median predicted probability",
+        color = "Treatment",
+    ) +
+    theme_bw() +
+    theme(
+        legend.position = "right",
+        legend.title = element_text(size = 18),
+        legend.text = element_text(size = 16),
+        axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18)
     )
+
+# Save the scatterplot
+ggsave(paste0(figures_dir, "/batch1_median_proba_vs_cell_count_compounds.png"), count_probas_plot, height = height, width = width, dpi = 500)
+
+count_probas_plot
+
+# Read in the mAP scores CSV file
+mAP_scores_path <- "./_all_mAP_scores.csv"
+mAP_scores <- read.csv(mAP_scores_path)
+mAP_scores <- dplyr::filter(mAP_scores, shuffled == "False") # Filter only for non-shuffled results
+
+# Set treatment as a character to match for merging
+summary_data$Metadata_treatment <- as.character(summary_data$Metadata_treatment)
+
+# Merge the mAP scores with the summary_data using the Metadata_treatment column
+summary_data_w_mAP <- summary_data %>%
+    left_join(mAP_scores %>% select(Metadata_treatment, negative_mean_average_precision, positive_mean_average_precision), 
+        by = "Metadata_treatment")
+
+# Drop rows with NaNs in the mAP scores
+summary_data_w_mAP <- summary_data_w_mAP %>%
+  filter(!is.na(negative_mean_average_precision) & !is.na(positive_mean_average_precision))
+
+
+# Display the updated summary_data
+dim(summary_data_w_mAP)
+head(summary_data_w_mAP)
+
+setdiff(summary_data$Metadata_treatment, mAP_scores$Metadata_treatment)
 
 height <- 10
 width <- 14
 options(repr.plot.width = width, repr.plot.height = height)
 
 # Generate scatterplot for probability and cell count
-count_probas_plot <- ggplot(summary_data, aes(x = cell_count, y = median_predicted_proba, color = Metadata_Pathway, shape = model_name)) +
-    geom_point(size = 4, alpha = 0.7) +
+count_probas_plot <- ggplot(summary_data_w_mAP, aes(x = cell_count, y = median_predicted_proba, color = Metadata_Pathway)) +
+    geom_point(aes(size = negative_mean_average_precision), alpha = 0.7) +
+    geom_text_repel(data = subset(summary_data, high_count_and_proba == TRUE), aes(label = Metadata_treatment), 
+                    size = 6, box.padding = 0.35, point.padding = 0.5, max.overlaps = 20, show.legend = FALSE) +  # Add labels
     scale_color_manual(values = custom_palette) +  # Use the custom color palette
+    scale_size_continuous(name = "Negative mAP score") +
     labs(
         x = "Cell count",
         y = "Median predicted probability",
         color = "Treatment",
-        shape = "Trained model"
     ) +
     theme_bw() +
     theme(
         legend.position = "right",
-        legend.title = element_text(size = 16),
-        axis.text = element_text(size = 14),
-        axis.title = element_text(size = 16),
-        legend.text = element_text(size = 14)
+        legend.title = element_text(size = 18),
+        legend.text = element_text(size = 16),
+        axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18)
     )
 
 # Save the scatterplot
-ggsave(paste0(figures_dir, "/batch1_median_proba_vs_cell_count_compounds.png"), count_probas_plot, height = height, width = width, dpi = 500)
+ggsave(paste0(figures_dir, "/batch1_neg_mAP_median_proba_vs_cell_count_compounds.png"), count_probas_plot, height = height, width = width, dpi = 500)
+
+count_probas_plot
+
+height <- 10
+width <- 14
+options(repr.plot.width = width, repr.plot.height = height)
+
+# Generate scatterplot for probability and cell count
+count_probas_plot <- ggplot(summary_data_w_mAP, aes(x = cell_count, y = median_predicted_proba, color = Metadata_Pathway)) +
+    geom_point(aes(size = positive_mean_average_precision), alpha = 0.7) +
+    geom_text_repel(data = subset(summary_data, high_count_and_proba == TRUE), aes(label = Metadata_treatment), 
+                    size = 6, box.padding = 0.35, point.padding = 0.5, max.overlaps = 20, show.legend = FALSE) +  # Add labels
+    scale_color_manual(values = custom_palette) +  # Use the custom color palette
+    scale_size_continuous(name = "Positive mAP score") +
+    labs(
+        x = "Cell count",
+        y = "Median predicted probability",
+        color = "Treatment",
+    ) +
+    theme_bw() +
+    theme(
+        legend.position = "right",
+        legend.title = element_text(size = 18),
+        legend.text = element_text(size = 16),
+        axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18)
+    )
+
+# Save the scatterplot
+ggsave(paste0(figures_dir, "/batch1_pos_mAP_median_proba_vs_cell_count_compounds.png"), count_probas_plot, height = height, width = width, dpi = 500)
 
 count_probas_plot

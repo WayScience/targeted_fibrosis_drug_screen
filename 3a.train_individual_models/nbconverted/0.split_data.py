@@ -85,49 +85,39 @@ for plate, df in feature_selected_dfs_dict.items():
 # In[5]:
 
 
-# Identify common feature columns (excluding Metadata_ columns)
+# Assuming output_dir is already defined
+train_files = list(output_dir.glob("*_train.parquet"))
+test_files = list(output_dir.glob("*_test.parquet"))
+
+# Load files
+train_dfs = [pd.read_parquet(f) for f in train_files]
+test_dfs = [pd.read_parquet(f) for f in test_files]
+all_dfs = train_dfs + test_dfs
+
+# Get intersection of feature columns (excluding Metadata_) across the dataframes
 common_features = set.intersection(*[
-    set(df.columns[~df.columns.str.startswith("Metadata_")]) 
-    for df in feature_selected_dfs_dict.values()
+    set(df.columns[~df.columns.str.startswith("Metadata_")]) for df in all_dfs
 ])
+print(len(common_features), "common features across all dataframes")
 
-# Concat all filtered dataframes while keeping Metadata columns
-combined_df = pd.concat(
-    [df[list(common_features) + [col for col in df.columns if col.startswith("Metadata_")]] 
-     for df in feature_selected_dfs_dict.values()],
-    ignore_index=True
-)
+# Use metadata columns from first df
+metadata_cols = [col for col in all_dfs[0].columns if col.startswith("Metadata_")]
+all_cols = metadata_cols + sorted(common_features)
 
-print(combined_df.shape)
-combined_df.head()
+# Reindex with consistent columns
+train_dfs = [df.reindex(columns=all_cols) for df in train_dfs]
+test_dfs = [df.reindex(columns=all_cols) for df in test_dfs]
 
+# Merge and save
+combined_train_df = pd.concat(train_dfs, ignore_index=True)
+combined_test_df = pd.concat(test_dfs, ignore_index=True)
 
-# ## Filter combined dataframe for only DMSO treated cells and split into training and testing dataframes
+combined_train_df.to_parquet(output_dir / "combined_batch1_train.parquet", index=False)
+combined_test_df.to_parquet(output_dir / "combined_batch1_test.parquet", index=False)
 
-# In[6]:
+print("Train shape:", combined_train_df.shape)
+print("Test shape:", combined_test_df.shape)
 
-
-# Set the ratio of the test data to 30% (training data will be 70%)
-test_ratio = 0.30
-
-# Filter only the DMSO treated cells
-DMSO_combined_df = combined_df[combined_df.Metadata_treatment == "DMSO"]
-
-# Split the combined data into training and test
-training_data, testing_data = train_test_split(
-    DMSO_combined_df,
-    test_size=test_ratio,
-    stratify=DMSO_combined_df[["Metadata_cell_type"]],
-    random_state=random_state,
-)
-
-# View shapes and example output
-print("The testing data contains", testing_data.shape[0], "single-cells.")
-print("The training data contains", training_data.shape[0], "single-cells.")
-
-# Save training and test data
-training_data.to_parquet(output_dir / "combined_batch1_train.parquet")
-testing_data.to_parquet(output_dir / "combined_batch1_test.parquet")
-
-testing_data.head()
+# Print on dataframe to verify
+combined_train_df.head()
 
