@@ -1,647 +1,647 @@
-UCD ID,Plate,Well,Cell Type,Pathway
-DMSO,Plate_1,B02,healthy,
-UCD-0159256,Plate_1,B03,failing,Apoptosis
-UCD-0001766,Plate_1,B04,failing,Angiogenesis
-DMSO,Plate_1,B05,healthy,
-UCD-0159262,Plate_1,B06,failing,Others
-UCD-0001915,Plate_1,B07,failing,Others
-DMSO,Plate_1,B08,healthy,
-UCD-0001783,Plate_1,B09,failing,Others
-UCD-0159279,Plate_1,B10,failing,Others
-DMSO,Plate_1,B11,healthy,
-UCD-0159283,Plate_1,C02,failing,Endocrinology & Hormones
-UCD-0001040,Plate_1,C03,failing,Endocrinology & Hormones
-UCD-0018091,Plate_1,C04,failing,GPCR & G Protein
-UCD-0000450,Plate_1,C05,failing,Neuronal Signaling
-UCD-0159257,Plate_1,C06,failing,DNA Damage
-UCD-0001810,Plate_1,C07,failing,DNA Damage
-UCD-0159263,Plate_1,C08,failing,Others
-UCD-0159269,Plate_1,C09,failing,Others
-UCD-0159273,Plate_1,C10,failing,Others
-UCD-0017907,Plate_1,C11,failing,Others
-UCD-0159284,Plate_1,D02,failing,Stem Cells &  Wnt
-UCD-0017999,Plate_1,D03,failing,Endocrinology & Hormones
-UCD-0000721,Plate_1,D04,failing,Neuronal Signaling
-UCD-0001014,Plate_1,D05,failing,Neuronal Signaling
-UCD-0001804,Plate_1,D06,failing,MAPK
-UCD-0159261,Plate_1,D07,failing,Others
-UCD-0159264,Plate_1,D08,failing,Neuronal Signaling
-UCD-0001775,Plate_1,D09,failing,Others
-UCD-0159274,Plate_1,D10,failing,Others
-UCD-0001792,Plate_1,D11,failing,Others
-DMSO,Plate_1,E02,failing,
-UCD-0159285,Plate_1,E03,failing,DNA Damage
-UCD-0159289,Plate_1,E04,failing,Metabolism
-DMSO,Plate_1,E05,failing,
-UCD-0018179,Plate_1,E06,failing,MAPK
-UCD-0001016,Plate_1,E07,failing,Neuronal Signaling
-DMSO,Plate_1,E08,failing,
-UCD-0159258,Plate_1,E09,failing,Angiogenesis
-UCD-0018207,Plate_1,E10,failing,Neuronal Signaling
-DMSO,Plate_1,E11,failing,
-UCD-0001844,Plate_1,F02,failing,Others
-UCD-0159270,Plate_1,F03,failing,Others
-UCD-0159275,Plate_1,F04,failing,Others
-UCD-0001800,Plate_1,F05,failing,Others
-UCD-0001613,Plate_1,F06,failing,Endocrinology & Hormones
-UCD-0001921,Plate_1,F07,failing,Epigenetics
-UCD-0159290,Plate_1,F08,failing,PI3K/Akt/mTOR
-UCD-0159293,Plate_1,F09,failing,Others
-UCD-0001808,Plate_1,F10,failing,MAPK
-UCD-0001801,Plate_1,F11,failing,Endocrinology & Hormones
-UCD-0159265,Plate_1,G02,failing,Neuronal Signaling
-UCD-0159271,Plate_1,G03,failing,Others
-UCD-0001835,Plate_1,G04,failing,Others
-UCD-0159280,Plate_1,G05,failing,Others
-UCD-0159286,Plate_1,G06,failing,Others
-UCD-0018131,Plate_1,G07,failing,Angiogenesis
-UCD-0001024,Plate_1,G08,failing,Neuronal Signaling
-UCD-0001829,Plate_1,G09,failing,PI3K/Akt/mTOR
-UCD-0159259,Plate_1,G10,failing,PI3K/Akt/mTOR
-UCD-0001842,Plate_1,G11,failing,Neuronal Signaling
-DMSO,Plate_2,B02,healthy,
-UCD-0159266,Plate_2,B03,failing,Others
-UCD-0001812,Plate_2,B04,failing,Others
-DMSO,Plate_2,B05,healthy,
-UCD-0159276,Plate_2,B06,failing,Others
-UCD-0159281,Plate_2,B07,failing,Others
-DMSO,Plate_2,B08,healthy,
-UCD-0159287,Plate_2,B09,failing,Endocrinology & Hormones
-UCD-0000849,Plate_2,B10,failing,Endocrinology & Hormones
-DMSO,Plate_2,B11,healthy,
-UCD-0159291,Plate_2,C02,failing,GPCR & G Protein
-UCD-0000421,Plate_2,C03,failing,Neuronal Signaling
-UCD-0017947,Plate_2,C04,failing,Apoptosis
-UCD-0001816,Plate_2,C05,failing,Metabolism
-UCD-0159267,Plate_2,C06,failing,Others
-UCD-0001802,Plate_2,C07,failing,Others
-UCD-0159277,Plate_2,C08,failing,Others
-UCD-0159282,Plate_2,C09,failing,Others
-UCD-0159288,Plate_2,C10,failing,Metabolism
-UCD-0018089,Plate_2,C11,failing,Endocrinology & Hormones
-UCD-0159292,Plate_2,D02,failing,DNA Damage
-UCD-0159294,Plate_2,D03,failing,Cell Cycle
-UCD-0159260,Plate_2,D04,failing,Epigenetics
-UCD-0001850,Plate_2,D05,failing,Others
-UCD-0159268,Plate_2,D06,failing,Others
-UCD-0159272,Plate_2,D07,failing,Others
-UCD-0159278,Plate_2,D08,failing,Others
-UCD-0001733,Plate_2,D09,failing,Protein Tyrosine Kinase
-UCD-0001086,Plate_2,D10,failing,Endocrinology & Hormones
-UCD-0000786,Plate_2,D11,failing,GPCR & G Protein
-DMSO,Plate_2,E02,failing,
-UCD-0001101,Plate_2,E03,failing,Neuronal Signaling
-UCD-0159295,Plate_2,E04,failing,Microbiology
-DMSO,Plate_2,E05,failing,
-UCD-0018083,Plate_2,E06,failing,JAK/STAT
-UCD-0001822,Plate_2,E07,failing,MAPK
-DMSO,Plate_2,E08,failing,
-UCD-0001759,Plate_2,E09,failing,Angiogenesis
-UCD-0000533,Plate_2,E10,failing,GPCR & G Protein
-DMSO,Plate_2,E11,failing,
-UCD-0000295,Plate_2,F02,failing,Metabolism
-UCD-0001580,Plate_2,F03,failing,Transmembrane Transporters
-UCD-0159317,Plate_2,F04,failing,Angiogenesis
-UCD-0018516,Plate_2,F05,failing,Neuronal Signaling
-UCD-0018304,Plate_2,F06,failing,Endocrinology & Hormones
-UCD-0159327,Plate_2,F07,failing,DNA Damage
-UCD-0159296,Plate_2,F08,failing,Metabolism
-UCD-0159302,Plate_2,F09,failing,PI3K/Akt/mTOR
-UCD-0001793,Plate_2,F10,failing,Cell Cycle
-UCD-0000757,Plate_2,F11,failing,Metabolism
-UCD-0159316,Plate_2,G02,failing,Proteases
-UCD-0000878,Plate_2,G03,failing,Transmembrane Transporters
-UCD-0159318,Plate_2,G04,failing,Angiogenesis
-UCD-0001616B,Plate_2,G05,failing,Others
-UCD-0001463,Plate_2,G06,failing,Neuronal Signaling
-UCD-0001847,Plate_2,G07,failing,JAK/STAT
-UCD-0159297,Plate_2,G08,failing,Microbiology
-UCD-0159303,Plate_2,G09,failing,Metabolism
-UCD-0159307,Plate_2,G10,failing,GPCR & G Protein
-UCD-0159312,Plate_2,G11,failing,Transmembrane Transporters
-DMSO,Plate_3,B02,healthy,
-UCD-0000253,Plate_3,B03,failing,Neuronal Signaling
-UCD-0000872,Plate_3,B04,failing,Metabolism
-DMSO,Plate_3,B05,healthy,
-UCD-0159319,Plate_3,B06,failing,Neuronal Signaling
-UCD-0000730,Plate_3,B07,failing,Metabolism
-DMSO,Plate_3,B08,healthy,
-UCD-0018569,Plate_3,B09,failing,Endocrinology & Hormones
-UCD-0159328,Plate_3,B10,failing,Proteases
-DMSO,Plate_3,B11,healthy,
-UCD-0159298,Plate_3,C02,failing,Cytoskeletal Signaling
-UCD-0159304,Plate_3,C03,failing,Cell Cycle
-UCD-0159308,Plate_3,C04,failing,Protein Tyrosine Kinase
-UCD-0018012,Plate_3,C05,failing,Apoptosis
-UCD-0001162,Plate_3,C06,failing,Endocrinology & Hormones
-UCD-0001305,Plate_3,C07,failing,Neuronal Signaling
-UCD-0018311,Plate_3,C08,failing,Neuronal Signaling
-UCD-0001441,Plate_3,C09,failing,Neuronal Signaling
-UCD-0159322,Plate_3,C10,failing,Endocrinology & Hormones
-UCD-0001784,Plate_3,C11,failing,Cell Cycle
-UCD-0159299,Plate_3,D02,failing,Metabolism
-UCD-0159305,Plate_3,D03,failing,Transmembrane Transporters
-UCD-0159309,Plate_3,D04,failing,Angiogenesis
-UCD-0001843,Plate_3,D05,failing,DNA Damage
-UCD-0000490,Plate_3,D06,failing,Neuronal Signaling
-UCD-0018439,Plate_3,D07,failing,Microbiology
-UCD-0001435,Plate_3,D08,failing,Others
-UCD-0018550,Plate_3,D09,failing,Neuronal Signaling
-UCD-0159323,Plate_3,D10,failing,Stem Cells &  Wnt
-UCD-0159329,Plate_3,D11,failing,JAK/STAT
-DMSO,Plate_3,E02,failing,
-UCD-0159300,Plate_3,E03,failing,GPCR & G Protein
-UCD-0001790,Plate_3,E04,failing,Cell Cycle
-DMSO,Plate_3,E05,failing,
-UCD-0013217,Plate_3,E06,failing,Epigenetics
-UCD-0159313,Plate_3,E07,failing,Protein Tyrosine Kinase
-DMSO,Plate_3,E08,failing,
-UCD-0018240,Plate_3,E09,failing,PI3K/Akt/mTOR
-UCD-0018483,Plate_3,E10,failing,Microbiology
-DMSO,Plate_3,E11,failing,
-UCD-0000101,Plate_3,F02,failing,Endocrinology & Hormones
-UCD-0159320,Plate_3,F03,failing,Metabolism
-UCD-0159324,Plate_3,F04,failing,Angiogenesis
-UCD-0001869,Plate_3,F05,failing,Protein Tyrosine Kinase
-UCD-0001818,Plate_3,F06,failing,MAPK
-UCD-0018051,Plate_3,F07,failing,Metabolism
-UCD-0159310,Plate_3,F08,failing,GPCR & G Protein
-UCD-0159314,Plate_3,F09,failing,PI3K/Akt/mTOR
-UCD-0000083,Plate_3,F10,failing,Neuronal Signaling
-UCD-0018527,Plate_3,F11,failing,Microbiology
-UCD-0000469,Plate_3,G02,failing,Neuronal Signaling
-UCD-0159321,Plate_3,G03,failing,Neuronal Signaling
-UCD-0159325,Plate_3,G04,failing,PI3K/Akt/mTOR
-UCD-0159330,Plate_3,G05,failing,Protein Tyrosine Kinase
-UCD-0159301,Plate_3,G06,failing,Cell Cycle
-UCD-0159306,Plate_3,G07,failing,Cell Cycle
-UCD-0159311,Plate_3,G08,failing,GPCR & G Protein
-UCD-0159315,Plate_3,G09,failing,PI3K/Akt/mTOR
-UCD-0000576,Plate_3,G10,failing,Neuronal Signaling
-UCD-0000324,Plate_3,G11,failing,Metabolism
-DMSO,Plate_4,B02,healthy,
-UCD-0001078,Plate_4,B03,failing,Metabolism
-UCD-0000972,Plate_4,B04,failing,Neuronal Signaling
-DMSO,Plate_4,B05,healthy,
-UCD-0159326,Plate_4,B06,failing,Neuronal Signaling
-UCD-0159331,Plate_4,B07,failing,Transmembrane Transporters
-DMSO,Plate_4,B08,healthy,
-UCD-0159332,Plate_4,B09,failing,Apoptosis
-UCD-0000936,Plate_4,B10,failing,Neuronal Signaling
-DMSO,Plate_4,B11,healthy,
-UCD-0001886,Plate_4,C02,failing,Cell Cycle
-UCD-0159344,Plate_4,C03,failing,Endocrinology & Hormones
-UCD-0159350,Plate_4,C04,failing,Neuronal Signaling
-UCD-0159355,Plate_4,C05,failing,PI3K/Akt/mTOR
-UCD-0159361,Plate_4,C06,failing,Others
-UCD-0159368,Plate_4,C07,failing,Angiogenesis
-UCD-0159375,Plate_4,C08,failing,NF-?B
-UCD-0159383,Plate_4,C09,failing,NF-?B
-UCD-0159333,Plate_4,C10,failing,Transmembrane Transporters
-UCD-0001616,Plate_4,C11,failing,Metabolism
-UCD-0159339,Plate_4,D02,failing,Neuronal Signaling
-UCD-0159345,Plate_4,D03,failing,Neuronal Signaling
-UCD-0159351,Plate_4,D04,failing,Others
-UCD-0001790B,Plate_4,D05,failing,Protein Tyrosine Kinase
-UCD-0159362,Plate_4,D06,failing,Stem Cells &  Wnt
-UCD-0159369,Plate_4,D07,failing,Epigenetics
-UCD-0159376,Plate_4,D08,failing,Transmembrane Transporters
-UCD-0159384,Plate_4,D09,failing,NF-?B
-UCD-0159334,Plate_4,D10,failing,Metabolism
-UCD-0159338,Plate_4,D11,failing,Neuronal Signaling
-DMSO,Plate_4,E02,failing,
-UCD-0159340,Plate_4,E03,failing,Others
-UCD-0159346,Plate_4,E04,failing,Stem Cells &  Wnt
-DMSO,Plate_4,E05,failing,
-UCD-0001900,Plate_4,E06,failing,PI3K/Akt/mTOR
-UCD-0159356,Plate_4,E07,failing,Cytoskeletal Signaling
-DMSO,Plate_4,E08,failing,
-UCD-0159363,Plate_4,E09,failing,Others
-UCD-0018540,Plate_4,E10,failing,MAPK
-DMSO,Plate_4,E11,failing,
-UCD-0159377,Plate_4,F02,failing,Metabolism
-UCD-0159385,Plate_4,F03,failing,Metabolism
-UCD-0000684,Plate_4,F04,failing,Others
-UCD-0001186,Plate_4,F05,failing,Neuronal Signaling
-UCD-0159341,Plate_4,F06,failing,Metabolism
-UCD-0159347,Plate_4,F07,failing,Metabolism
-UCD-0001861,Plate_4,F08,failing,Angiogenesis
-UCD-0159357,Plate_4,F09,failing,Apoptosis
-UCD-0011696,Plate_4,F10,failing,JAK/STAT
-UCD-0159370,Plate_4,F11,failing,PI3K/Akt/mTOR
-UCD-0159378,Plate_4,G02,failing,Protein Tyrosine Kinase
-UCD-0159386,Plate_4,G03,failing,DNA Damage
-UCD-0159335,Plate_4,G04,failing,JAK/STAT
-UCD-0018448,Plate_4,G05,failing,GPCR & G Protein
-UCD-0159342,Plate_4,G06,failing,Others
-UCD-0001885,Plate_4,G07,failing,PI3K/Akt/mTOR
-UCD-0159352,Plate_4,G08,failing,Proteases
-UCD-0159358,Plate_4,G09,failing,Metabolism
-UCD-0159364,Plate_4,G10,failing,Others
-UCD-0159371,Plate_4,G11,failing,Apoptosis
-DMSO,Plate_5,B02,healthy,
-UCD-0159379,Plate_5,B03,failing,PI3K/Akt/mTOR
-UCD-0159387,Plate_5,B04,failing,Neuronal Signaling
-DMSO,Plate_5,B05,healthy,
-UCD-0159336,Plate_5,B06,failing,Ubiquitin
-UCD-0001419,Plate_5,B07,failing,Transmembrane Transporters
-DMSO,Plate_5,B08,healthy,
-UCD-0159343,Plate_5,B09,failing,GPCR & G Protein
-UCD-0001863,Plate_5,B10,failing,Angiogenesis
-DMSO,Plate_5,B11,healthy,
-UCD-0159353,Plate_5,C02,failing,Proteases
-UCD-0159359,Plate_5,C03,failing,Others
-UCD-0159365,Plate_5,C04,failing,TGF-beta/Smad
-UCD-0159372,Plate_5,C05,failing,Protein Tyrosine Kinase
-UCD-0159380,Plate_5,C06,failing,GPCR & G Protein
-UCD-0159388,Plate_5,C07,failing,NF-?B
-UCD-0159337,Plate_5,C08,failing,Neuronal Signaling
-UCD-0001391,Plate_5,C09,failing,Metabolism
-UCD-0001856,Plate_5,C10,failing,Angiogenesis
-UCD-0159348,Plate_5,C11,failing,Cell Cycle
-UCD-0159354,Plate_5,D02,failing,Metabolism
-UCD-0000201,Plate_5,D03,failing,GPCR & G Protein
-UCD-0159366,Plate_5,D04,failing,Metabolism
-UCD-0159373,Plate_5,D05,failing,Angiogenesis
-UCD-0159381,Plate_5,D06,failing,Neuronal Signaling
-UCD-0001864,Plate_5,D07,failing,Angiogenesis
-UCD-0000737,Plate_5,D08,failing,GPCR & G Protein
-UCD-0001870,Plate_5,D09,failing,Angiogenesis
-UCD-0001888,Plate_5,D10,failing,PI3K/Akt/mTOR
-UCD-0159349,Plate_5,D11,failing,Metabolism
-DMSO,Plate_5,E02,failing,
-UCD-0001567,Plate_5,E03,failing,Transmembrane Transporters
-UCD-0159360,Plate_5,E04,failing,Metabolism
-DMSO,Plate_5,E05,failing,
-UCD-0159367,Plate_5,E06,failing,Neuronal Signaling
-UCD-0159374,Plate_5,E07,failing,Endocrinology & Hormones
-DMSO,Plate_5,E08,failing,
-UCD-0159382,Plate_5,E09,failing,Neuronal Signaling
-UCD-0159389,Plate_5,E10,failing,Protein Tyrosine Kinase
-DMSO,Plate_5,E11,failing,
-UCD-0159390,Plate_5,F02,failing,Neuronal Signaling
-UCD-0022022,Plate_5,F03,failing,Others
-UCD-0018458,Plate_5,F04,failing,Proteases
-UCD-0000899,Plate_5,F05,failing,Neuronal Signaling
-UCD-0159408,Plate_5,F06,failing,Neuronal Signaling
-UCD-0017582,Plate_5,F07,failing,Neuronal Signaling
-UCD-0159414,Plate_5,F08,failing,DNA Damage
-UCD-0159422,Plate_5,F09,failing,Apoptosis
-UCD-0159430,Plate_5,F10,failing,Proteases
-UCD-0159435,Plate_5,F11,failing,Protein Tyrosine Kinase
-UCD-0159391,Plate_5,G02,failing,Protein Tyrosine Kinase
-UCD-0159398,Plate_5,G03,failing,Protein Tyrosine Kinase
-UCD-0159402,Plate_5,G04,failing,GPCR & G Protein
-UCD-0159407,Plate_5,G05,failing,NF-?B
-UCD-0011462,Plate_5,G06,failing,Endocrinology & Hormones
-UCD-0159410,Plate_5,G07,failing,Neuronal Signaling
-UCD-0159415,Plate_5,G08,failing,Ubiquitin
-UCD-0159423,Plate_5,G09,failing,PI3K/Akt/mTOR
-UCD-0159431,Plate_5,G10,failing,PI3K/Akt/mTOR
-UCD-0159436,Plate_5,G11,failing,Stem Cells &  Wnt
-DMSO,Plate_6,B02,healthy,
-UCD-0159392,Plate_6,B03,failing,Angiogenesis
-UCD-0159399,Plate_6,B04,failing,Apoptosis
-DMSO,Plate_6,B05,healthy,
-UCD-0159403,Plate_6,B06,failing,GPCR & G Protein
-UCD-0000904,Plate_6,B07,failing,GPCR & G Protein
-DMSO,Plate_6,B08,healthy,
-UCD-0000243,Plate_6,B09,failing,Neuronal Signaling
-UCD-0159411B,Plate_6,B10,failing,Neuronal Signaling
-DMSO,Plate_6,B11,healthy,
-UCD-0159416,Plate_6,C02,failing,Metabolism
-UCD-0159424,Plate_6,C03,failing,JAK/STAT
-UCD-0159432,Plate_6,C04,failing,Angiogenesis
-UCD-0159437,Plate_6,C05,failing,Cytoskeletal Signaling
-UCD-0159393,Plate_6,C06,failing,GPCR & G Protein
-UCD-0159400,Plate_6,C07,failing,Apoptosis
-UCD-0001059,Plate_6,C08,failing,Epigenetics
-UCD-0011606,Plate_6,C09,failing,Neuronal Signaling
-UCD-0000463,Plate_6,C10,failing,Others
-UCD-0159411,Plate_6,C11,failing,Neuronal Signaling
-UCD-0159417,Plate_6,D02,failing,GPCR & G Protein
-UCD-0159425,Plate_6,D03,failing,Apoptosis
-UCD-0159433,Plate_6,D04,failing,Protein Tyrosine Kinase
-UCD-0159438,Plate_6,D05,failing,Cytoskeletal Signaling
-UCD-0159394,Plate_6,D06,failing,TGF-beta/Smad
-UCD-0018410,Plate_6,D07,failing,Metabolism
-UCD-0001653,Plate_6,D08,failing,Transmembrane Transporters
-UCD-0000377,Plate_6,D09,failing,Transmembrane Transporters
-UCD-0001002,Plate_6,D10,failing,Neuronal Signaling
-UCD-0001657,Plate_6,D11,failing,GPCR & G Protein
-DMSO,Plate_6,E02,failing,
-UCD-0159418,Plate_6,E03,failing,Transmembrane Transporters
-UCD-0159426,Plate_6,E04,failing,DNA Damage
-DMSO,Plate_6,E05,failing,
-UCD-0001924,Plate_6,E06,failing,Epigenetics
-UCD-0159439,Plate_6,E07,failing,PI3K/Akt/mTOR
-DMSO,Plate_6,E08,failing,
-UCD-0159395,Plate_6,E09,failing,GPCR & G Protein
-UCD-0018456,Plate_6,E10,failing,GPCR & G Protein
-DMSO,Plate_6,E11,failing,
-UCD-0159404,Plate_6,F02,failing,Metabolism
-UCD-0011098,Plate_6,F03,failing,Neuronal Signaling
-UCD-0011250,Plate_6,F04,failing,Endocrinology & Hormones
-UCD-0018183,Plate_6,F05,failing,Proteases
-UCD-0159419,Plate_6,F06,failing,Protein Tyrosine Kinase
-UCD-0159427,Plate_6,F07,failing,Apoptosis
-UCD-0001966,Plate_6,F08,failing,Others
-UCD-0159440,Plate_6,F09,failing,Protein Tyrosine Kinase
-UCD-0159396,Plate_6,F10,failing,DNA Damage
-UCD-0159401,Plate_6,F11,failing,Angiogenesis
-UCD-0159405,Plate_6,G02,failing,Metabolism
-UCD-0159664,Plate_6,G03,failing,Epigenetics
-UCD-0001098,Plate_6,G04,failing,Neuronal Signaling
-UCD-0159412,Plate_6,G05,failing,Apoptosis
-UCD-0159420,Plate_6,G06,failing,Angiogenesis
-UCD-0159428,Plate_6,G07,failing,Apoptosis
-UCD-0001925,Plate_6,G08,failing,Epigenetics
-UCD-0159441,Plate_6,G09,failing,Metabolism
-UCD-0159397,Plate_6,G10,failing,Others
-UCD-0000918,Plate_6,G11,failing,Proteases
-DMSO,Plate_7,B02,healthy,
-UCD-0159406,Plate_7,B03,failing,Neuronal Signaling
-UCD-0000841,Plate_7,B04,failing,Neuronal Signaling
-DMSO,Plate_7,B05,healthy,
-UCD-0159409,Plate_7,B06,failing,Others
-UCD-0159413,Plate_7,B07,failing,NF-?B
-DMSO,Plate_7,B08,healthy,
-UCD-0159421,Plate_7,B09,failing,Apoptosis
-UCD-0159429,Plate_7,B10,failing,Stem Cells &  Wnt
-DMSO,Plate_7,B11,healthy,
-UCD-0159434,Plate_7,C02,failing,Angiogenesis
-UCD-0159442,Plate_7,C03,failing,Epigenetics
-UCD-0159443,Plate_7,C04,failing,Others
-UCD-0159451,Plate_7,C05,failing,Ubiquitin
-UCD-0159458,Plate_7,C06,failing,Others
-UCD-0159466,Plate_7,C07,failing,Cell Cycle
-UCD-0159474,Plate_7,C08,failing,DNA Damage
-UCD-0159482,Plate_7,C09,failing,Angiogenesis
-UCD-0159490,Plate_7,C10,failing,Ubiquitin
-UCD-0159498,Plate_7,C11,failing,PI3K/Akt/mTOR
-UCD-0159506,Plate_7,D02,failing,NF-?B
-UCD-0159514,Plate_7,D03,failing,Others
-UCD-0159444,Plate_7,D04,failing,MAPK
-UCD-0159452,Plate_7,D05,failing,Ubiquitin
-UCD-0159459,Plate_7,D06,failing,Cytoskeletal Signaling
-UCD-0159467,Plate_7,D07,failing,Ubiquitin
-UCD-0159475,Plate_7,D08,failing,Metabolism
-UCD-0159483,Plate_7,D09,failing,Endocrinology & Hormones
-UCD-0159491,Plate_7,D10,failing,Others
-UCD-0159499,Plate_7,D11,failing,Cell Cycle
-DMSO,Plate_7,E02,failing,
-UCD-0159507,Plate_7,E03,failing,Cytoskeletal Signaling
-UCD-0159515,Plate_7,E04,failing,Epigenetics
-DMSO,Plate_7,E05,failing,
-UCD-0159445,Plate_7,E06,failing,Others
-UCD-0159453,Plate_7,E07,failing,TGF-beta/Smad
-DMSO,Plate_7,E08,failing,
-UCD-0159460,Plate_7,E09,failing,Angiogenesis
-UCD-0159468,Plate_7,E10,failing,Apoptosis
-DMSO,Plate_7,E11,failing,
-UCD-0159476,Plate_7,F02,failing,Metabolism
-UCD-0159484,Plate_7,F03,failing,Epigenetics
-UCD-0159492,Plate_7,F04,failing,Cell Cycle
-UCD-0159500,Plate_7,F05,failing,Epigenetics
-UCD-0159508,Plate_7,F06,failing,Epigenetics
-UCD-0159516,Plate_7,F07,failing,Proteases
-UCD-0159446,Plate_7,F08,failing,Transmembrane Transporters
-UCD-0159454,Plate_7,F09,failing,TGF-beta/Smad
-UCD-0159461,Plate_7,F10,failing,Angiogenesis
-UCD-0159469,Plate_7,F11,failing,Protein Tyrosine Kinase
-UCD-0159477,Plate_7,G02,failing,Metabolism
-UCD-0159485,Plate_7,G03,failing,Transmembrane Transporters
-UCD-0159493,Plate_7,G04,failing,Epigenetics
-UCD-0159501,Plate_7,G05,failing,Cell Cycle
-UCD-0159509,Plate_7,G06,failing,Others
-UCD-0159517,Plate_7,G07,failing,Proteases
-UCD-0159447,Plate_7,G08,failing,Ubiquitin
-UCD-0159455,Plate_7,G09,failing,TGF-beta/Smad
-UCD-0159462,Plate_7,G10,failing,GPCR & G Protein
-UCD-0159470,Plate_7,G11,failing,MAPK
-DMSO,Plate_8,B02,healthy,
-UCD-0159478,Plate_8,B03,failing,Cell Cycle
-UCD-0159486,Plate_8,B04,failing,Others
-DMSO,Plate_8,B05,healthy,
-UCD-0159494,Plate_8,B06,failing,Protein Tyrosine Kinase
-UCD-0159502,Plate_8,B07,failing,MAPK
-DMSO,Plate_8,B08,healthy,
-UCD-0159510,Plate_8,B09,failing,Autophagy
-UCD-0159518,Plate_8,B10,failing,Proteases
-DMSO,Plate_8,B11,healthy,
-UCD-0159448,Plate_8,C02,failing,Ubiquitin
-UCD-0159456,Plate_8,C03,failing,Apoptosis
-UCD-0159463,Plate_8,C04,failing,GPCR & G Protein
-UCD-0159471,Plate_8,C05,failing,Proteases
-UCD-0159479,Plate_8,C06,failing,Transmembrane Transporters
-UCD-0159487,Plate_8,C07,failing,Others
-UCD-0159495,Plate_8,C08,failing,Apoptosis
-UCD-0159503,Plate_8,C09,failing,Cytoskeletal Signaling
-UCD-0159511,Plate_8,C10,failing,Autophagy
-UCD-0159519,Plate_8,C11,failing,Stem Cells &  Wnt
-UCD-0159449,Plate_8,D02,failing,Ubiquitin
-UCD-0001927,Plate_8,D03,failing,Epigenetics
-UCD-0159464,Plate_8,D04,failing,Metabolism
-UCD-0159472,Plate_8,D05,failing,TGF-beta/Smad
-UCD-0159480,Plate_8,D06,failing,Transmembrane Transporters
-UCD-0159488,Plate_8,D07,failing,Epigenetics
-UCD-0159496,Plate_8,D08,failing,Others
-UCD-0159504,Plate_8,D09,failing,Others
-UCD-0159512,Plate_8,D10,failing,Others
-UCD-0159520,Plate_8,D11,failing,NF-?B
-DMSO,Plate_8,E02,failing,
-UCD-0159450,Plate_8,E03,failing,DNA Damage
-UCD-0159457,Plate_8,E04,failing,Proteases
-DMSO,Plate_8,E05,failing,
-UCD-0159465,Plate_8,E06,failing,Metabolism
-UCD-0159473,Plate_8,E07,failing,Epigenetics
-DMSO,Plate_8,E08,failing,
-UCD-0159481,Plate_8,E09,failing,Cell Cycle
-UCD-0159489,Plate_8,E10,failing,Epigenetics
-DMSO,Plate_8,E11,failing,
-UCD-0159497,Plate_8,F02,failing,PI3K/Akt/mTOR
-UCD-0159505,Plate_8,F03,failing,Others
-UCD-0159513,Plate_8,F04,failing,Others
-UCD-0159521,Plate_8,F05,failing,Others
-UCD-0159522,Plate_8,F06,failing,Proteases
-UCD-0159529,Plate_8,F07,failing,Cell Cycle
-UCD-0159537,Plate_8,F08,failing,Others
-UCD-0159545,Plate_8,F09,failing,Autophagy
-UCD-0159552,Plate_8,F10,failing,Protein Tyrosine Kinase
-UCD-0159560,Plate_8,F11,failing,DNA Damage
-UCD-0159568,Plate_8,G02,failing,Others
-UCD-0159576,Plate_8,G03,failing,Others
-UCD-0159584,Plate_8,G04,failing,Cell Cycle
-UCD-0159591,Plate_8,G05,failing,Epigenetics
-UCD-0159523,Plate_8,G06,failing,Proteases
-UCD-0159530,Plate_8,G07,failing,Proteases
-UCD-0159538,Plate_8,G08,failing,MAPK
-UCD-0159546,Plate_8,G09,failing,Ubiquitin
-UCD-0159553,Plate_8,G10,failing,PI3K/Akt/mTOR
-UCD-0159561,Plate_8,G11,failing,JAK/STAT
-DMSO,Plate_9,B02,healthy,
-UCD-0159569,Plate_9,B03,failing,Protein Tyrosine Kinase
-UCD-0159577,Plate_9,B04,failing,Cell Cycle
-DMSO,Plate_9,B05,healthy,
-UCD-0159585,Plate_9,B06,failing,Protein Tyrosine Kinase
-UCD-0159592,Plate_9,B07,failing,Epigenetics
-DMSO,Plate_9,B08,healthy,
-UCD-0159524,Plate_9,B09,failing,Others
-UCD-0159531,Plate_9,B10,failing,Metabolism
-DMSO,Plate_9,B11,healthy,
-UCD-0159539,Plate_9,C02,failing,Proteases
-UCD-0159547,Plate_9,C03,failing,Apoptosis
-UCD-0159554,Plate_9,C04,failing,Angiogenesis
-UCD-0159562,Plate_9,C05,failing,Epigenetics
-UCD-0159570,Plate_9,C06,failing,GPCR & G Protein
-UCD-0159578,Plate_9,C07,failing,PI3K/Akt/mTOR
-UCD-0159586,Plate_9,C08,failing,Angiogenesis
-UCD-0159593,Plate_9,C09,failing,Epigenetics
-UCD-0159525,Plate_9,C10,failing,Others
-UCD-0159532,Plate_9,C11,failing,PI3K/Akt/mTOR
-UCD-0159540,Plate_9,D02,failing,Others
-UCD-0159548,Plate_9,D03,failing,Others
-UCD-0159555,Plate_9,D04,failing,Cytoskeletal Signaling
-UCD-0159563,Plate_9,D05,failing,Angiogenesis
-UCD-0159571,Plate_9,D06,failing,Others
-UCD-0159579,Plate_9,D07,failing,PI3K/Akt/mTOR
-UCD-0159587,Plate_9,D08,failing,Angiogenesis
-UCD-0159594,Plate_9,D09,failing,Others
-UCD-0159526,Plate_9,D10,failing,DNA Damage
-UCD-0159533,Plate_9,D11,failing,Cytoskeletal Signaling
-DMSO,Plate_9,E02,failing,
-UCD-0159541,Plate_9,E03,failing,Protein Tyrosine Kinase
-UCD-0159514B,Plate_9,E04,failing,Others
-DMSO,Plate_9,E05,failing,
-UCD-0159556,Plate_9,E06,failing,GPCR & G Protein
-UCD-0159564,Plate_9,E07,failing,Epigenetics
-DMSO,Plate_9,E08,failing,
-UCD-0159572,Plate_9,E09,failing,Epigenetics
-UCD-0159580,Plate_9,E10,failing,NF-?B
-DMSO,Plate_9,E11,failing,
-UCD-0159588,Plate_9,F02,failing,MAPK
-UCD-0159595,Plate_9,F03,failing,Endocrinology & Hormones
-UCD-0159527,Plate_9,F04,failing,DNA Damage
-UCD-0159534,Plate_9,F05,failing,Others
-UCD-0159542,Plate_9,F06,failing,MAPK
-UCD-0159549,Plate_9,F07,failing,JAK/STAT
-UCD-0159557,Plate_9,F08,failing,Others
-UCD-0159565,Plate_9,F09,failing,TGF-beta/Smad
-UCD-0159573,Plate_9,F10,failing,Protein Tyrosine Kinase
-UCD-0159581,Plate_9,F11,failing,PI3K/Akt/mTOR
-UCD-0159589,Plate_9,G02,failing,DNA Damage
-UCD-0001944,Plate_9,G03,failing,Epigenetics
-UCD-0159665,Plate_9,G04,failing,Others
-UCD-0159535,Plate_9,G05,failing,Others
-UCD-0159543,Plate_9,G06,failing,MAPK
-UCD-0159550,Plate_9,G07,failing,MAPK
-UCD-0159558,Plate_9,G08,failing,Cytoskeletal Signaling
-UCD-0159566,Plate_9,G09,failing,DNA Damage
-UCD-0159574,Plate_9,G10,failing,Epigenetics
-UCD-0159582,Plate_9,G11,failing,Neuronal Signaling
-DMSO,Plate_10,B02,healthy,
-UCD-0159253,Plate_10,B03,failing,Epigenetics
-UCD-0159596,Plate_10,B04,failing,Cytoskeletal Signaling
-DMSO,Plate_10,B05,healthy,
-UCD-0159528,Plate_10,B06,failing,Transmembrane Transporters
-UCD-0159536,Plate_10,B07,failing,JAK/STAT
-DMSO,Plate_10,B08,healthy,
-UCD-0159544,Plate_10,B09,failing,Angiogenesis
-UCD-0159551,Plate_10,B10,failing,Epigenetics
-DMSO,Plate_10,B11,healthy,
-UCD-0159559,Plate_10,C02,failing,DNA Damage
-UCD-0159567,Plate_10,C03,failing,Others
-UCD-0159575,Plate_10,C04,failing,Autophagy
-UCD-0159583,Plate_10,C05,failing,MAPK
-UCD-0159590,Plate_10,C06,failing,Others
-UCD-0159597,Plate_10,C07,failing,Epigenetics
-UCD-0159598,Plate_10,C08,failing,Endocrinology & Hormones
-UCD-0159605,Plate_10,C09,failing,PI3K/Akt/mTOR
-UCD-0159612,Plate_10,C10,failing,Cell Cycle
-UCD-0159620,Plate_10,C11,failing,DNA Damage
-UCD-0159628,Plate_10,D02,failing,GPCR & G Protein
-UCD-0159636,Plate_10,D03,failing,Protein Tyrosine Kinase
-UCD-0159644,Plate_10,D04,failing,Transmembrane Transporters
-UCD-0159650,Plate_10,D05,failing,MAPK
-UCD-0159658,Plate_10,D06,failing,Autophagy
-UCD-0159599,Plate_10,D07,failing,MAPK
-UCD-0159606,Plate_10,D08,failing,Autophagy
-UCD-0159613,Plate_10,D09,failing,PI3K/Akt/mTOR
-UCD-0159621,Plate_10,D10,failing,PI3K/Akt/mTOR
-UCD-0159629,Plate_10,D11,failing,Angiogenesis
-DMSO,Plate_10,E02,failing,
-UCD-0159637,Plate_10,E03,failing,Others
-UCD-0159645,Plate_10,E04,failing,Transmembrane Transporters
-DMSO,Plate_10,E05,failing,
-UCD-0159651,Plate_10,E06,failing,Angiogenesis
-UCD-0159659,Plate_10,E07,failing,Metabolism
-DMSO,Plate_10,E08,failing,
-UCD-0159666,Plate_10,E09,failing,Cytoskeletal Signaling
-UCD-0159607,Plate_10,E10,failing,Metabolism
-DMSO,Plate_10,E11,failing,
-UCD-0159614,Plate_10,F02,failing,Metabolism
-UCD-0159622,Plate_10,F03,failing,JAK/STAT
-UCD-0159630,Plate_10,F04,failing,Transmembrane Transporters
-UCD-0159638,Plate_10,F05,failing,Apoptosis
-UCD-0159646,Plate_10,F06,failing,GPCR & G Protein
-UCD-0159652,Plate_10,F07,failing,Proteases
-UCD-0159660,Plate_10,F08,failing,Epigenetics
-UCD-0159600,Plate_10,F09,failing,Epigenetics
-UCD-0001957,Plate_10,F10,failing,Epigenetics
-UCD-0159615,Plate_10,F11,failing,Angiogenesis
-UCD-0159623,Plate_10,G02,failing,DNA Damage
-UCD-0159631,Plate_10,G03,failing,Cell Cycle
-UCD-0159639,Plate_10,G04,failing,Protein Tyrosine Kinase
-UCD-0159647,Plate_10,G05,failing,GPCR & G Protein
-UCD-0159653,Plate_10,G06,failing,Protein Tyrosine Kinase
-UCD-0159661,Plate_10,G07,failing,Transmembrane Transporters
-UCD-0159601,Plate_10,G08,failing,Protein Tyrosine Kinase
-UCD-0159608,Plate_10,G09,failing,Metabolism
-UCD-0159616,Plate_10,G10,failing,GPCR & G Protein
-UCD-0159624,Plate_10,G11,failing,GPCR & G Protein
-DMSO,Plate_11,B02,healthy,
-UCD-0159632,Plate_11,B03,failing,Angiogenesis
-UCD-0159640,Plate_11,B04,failing,Epigenetics
-DMSO,Plate_11,B05,healthy,
-UCD-0001952,Plate_11,B06,failing,Epigenetics
-UCD-0159654,Plate_11,B07,failing,Epigenetics
-DMSO,Plate_11,B08,healthy,
-UCD-0159662,Plate_11,B09,failing,GPCR & G Protein
-UCD-0159602,Plate_11,B10,failing,Angiogenesis
-DMSO,Plate_11,B11,healthy,
-UCD-0159609,Plate_11,C02,failing,Others
-UCD-0159617,Plate_11,C03,failing,Endocrinology & Hormones
-UCD-0159625,Plate_11,C04,failing,Endocrinology & Hormones
-UCD-0159633,Plate_11,C05,failing,Apoptosis
-UCD-0159641,Plate_11,C06,failing,JAK/STAT
-UCD-0001953,Plate_11,C07,failing,Epigenetics
-UCD-0159655,Plate_11,C08,failing,Epigenetics
-UCD-0159663,Plate_11,C09,failing,Protein Tyrosine Kinase
-UCD-0159603,Plate_11,C10,failing,GPCR & G Protein
-UCD-0159610,Plate_11,C11,failing,Transmembrane Transporters
-UCD-0159618,Plate_11,D02,failing,MAPK
-UCD-0159626,Plate_11,D03,failing,Neuronal Signaling
-UCD-0159634,Plate_11,D04,failing,Cytoskeletal Signaling
-UCD-0159642,Plate_11,D05,failing,Proteases
-UCD-0159648,Plate_11,D06,failing,GPCR & G Protein
-UCD-0159656,Plate_11,D07,failing,GPCR & G Protein
-UCD-0159604,Plate_11,D08,failing,Autophagy
-UCD-0159611,Plate_11,D09,failing,Others
-UCD-0159619,Plate_11,D10,failing,GPCR & G Protein
-UCD-0159627,Plate_11,D11,failing,Metabolism
-DMSO,Plate_11,E02,failing,
-UCD-0159635,Plate_11,E03,failing,MAPK
-UCD-0159643,Plate_11,E04,failing,Metabolism
-DMSO,Plate_11,E05,failing,
-UCD-0159649,Plate_11,E06,failing,Angiogenesis
-UCD-0159657,Plate_11,E07,failing,Others
-DMSO,Plate_11,E08,failing,
-DMSO,Plate_11,E11,failing,
-TGFBRi,Plate_11,F02,healthy,
-TGFBRi,Plate_11,F05,healthy,
-TGFBRi,Plate_11,F08,healthy,
-TGFBRi,Plate_11,F11,heathly,
-TGFBRi,Plate_11,G02,failing,
-TGFBRi,Plate_11,G05,failing,
-TGFBRi,Plate_11,G08,failing,
-TGFBRi,Plate_11,G11,failing,
+UCD ID,Plate,Well,Pathway
+DMSO,Plate_1,B02,
+UCD-0159256,Plate_1,B03,Apoptosis
+UCD-0001766,Plate_1,B04,Angiogenesis
+DMSO,Plate_1,B05,
+UCD-0159262,Plate_1,B06,Others
+UCD-0001915,Plate_1,B07,Others
+DMSO,Plate_1,B08,
+UCD-0001783,Plate_1,B09,Others
+UCD-0159279,Plate_1,B10,Others
+DMSO,Plate_1,B11,
+UCD-0159283,Plate_1,C02,Endocrinology & Hormones
+UCD-0001040,Plate_1,C03,Endocrinology & Hormones
+UCD-0018091,Plate_1,C04,GPCR & G Protein
+UCD-0000450,Plate_1,C05,Neuronal Signaling
+UCD-0159257,Plate_1,C06,DNA Damage
+UCD-0001810,Plate_1,C07,DNA Damage
+UCD-0159263,Plate_1,C08,Others
+UCD-0159269,Plate_1,C09,Others
+UCD-0159273,Plate_1,C10,Others
+UCD-0017907,Plate_1,C11,Others
+UCD-0159284,Plate_1,D02,Stem Cells &  Wnt
+UCD-0017999,Plate_1,D03,Endocrinology & Hormones
+UCD-0000721,Plate_1,D04,Neuronal Signaling
+UCD-0001014,Plate_1,D05,Neuronal Signaling
+UCD-0159258,Plate_1,D06,Angiogenesis
+UCD-0159261,Plate_1,D07,Others
+UCD-0159264,Plate_1,D08,Neuronal Signaling
+UCD-0001775,Plate_1,D09,Others
+UCD-0159274,Plate_1,D10,Others
+UCD-0001792,Plate_1,D11,Others
+DMSO,Plate_1,E02,
+UCD-0159285,Plate_1,E03,DNA Damage
+UCD-0159289,Plate_1,E04,Metabolism
+DMSO,Plate_1,E05,
+UCD-0018179,Plate_1,E06,MAPK
+UCD-0001016,Plate_1,E07,Neuronal Signaling
+DMSO,Plate_1,E08,
+UCD-0001804,Plate_1,E09,MAPK
+UCD-0018207,Plate_1,E10,Neuronal Signaling
+DMSO,Plate_1,E11,
+UCD-0001844,Plate_1,F02,Others
+UCD-0159270,Plate_1,F03,Others
+UCD-0159275,Plate_1,F04,Others
+UCD-0001800,Plate_1,F05,Others
+UCD-0001613,Plate_1,F06,Endocrinology & Hormones
+UCD-0001921,Plate_1,F07,Epigenetics
+UCD-0159290,Plate_1,F08,PI3K/Akt/mTOR
+UCD-0159293,Plate_1,F09,Others
+UCD-0001808,Plate_1,F10,MAPK
+UCD-0001801,Plate_1,F11,Endocrinology & Hormones
+UCD-0159265,Plate_1,G02,Neuronal Signaling
+UCD-0159271,Plate_1,G03,Others
+UCD-0001835,Plate_1,G04,Others
+UCD-0159280,Plate_1,G05,Others
+UCD-0159286,Plate_1,G06,Others
+UCD-0018131,Plate_1,G07,Angiogenesis
+UCD-0001024,Plate_1,G08,Neuronal Signaling
+UCD-0001829,Plate_1,G09,PI3K/Akt/mTOR
+UCD-0159259,Plate_1,G10,PI3K/Akt/mTOR
+UCD-0001842,Plate_1,G11,Neuronal Signaling
+DMSO,Plate_2,B02,
+UCD-0159266,Plate_2,B03,Others
+UCD-0001812,Plate_2,B04,Others
+DMSO,Plate_2,B05,
+UCD-0159276,Plate_2,B06,Others
+UCD-0159281,Plate_2,B07,Others
+DMSO,Plate_2,B08,
+UCD-0159287,Plate_2,B09,Endocrinology & Hormones
+UCD-0000849,Plate_2,B10,Endocrinology & Hormones
+DMSO,Plate_2,B11,
+UCD-0159291,Plate_2,C02,GPCR & G Protein
+UCD-0000421,Plate_2,C03,Neuronal Signaling
+UCD-0017947,Plate_2,C04,Apoptosis
+UCD-0001816,Plate_2,C05,Metabolism
+UCD-0159267,Plate_2,C06,Others
+UCD-0001802,Plate_2,C07,Others
+UCD-0159277,Plate_2,C08,Others
+UCD-0159282,Plate_2,C09,Others
+UCD-0159288,Plate_2,C10,Metabolism
+UCD-0018089,Plate_2,C11,Endocrinology & Hormones
+UCD-0159292,Plate_2,D02,DNA Damage
+UCD-0159294,Plate_2,D03,Cell Cycle
+UCD-0159260,Plate_2,D04,Epigenetics
+UCD-0001850,Plate_2,D05,Others
+UCD-0159268,Plate_2,D06,Others
+UCD-0159272,Plate_2,D07,Others
+UCD-0159278,Plate_2,D08,Others
+UCD-0001733,Plate_2,D09,Protein Tyrosine Kinase
+UCD-0001086,Plate_2,D10,Endocrinology & Hormones
+UCD-0000786,Plate_2,D11,GPCR & G Protein
+DMSO,Plate_2,E02,
+UCD-0001101,Plate_2,E03,Neuronal Signaling
+UCD-0159295,Plate_2,E04,Microbiology
+DMSO,Plate_2,E05,
+UCD-0018083,Plate_2,E06,JAK/STAT
+UCD-0001822,Plate_2,E07,MAPK
+DMSO,Plate_2,E08,
+UCD-0001759,Plate_2,E09,Angiogenesis
+UCD-0000533,Plate_2,E10,GPCR & G Protein
+DMSO,Plate_2,E11,
+UCD-0000295,Plate_2,F02,Metabolism
+UCD-0001580,Plate_2,F03,Transmembrane Transporters
+UCD-0159317,Plate_2,F04,Angiogenesis
+UCD-0018516,Plate_2,F05,Neuronal Signaling
+UCD-0018304,Plate_2,F06,Endocrinology & Hormones
+UCD-0159327,Plate_2,F07,DNA Damage
+UCD-0159296,Plate_2,F08,Metabolism
+UCD-0159302,Plate_2,F09,PI3K/Akt/mTOR
+UCD-0001793,Plate_2,F10,Cell Cycle
+UCD-0000757,Plate_2,F11,Metabolism
+UCD-0159316,Plate_2,G02,Proteases
+UCD-0000878,Plate_2,G03,Transmembrane Transporters
+UCD-0159318,Plate_2,G04,Angiogenesis
+UCD-0001616B,Plate_2,G05,Others
+UCD-0001463,Plate_2,G06,Neuronal Signaling
+UCD-0001847,Plate_2,G07,JAK/STAT
+UCD-0159297,Plate_2,G08,Microbiology
+UCD-0159303,Plate_2,G09,Metabolism
+UCD-0159307,Plate_2,G10,GPCR & G Protein
+UCD-0159312,Plate_2,G11,Transmembrane Transporters
+DMSO,Plate_3,B02,
+UCD-0000253,Plate_3,B03,Neuronal Signaling
+UCD-0000872,Plate_3,B04,Metabolism
+DMSO,Plate_3,B05,
+UCD-0159319,Plate_3,B06,Neuronal Signaling
+UCD-0000730,Plate_3,B07,Metabolism
+DMSO,Plate_3,B08,
+UCD-0018569,Plate_3,B09,Endocrinology & Hormones
+UCD-0159328,Plate_3,B10,Proteases
+DMSO,Plate_3,B11,
+UCD-0159298,Plate_3,C02,Cytoskeletal Signaling
+UCD-0159304,Plate_3,C03,Cell Cycle
+UCD-0159308,Plate_3,C04,Protein Tyrosine Kinase
+UCD-0018012,Plate_3,C05,Apoptosis
+UCD-0001162,Plate_3,C06,Endocrinology & Hormones
+UCD-0001305,Plate_3,C07,Neuronal Signaling
+UCD-0018311,Plate_3,C08,Neuronal Signaling
+UCD-0001441,Plate_3,C09,Neuronal Signaling
+UCD-0159322,Plate_3,C10,Endocrinology & Hormones
+UCD-0001784,Plate_3,C11,Cell Cycle
+UCD-0159299,Plate_3,D02,Metabolism
+UCD-0159305,Plate_3,D03,Transmembrane Transporters
+UCD-0159309,Plate_3,D04,Angiogenesis
+UCD-0001843,Plate_3,D05,DNA Damage
+UCD-0000490,Plate_3,D06,Neuronal Signaling
+UCD-0018439,Plate_3,D07,Microbiology
+UCD-0001435,Plate_3,D08,Others
+UCD-0018550,Plate_3,D09,Neuronal Signaling
+UCD-0159323,Plate_3,D10,Stem Cells &  Wnt
+UCD-0159329,Plate_3,D11,JAK/STAT
+DMSO,Plate_3,E02,
+UCD-0159300,Plate_3,E03,GPCR & G Protein
+UCD-0001790,Plate_3,E04,Cell Cycle
+DMSO,Plate_3,E05,
+UCD-0013217,Plate_3,E06,Epigenetics
+UCD-0159313,Plate_3,E07,Protein Tyrosine Kinase
+DMSO,Plate_3,E08,
+UCD-0018240,Plate_3,E09,PI3K/Akt/mTOR
+UCD-0018483,Plate_3,E10,Microbiology
+DMSO,Plate_3,E11,
+UCD-0000101,Plate_3,F02,Endocrinology & Hormones
+UCD-0159320,Plate_3,F03,Metabolism
+UCD-0159324,Plate_3,F04,Angiogenesis
+UCD-0001869,Plate_3,F05,Protein Tyrosine Kinase
+UCD-0001818,Plate_3,F06,MAPK
+UCD-0018051,Plate_3,F07,Metabolism
+UCD-0159310,Plate_3,F08,GPCR & G Protein
+UCD-0159314,Plate_3,F09,PI3K/Akt/mTOR
+UCD-0000083,Plate_3,F10,Neuronal Signaling
+UCD-0018527,Plate_3,F11,Microbiology
+UCD-0000469,Plate_3,G02,Neuronal Signaling
+UCD-0159321,Plate_3,G03,Neuronal Signaling
+UCD-0159325,Plate_3,G04,PI3K/Akt/mTOR
+UCD-0159330,Plate_3,G05,Protein Tyrosine Kinase
+UCD-0159301,Plate_3,G06,Cell Cycle
+UCD-0159306,Plate_3,G07,Cell Cycle
+UCD-0159311,Plate_3,G08,GPCR & G Protein
+UCD-0159315,Plate_3,G09,PI3K/Akt/mTOR
+UCD-0000576,Plate_3,G10,Neuronal Signaling
+UCD-0000324,Plate_3,G11,Metabolism
+DMSO,Plate_4,B02,
+UCD-0001078,Plate_4,B03,Metabolism
+UCD-0000972,Plate_4,B04,Neuronal Signaling
+DMSO,Plate_4,B05,
+UCD-0159326,Plate_4,B06,Neuronal Signaling
+UCD-0159331,Plate_4,B07,Transmembrane Transporters
+DMSO,Plate_4,B08,
+UCD-0159332,Plate_4,B09,Apoptosis
+UCD-0000936,Plate_4,B10,Neuronal Signaling
+DMSO,Plate_4,B11,
+UCD-0001886,Plate_4,C02,Cell Cycle
+UCD-0159344,Plate_4,C03,Endocrinology & Hormones
+UCD-0159350,Plate_4,C04,Neuronal Signaling
+UCD-0159355,Plate_4,C05,PI3K/Akt/mTOR
+UCD-0159361,Plate_4,C06,Others
+UCD-0159368,Plate_4,C07,Angiogenesis
+UCD-0159375,Plate_4,C08,NF-κB
+UCD-0159383,Plate_4,C09,NF-κB
+UCD-0159333,Plate_4,C10,Transmembrane Transporters
+UCD-0001616,Plate_4,C11,Metabolism
+UCD-0159339,Plate_4,D02,Neuronal Signaling
+UCD-0159345,Plate_4,D03,Neuronal Signaling
+UCD-0159351,Plate_4,D04,Others
+UCD-0001790B,Plate_4,D05,Protein Tyrosine Kinase
+UCD-0159362,Plate_4,D06,Stem Cells &  Wnt
+UCD-0159369,Plate_4,D07,Epigenetics
+UCD-0159376,Plate_4,D08,Transmembrane Transporters
+UCD-0159384,Plate_4,D09,NF-κB
+UCD-0159334,Plate_4,D10,Metabolism
+UCD-0159338,Plate_4,D11,Neuronal Signaling
+DMSO,Plate_4,E02,
+UCD-0159340,Plate_4,E03,Others
+UCD-0159346,Plate_4,E04,Stem Cells &  Wnt
+DMSO,Plate_4,E05,
+UCD-0001900,Plate_4,E06,PI3K/Akt/mTOR
+UCD-0159356,Plate_4,E07,Cytoskeletal Signaling
+DMSO,Plate_4,E08,
+UCD-0159363,Plate_4,E09,Others
+UCD-0018540,Plate_4,E10,MAPK
+DMSO,Plate_4,E11,
+UCD-0159377,Plate_4,F02,Metabolism
+UCD-0159385,Plate_4,F03,Metabolism
+UCD-0000684,Plate_4,F04,Others
+UCD-0001186,Plate_4,F05,Neuronal Signaling
+UCD-0159341,Plate_4,F06,Metabolism
+UCD-0159347,Plate_4,F07,Metabolism
+UCD-0001861,Plate_4,F08,Angiogenesis
+UCD-0159357,Plate_4,F09,Apoptosis
+UCD-0011696,Plate_4,F10,JAK/STAT
+UCD-0159370,Plate_4,F11,PI3K/Akt/mTOR
+UCD-0159378,Plate_4,G02,Protein Tyrosine Kinase
+UCD-0159386,Plate_4,G03,DNA Damage
+UCD-0159335,Plate_4,G04,JAK/STAT
+UCD-0018448,Plate_4,G05,GPCR & G Protein
+UCD-0159342,Plate_4,G06,Others
+UCD-0001885,Plate_4,G07,PI3K/Akt/mTOR
+UCD-0159352,Plate_4,G08,Proteases
+UCD-0159358,Plate_4,G09,Metabolism
+UCD-0159364,Plate_4,G10,Others
+UCD-0159371,Plate_4,G11,Apoptosis
+DMSO,Plate_5,B02,
+UCD-0159379,Plate_5,B03,PI3K/Akt/mTOR
+UCD-0159387,Plate_5,B04,Neuronal Signaling
+DMSO,Plate_5,B05,
+UCD-0159336,Plate_5,B06,Ubiquitin
+UCD-0001419,Plate_5,B07,Transmembrane Transporters
+DMSO,Plate_5,B08,
+UCD-0159343,Plate_5,B09,GPCR & G Protein
+UCD-0001863,Plate_5,B10,Angiogenesis
+DMSO,Plate_5,B11,
+UCD-0159353,Plate_5,C02,Proteases
+UCD-0159359,Plate_5,C03,Others
+UCD-0159365,Plate_5,C04,TGF-beta/Smad
+UCD-0159372,Plate_5,C05,Protein Tyrosine Kinase
+UCD-0159380,Plate_5,C06,GPCR & G Protein
+UCD-0159388,Plate_5,C07,NF-κB
+UCD-0159337,Plate_5,C08,Neuronal Signaling
+UCD-0001391,Plate_5,C09,Metabolism
+UCD-0001856,Plate_5,C10,Angiogenesis
+UCD-0159348,Plate_5,C11,Cell Cycle
+UCD-0159354,Plate_5,D02,Metabolism
+UCD-0000201,Plate_5,D03,GPCR & G Protein
+UCD-0159366,Plate_5,D04,Metabolism
+UCD-0159373,Plate_5,D05,Angiogenesis
+UCD-0159381,Plate_5,D06,Neuronal Signaling
+UCD-0001864,Plate_5,D07,Angiogenesis
+UCD-0000737,Plate_5,D08,GPCR & G Protein
+UCD-0001870,Plate_5,D09,Angiogenesis
+UCD-0001888,Plate_5,D10,PI3K/Akt/mTOR
+UCD-0159349,Plate_5,D11,Metabolism
+DMSO,Plate_5,E02,
+UCD-0001567,Plate_5,E03,Transmembrane Transporters
+UCD-0159360,Plate_5,E04,Metabolism
+DMSO,Plate_5,E05,
+UCD-0159367,Plate_5,E06,Neuronal Signaling
+UCD-0159374,Plate_5,E07,Endocrinology & Hormones
+DMSO,Plate_5,E08,
+UCD-0159382,Plate_5,E09,Neuronal Signaling
+UCD-0159389,Plate_5,E10,Protein Tyrosine Kinase
+DMSO,Plate_5,E11,
+UCD-0159390,Plate_5,F02,Neuronal Signaling
+UCD-0022022,Plate_5,F03,Others
+UCD-0018458,Plate_5,F04,Proteases
+UCD-0000899,Plate_5,F05,Neuronal Signaling
+UCD-0159408,Plate_5,F06,Neuronal Signaling
+UCD-0017582,Plate_5,F07,Neuronal Signaling
+UCD-0159414,Plate_5,F08,DNA Damage
+UCD-0159422,Plate_5,F09,Apoptosis
+UCD-0159430,Plate_5,F10,Proteases
+UCD-0159435,Plate_5,F11,Protein Tyrosine Kinase
+UCD-0159391,Plate_5,G02,Protein Tyrosine Kinase
+UCD-0159398,Plate_5,G03,Protein Tyrosine Kinase
+UCD-0159402,Plate_5,G04,GPCR & G Protein
+UCD-0159407,Plate_5,G05,NF-κB
+UCD-0011462,Plate_5,G06,Endocrinology & Hormones
+UCD-0159410,Plate_5,G07,Neuronal Signaling
+UCD-0159415,Plate_5,G08,Ubiquitin
+UCD-0159423,Plate_5,G09,PI3K/Akt/mTOR
+UCD-0159431,Plate_5,G10,PI3K/Akt/mTOR
+UCD-0159436,Plate_5,G11,Stem Cells &  Wnt
+DMSO,Plate_6,B02,
+UCD-0159392,Plate_6,B03,Angiogenesis
+UCD-0159399,Plate_6,B04,Apoptosis
+DMSO,Plate_6,B05,
+UCD-0159403,Plate_6,B06,GPCR & G Protein
+UCD-0000904,Plate_6,B07,GPCR & G Protein
+DMSO,Plate_6,B08,
+UCD-0000243,Plate_6,B09,Neuronal Signaling
+UCD-0159411B,Plate_6,B10,Neuronal Signaling
+DMSO,Plate_6,B11,
+UCD-0159416,Plate_6,C02,Metabolism
+UCD-0159424,Plate_6,C03,JAK/STAT
+UCD-0159432,Plate_6,C04,Angiogenesis
+UCD-0159437,Plate_6,C05,Cytoskeletal Signaling
+UCD-0159393,Plate_6,C06,GPCR & G Protein
+UCD-0159400,Plate_6,C07,Apoptosis
+UCD-0001059,Plate_6,C08,Epigenetics
+UCD-0011606,Plate_6,C09,Neuronal Signaling
+UCD-0000463,Plate_6,C10,Others
+UCD-0159411,Plate_6,C11,Neuronal Signaling
+UCD-0159417,Plate_6,D02,GPCR & G Protein
+UCD-0159425,Plate_6,D03,Apoptosis
+UCD-0159433,Plate_6,D04,Protein Tyrosine Kinase
+UCD-0159438,Plate_6,D05,Cytoskeletal Signaling
+UCD-0159394,Plate_6,D06,TGF-beta/Smad
+UCD-0018410,Plate_6,D07,Metabolism
+UCD-0001653,Plate_6,D08,Transmembrane Transporters
+UCD-0000377,Plate_6,D09,Transmembrane Transporters
+UCD-0001002,Plate_6,D10,Neuronal Signaling
+UCD-0001657,Plate_6,D11,GPCR & G Protein
+DMSO,Plate_6,E02,
+UCD-0159418,Plate_6,E03,Transmembrane Transporters
+UCD-0159426,Plate_6,E04,DNA Damage
+DMSO,Plate_6,E05,
+UCD-0001924,Plate_6,E06,Epigenetics
+UCD-0159439,Plate_6,E07,PI3K/Akt/mTOR
+DMSO,Plate_6,E08,
+UCD-0159395,Plate_6,E09,GPCR & G Protein
+UCD-0018456,Plate_6,E10,GPCR & G Protein
+DMSO,Plate_6,E11,
+UCD-0159404,Plate_6,F02,Metabolism
+UCD-0011098,Plate_6,F03,Neuronal Signaling
+UCD-0011250,Plate_6,F04,Endocrinology & Hormones
+UCD-0018183,Plate_6,F05,Proteases
+UCD-0159419,Plate_6,F06,Protein Tyrosine Kinase
+UCD-0159427,Plate_6,F07,Apoptosis
+UCD-0001966,Plate_6,F08,Others
+UCD-0159440,Plate_6,F09,Protein Tyrosine Kinase
+UCD-0159396,Plate_6,F10,DNA Damage
+UCD-0159401,Plate_6,F11,Angiogenesis
+UCD-0159405,Plate_6,G02,Metabolism
+UCD-0159664,Plate_6,G03,Epigenetics
+UCD-0001098,Plate_6,G04,Neuronal Signaling
+UCD-0159412,Plate_6,G05,Apoptosis
+UCD-0159420,Plate_6,G06,Angiogenesis
+UCD-0159428,Plate_6,G07,Apoptosis
+UCD-0001925,Plate_6,G08,Epigenetics
+UCD-0159441,Plate_6,G09,Metabolism
+UCD-0159397,Plate_6,G10,Others
+UCD-0000918,Plate_6,G11,Proteases
+DMSO,Plate_7,B02,
+UCD-0159406,Plate_7,B03,Neuronal Signaling
+UCD-0000841,Plate_7,B04,Neuronal Signaling
+DMSO,Plate_7,B05,
+UCD-0159409,Plate_7,B06,Others
+UCD-0159413,Plate_7,B07,NF-κB
+DMSO,Plate_7,B08,
+UCD-0159421,Plate_7,B09,Apoptosis
+UCD-0159429,Plate_7,B10,Stem Cells &  Wnt
+DMSO,Plate_7,B11,
+UCD-0159434,Plate_7,C02,Angiogenesis
+UCD-0159442,Plate_7,C03,Epigenetics
+UCD-0159443,Plate_7,C04,Others
+UCD-0159451,Plate_7,C05,Ubiquitin
+UCD-0159458,Plate_7,C06,Others
+UCD-0159466,Plate_7,C07,Cell Cycle
+UCD-0159474,Plate_7,C08,DNA Damage
+UCD-0159482,Plate_7,C09,Angiogenesis
+UCD-0159490,Plate_7,C10,Ubiquitin
+UCD-0159498,Plate_7,C11,PI3K/Akt/mTOR
+UCD-0159506,Plate_7,D02,NF-κB
+UCD-0159514,Plate_7,D03,Others
+UCD-0159444,Plate_7,D04,MAPK
+UCD-0159452,Plate_7,D05,Ubiquitin
+UCD-0159459,Plate_7,D06,Cytoskeletal Signaling
+UCD-0159467,Plate_7,D07,Ubiquitin
+UCD-0159475,Plate_7,D08,Metabolism
+UCD-0159483,Plate_7,D09,Endocrinology & Hormones
+UCD-0159491,Plate_7,D10,Others
+UCD-0159499,Plate_7,D11,Cell Cycle
+DMSO,Plate_7,E02,
+UCD-0159507,Plate_7,E03,Cytoskeletal Signaling
+UCD-0159515,Plate_7,E04,Epigenetics
+DMSO,Plate_7,E05,
+UCD-0159445,Plate_7,E06,Others
+UCD-0159453,Plate_7,E07,TGF-beta/Smad
+DMSO,Plate_7,E08,
+UCD-0159460,Plate_7,E09,Angiogenesis
+UCD-0159468,Plate_7,E10,Apoptosis
+DMSO,Plate_7,E11,
+UCD-0159476,Plate_7,F02,Metabolism
+UCD-0159484,Plate_7,F03,Epigenetics
+UCD-0159492,Plate_7,F04,Cell Cycle
+UCD-0159500,Plate_7,F05,Epigenetics
+UCD-0159508,Plate_7,F06,Epigenetics
+UCD-0159516,Plate_7,F07,Proteases
+UCD-0159446,Plate_7,F08,Transmembrane Transporters
+UCD-0159454,Plate_7,F09,TGF-beta/Smad
+UCD-0159461,Plate_7,F10,Angiogenesis
+UCD-0159469,Plate_7,F11,Protein Tyrosine Kinase
+UCD-0159477,Plate_7,G02,Metabolism
+UCD-0159485,Plate_7,G03,Transmembrane Transporters
+UCD-0159493,Plate_7,G04,Epigenetics
+UCD-0159501,Plate_7,G05,Cell Cycle
+UCD-0159509,Plate_7,G06,Others
+UCD-0159517,Plate_7,G07,Proteases
+UCD-0159447,Plate_7,G08,Ubiquitin
+UCD-0159455,Plate_7,G09,TGF-beta/Smad
+UCD-0159462,Plate_7,G10,GPCR & G Protein
+UCD-0159470,Plate_7,G11,MAPK
+DMSO,Plate_8,B02,
+UCD-0159478,Plate_8,B03,Cell Cycle
+UCD-0159486,Plate_8,B04,Others
+DMSO,Plate_8,B05,
+UCD-0159494,Plate_8,B06,Protein Tyrosine Kinase
+UCD-0159502,Plate_8,B07,MAPK
+DMSO,Plate_8,B08,
+UCD-0159510,Plate_8,B09,Autophagy
+UCD-0159518,Plate_8,B10,Proteases
+DMSO,Plate_8,B11,
+UCD-0159448,Plate_8,C02,Ubiquitin
+UCD-0159456,Plate_8,C03,Apoptosis
+UCD-0159463,Plate_8,C04,GPCR & G Protein
+UCD-0159471,Plate_8,C05,Proteases
+UCD-0159479,Plate_8,C06,Transmembrane Transporters
+UCD-0159487,Plate_8,C07,Others
+UCD-0159495,Plate_8,C08,Apoptosis
+UCD-0159503,Plate_8,C09,Cytoskeletal Signaling
+UCD-0159511,Plate_8,C10,Autophagy
+UCD-0159519,Plate_8,C11,Stem Cells &  Wnt
+UCD-0159449,Plate_8,D02,Ubiquitin
+UCD-0001927,Plate_8,D03,Epigenetics
+UCD-0159464,Plate_8,D04,Metabolism
+UCD-0159472,Plate_8,D05,TGF-beta/Smad
+UCD-0159480,Plate_8,D06,Transmembrane Transporters
+UCD-0159488,Plate_8,D07,Epigenetics
+UCD-0159496,Plate_8,D08,Others
+UCD-0159504,Plate_8,D09,Others
+UCD-0159512,Plate_8,D10,Others
+UCD-0159520,Plate_8,D11,NF-κB
+DMSO,Plate_8,E02,
+UCD-0159450,Plate_8,E03,DNA Damage
+UCD-0159457,Plate_8,E04,Proteases
+DMSO,Plate_8,E05,
+UCD-0159465,Plate_8,E06,Metabolism
+UCD-0159473,Plate_8,E07,Epigenetics
+DMSO,Plate_8,E08,
+UCD-0159481,Plate_8,E09,Cell Cycle
+UCD-0159489,Plate_8,E10,Epigenetics
+DMSO,Plate_8,E11,
+UCD-0159497,Plate_8,F02,PI3K/Akt/mTOR
+UCD-0159505,Plate_8,F03,Others
+UCD-0159513,Plate_8,F04,Others
+UCD-0159521,Plate_8,F05,Others
+UCD-0159522,Plate_8,F06,Proteases
+UCD-0159529,Plate_8,F07,Cell Cycle
+UCD-0159537,Plate_8,F08,Others
+UCD-0159545,Plate_8,F09,Autophagy
+UCD-0159552,Plate_8,F10,Protein Tyrosine Kinase
+UCD-0159560,Plate_8,F11,DNA Damage
+UCD-0159568,Plate_8,G02,Others
+UCD-0159576,Plate_8,G03,Others
+UCD-0159584,Plate_8,G04,Cell Cycle
+UCD-0159591,Plate_8,G05,Epigenetics
+UCD-0159523,Plate_8,G06,Proteases
+UCD-0159530,Plate_8,G07,Proteases
+UCD-0159538,Plate_8,G08,MAPK
+UCD-0159546,Plate_8,G09,Ubiquitin
+UCD-0159553,Plate_8,G10,PI3K/Akt/mTOR
+UCD-0159561,Plate_8,G11,JAK/STAT
+DMSO,Plate_9,B02,
+UCD-0159569,Plate_9,B03,Protein Tyrosine Kinase
+UCD-0159577,Plate_9,B04,Cell Cycle
+DMSO,Plate_9,B05,
+UCD-0159585,Plate_9,B06,Protein Tyrosine Kinase
+UCD-0159592,Plate_9,B07,Epigenetics
+DMSO,Plate_9,B08,
+UCD-0159524,Plate_9,B09,Others
+UCD-0159531,Plate_9,B10,Metabolism
+DMSO,Plate_9,B11,
+UCD-0159539,Plate_9,C02,Proteases
+UCD-0159547,Plate_9,C03,Apoptosis
+UCD-0159554,Plate_9,C04,Angiogenesis
+UCD-0159562,Plate_9,C05,Epigenetics
+UCD-0159570,Plate_9,C06,GPCR & G Protein
+UCD-0159578,Plate_9,C07,PI3K/Akt/mTOR
+UCD-0159586,Plate_9,C08,Angiogenesis
+UCD-0159593,Plate_9,C09,Epigenetics
+UCD-0159525,Plate_9,C10,Others
+UCD-0159532,Plate_9,C11,PI3K/Akt/mTOR
+UCD-0159540,Plate_9,D02,Others
+UCD-0159548,Plate_9,D03,Others
+UCD-0159555,Plate_9,D04,Cytoskeletal Signaling
+UCD-0159563,Plate_9,D05,Angiogenesis
+UCD-0159571,Plate_9,D06,Others
+UCD-0159579,Plate_9,D07,PI3K/Akt/mTOR
+UCD-0159587,Plate_9,D08,Angiogenesis
+UCD-0159594,Plate_9,D09,Others
+UCD-0159526,Plate_9,D10,DNA Damage
+UCD-0159533,Plate_9,D11,Cytoskeletal Signaling
+DMSO,Plate_9,E02,
+UCD-0159541,Plate_9,E03,Protein Tyrosine Kinase
+UCD-0159514B,Plate_9,E04,Others
+DMSO,Plate_9,E05,
+UCD-0159556,Plate_9,E06,GPCR & G Protein
+UCD-0159564,Plate_9,E07,Epigenetics
+DMSO,Plate_9,E08,
+UCD-0159572,Plate_9,E09,Epigenetics
+UCD-0159580,Plate_9,E10,NF-κB
+DMSO,Plate_9,E11,
+UCD-0159588,Plate_9,F02,MAPK
+UCD-0159595,Plate_9,F03,Endocrinology & Hormones
+UCD-0159527,Plate_9,F04,DNA Damage
+UCD-0159534,Plate_9,F05,Others
+UCD-0159542,Plate_9,F06,MAPK
+UCD-0159549,Plate_9,F07,JAK/STAT
+UCD-0159557,Plate_9,F08,Others
+UCD-0159565,Plate_9,F09,TGF-beta/Smad
+UCD-0159573,Plate_9,F10,Protein Tyrosine Kinase
+UCD-0159581,Plate_9,F11,PI3K/Akt/mTOR
+UCD-0159589,Plate_9,G02,DNA Damage
+UCD-0001944,Plate_9,G03,Epigenetics
+UCD-0159665,Plate_9,G04,Others
+UCD-0159535,Plate_9,G05,Others
+UCD-0159543,Plate_9,G06,MAPK
+UCD-0159550,Plate_9,G07,MAPK
+UCD-0159558,Plate_9,G08,Cytoskeletal Signaling
+UCD-0159566,Plate_9,G09,DNA Damage
+UCD-0159574,Plate_9,G10,Epigenetics
+UCD-0159582,Plate_9,G11,Neuronal Signaling
+DMSO,Plate_10,B02,
+UCD-0159253,Plate_10,B03,Epigenetics
+UCD-0159596,Plate_10,B04,Cytoskeletal Signaling
+DMSO,Plate_10,B05,
+UCD-0159528,Plate_10,B06,Transmembrane Transporters
+UCD-0159536,Plate_10,B07,JAK/STAT
+DMSO,Plate_10,B08,
+UCD-0159544,Plate_10,B09,Angiogenesis
+UCD-0159551,Plate_10,B10,Epigenetics
+DMSO,Plate_10,B11,
+UCD-0159559,Plate_10,C02,DNA Damage
+UCD-0159567,Plate_10,C03,Others
+UCD-0159575,Plate_10,C04,Autophagy
+UCD-0159583,Plate_10,C05,MAPK
+UCD-0159590,Plate_10,C06,Others
+UCD-0159597,Plate_10,C07,Epigenetics
+UCD-0159598,Plate_10,C08,Endocrinology & Hormones
+UCD-0159605,Plate_10,C09,PI3K/Akt/mTOR
+UCD-0159612,Plate_10,C10,Cell Cycle
+UCD-0159620,Plate_10,C11,DNA Damage
+UCD-0159628,Plate_10,D02,GPCR & G Protein
+UCD-0159636,Plate_10,D03,Protein Tyrosine Kinase
+UCD-0159644,Plate_10,D04,Transmembrane Transporters
+UCD-0159650,Plate_10,D05,MAPK
+UCD-0159658,Plate_10,D06,Autophagy
+UCD-0159599,Plate_10,D07,MAPK
+UCD-0159606,Plate_10,D08,Autophagy
+UCD-0159613,Plate_10,D09,PI3K/Akt/mTOR
+UCD-0159621,Plate_10,D10,PI3K/Akt/mTOR
+UCD-0159629,Plate_10,D11,Angiogenesis
+DMSO,Plate_10,E02,
+UCD-0159637,Plate_10,E03,Others
+UCD-0159645,Plate_10,E04,Transmembrane Transporters
+DMSO,Plate_10,E05,
+UCD-0159651,Plate_10,E06,Angiogenesis
+UCD-0159659,Plate_10,E07,Metabolism
+DMSO,Plate_10,E08,
+UCD-0159666,Plate_10,E09,Cytoskeletal Signaling
+UCD-0159607,Plate_10,E10,Metabolism
+DMSO,Plate_10,E11,
+UCD-0159614,Plate_10,F02,Metabolism
+UCD-0159622,Plate_10,F03,JAK/STAT
+UCD-0159630,Plate_10,F04,Transmembrane Transporters
+UCD-0159638,Plate_10,F05,Apoptosis
+UCD-0159646,Plate_10,F06,GPCR & G Protein
+UCD-0159652,Plate_10,F07,Proteases
+UCD-0159660,Plate_10,F08,Epigenetics
+UCD-0159600,Plate_10,F09,Epigenetics
+UCD-0001957,Plate_10,F10,Epigenetics
+UCD-0159615,Plate_10,F11,Angiogenesis
+UCD-0159623,Plate_10,G02,DNA Damage
+UCD-0159631,Plate_10,G03,Cell Cycle
+UCD-0159639,Plate_10,G04,Protein Tyrosine Kinase
+UCD-0159647,Plate_10,G05,GPCR & G Protein
+UCD-0159653,Plate_10,G06,Protein Tyrosine Kinase
+UCD-0159661,Plate_10,G07,Transmembrane Transporters
+UCD-0159601,Plate_10,G08,Protein Tyrosine Kinase
+UCD-0159608,Plate_10,G09,Metabolism
+UCD-0159616,Plate_10,G10,GPCR & G Protein
+UCD-0159624,Plate_10,G11,GPCR & G Protein
+DMSO,Plate_11,B02,
+UCD-0159632,Plate_11,B03,Angiogenesis
+UCD-0159640,Plate_11,B04,Epigenetics
+DMSO,Plate_11,B05,
+UCD-0001952,Plate_11,B06,Epigenetics
+UCD-0159654,Plate_11,B07,Epigenetics
+DMSO,Plate_11,B08,
+UCD-0159662,Plate_11,B09,GPCR & G Protein
+UCD-0159602,Plate_11,B10,Angiogenesis
+DMSO,Plate_11,B11,
+UCD-0159609,Plate_11,C02,Others
+UCD-0159617,Plate_11,C03,Endocrinology & Hormones
+UCD-0159625,Plate_11,C04,Endocrinology & Hormones
+UCD-0159633,Plate_11,C05,Apoptosis
+UCD-0159641,Plate_11,C06,JAK/STAT
+UCD-0001953,Plate_11,C07,Epigenetics
+UCD-0159655,Plate_11,C08,Epigenetics
+UCD-0159663,Plate_11,C09,Protein Tyrosine Kinase
+UCD-0159603,Plate_11,C10,GPCR & G Protein
+UCD-0159610,Plate_11,C11,Transmembrane Transporters
+UCD-0159618,Plate_11,D02,MAPK
+UCD-0159626,Plate_11,D03,Neuronal Signaling
+UCD-0159634,Plate_11,D04,Cytoskeletal Signaling
+UCD-0159642,Plate_11,D05,Proteases
+UCD-0159648,Plate_11,D06,GPCR & G Protein
+UCD-0159656,Plate_11,D07,GPCR & G Protein
+UCD-0159604,Plate_11,D08,Autophagy
+UCD-0159611,Plate_11,D09,Others
+UCD-0159619,Plate_11,D10,GPCR & G Protein
+UCD-0159627,Plate_11,D11,Metabolism
+DMSO,Plate_11,E02,
+UCD-0159635,Plate_11,E03,MAPK
+UCD-0159643,Plate_11,E04,Metabolism
+DMSO,Plate_11,E05,
+UCD-0159649,Plate_11,E06,Angiogenesis
+UCD-0159657,Plate_11,E07,Others
+DMSO,Plate_11,E08,
+DMSO,Plate_11,E11,
+TGFRi,Plate_11,F02,
+TGFRi,Plate_11,F05,
+TGFRi,Plate_11,F08,
+TGFRi,Plate_11,F11,
+TGFRi,Plate_11,G02,
+TGFRi,Plate_11,G05,
+TGFRi,Plate_11,G08,
+TGFRi,Plate_11,G11,
