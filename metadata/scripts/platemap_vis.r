@@ -12,7 +12,7 @@ if (!dir.exists(output_dir)) {
 
 # path to one platemap file since all have same layout but different compounds
 platemap_file_full <- file.path("./original_platemaps/Target_Selective_Library_Screen_Plate_1.csv")
-platemap_file_partial <- file.path("./original_platemaps/Target_Selective_Library_Screen_Plate_11.csv")
+platemap_file_partial <- file.path("./original_platemaps/Target_Selective_Library_Screen_Plate_11.csv") 
 
 # Directory for example platemap figures
 output_fig_full_plates <- file.path(output_dir, "example_platemap_full_plates.png")
@@ -25,8 +25,8 @@ platemap_df_full <- readr::read_csv(
 
 # Add new column for "condition" to plot on platemap for DMSO versus compound
 platemap_df_full <- platemap_df_full %>%
-    mutate(condition = ifelse(treatment == "DMSO", "DMSO",
-                              ifelse(grepl("^UCD", treatment), "compound",
+    mutate(condition = ifelse(treatment == "DMSO", "DMSO", 
+                              ifelse(grepl("^UCD", treatment), "compound", 
                                     ifelse(treatment == "TGFRi", "TGFRi", NA))))
 
 
@@ -40,8 +40,8 @@ platemap_df_partial <- readr::read_csv(
 
 # Add new column for "condition" to plot on platemap for DMSO versus compound
 platemap_df_partial <- platemap_df_partial %>%
-    mutate(condition = ifelse(treatment == "DMSO", "DMSO",
-                              ifelse(grepl("^UCD", treatment), "compound",
+    mutate(condition = ifelse(treatment == "DMSO", "DMSO", 
+                              ifelse(grepl("^UCD", treatment), "compound", 
                                     ifelse(treatment == "TGFRi", "TGFRi", NA))))
 
 
@@ -83,7 +83,7 @@ plates_partial_gg <-
     ggplot2::geom_point(aes(shape = platemap_df_partial$cell_type)) +
     ggplot2::scale_shape_discrete(name = "Cell Type") +
     ggplot2::scale_fill_manual(name = "Treatment",
-                               values = c("compound" = "#F8766D",
+                               values = c("compound" = "#F8766D", 
                                           "DMSO" = "#00BFC4",
                                           "TGFRi" = "#7CAE00")) # Assign the default colors to match the previous full platemap layouts
 
@@ -96,3 +96,4 @@ ggsave(
 )
 
 plates_partial_gg
+

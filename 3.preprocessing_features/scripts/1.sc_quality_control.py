@@ -1,44 +1,46 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 # # Perform single-cell quality control
-#
+# 
 # In this notebook, we perform single-cell quality control using coSMicQC. We filter the single cells by identifying outliers with z-scores, and use either combinations of features or one feature for each condition. We use features from the AreaShape and Intensity modules to assess the quality of the segmented single-cells:
-#
+# 
 # ### Assessing poor nuclei segmentation
-#
+# 
 # Due to high confluence, sometimes nuclei overlap on top of each other, creating highly intense clusters within the Hoechst channel. To identify these nuclei, we use:
-#
-# - **Nuclei Area:** This metric quantifies the number of pixels in a nucleus segmentation.
-# We detect nuclei that are abnormally large, which likely indicates poor nucleus segmentation where overlapping nuclei are merged into one segmentation.
-# - **Nuclei Intensity:** This metric quantifies the total intensity of all pixels in a nucleus segmentation.
-#
+# 
+# - **Nuclei Area:** This metric quantifies the number of pixels in a nucleus segmentation. 
+# We detect nuclei that are abnormally large, which likely indicates poor nucleus segmentation where overlapping nuclei are merged into one segmentation. 
+# - **Nuclei Intensity:** This metric quantifies the total intensity of all pixels in a nucleus segmentation. 
+#   
 # In combination with abnormally large nuclei, we detect nuclei that are also highly intense, likely indicating that this a group of overlapped nuclei.
-#
+# 
 # `We utilize the same thresholds for this section as set in the [cellpainting_predicts_cardiac_fibroblasts](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis) repository.`
-#
-# We decided in this notebook to also include finding nuclei with very **LOW** intensity which more than likely correlates with mis-segmented nuclei from the background.
+# 
+# We decided in this notebook to also include finding nuclei with very **LOW** intensity which more than likely correlates with mis-segmented nuclei from the background. 
 # These occur due to very cytotoxic compounds that kill all the cells, leaving empty FOVs where the segmentation parameters sometimes decides to segment nuclei from nothing.
-#
+# 
 # `We determine our own threshold using the first batch of data (4 plates from layout one) that we will use for the rest of the plates.`
-#
+# 
 # ### Assessing poor cell segmentation
-#
-# Also due to high confluence, images with large, intense clusters of cells leads to errors in the segmentation algorithm that causes cells around the cluster to segmented incorrectly.
+# 
+# Also due to high confluence, images with large, intense clusters of cells leads to errors in the segmentation algorithm that causes cells around the cluster to segmented incorrectly. 
 # When this happens, a cell is segmented around the same segmentation as the nucleus, giving it the same area which is very small for a normal cardiac fibroblast cell. To detect poorly segmented cells, we use:
-#
+# 
 # - **Cells area:** The cells Area metric quantifies the number of pixels in a cell segmentation.
-#
+# 
 # `We update the threshold for this dataset from the original thresholds since we determined that there were too many good cells being removed. We update the threshold to be more loose.`
 
 # In[1]:
 
 
 import pathlib
-
-import matplotlib.pyplot as plt
 import pandas as pd
+import matplotlib.pyplot as plt
 import seaborn as sns
+
 from cosmicqc import find_outliers
+
 
 # ## Set paths and variables
 
@@ -84,15 +86,15 @@ plate_data_dict = {}
 for plate_file in data_dir.glob("*_converted.parquet"):
     # Extract the plate name (stem) from the file path
     plate = plate_file.stem.replace("_converted", "")
-
+    
     # Load the converted plate data
     plate_df = pd.read_parquet(plate_file)
-
+    
     # Store the DataFrame in the dictionary with the plate name as the key
     plate_data_dict[plate] = {
         'converted_df': plate_df  # Store the loaded DataFrame under 'converted_df'
     }
-
+    
     # Print the shape of the DataFrame for each plate
     print(f"Loaded plate: {plate}, Shape: {plate_df.shape}")
 
@@ -109,14 +111,14 @@ for plate_name, plate_data in plate_data_dict.items():
     # Access the original DataFrame
     plate_df = plate_data['converted_df']
 
-    # OVER-SEGMENTED AND OVER-SATURATED NUCLEI
+    # OVER-SEGMENTED AND OVER-SATURATED NUCLEI 
     ###########################################
     # Set outlier threshold for large nuclei and high intensity
     feature_thresholds_large_nuclei_high_int = {
         "Nuclei_AreaShape_Area": 2,
         "Nuclei_Intensity_IntegratedIntensity_Hoechst": 2,
     }
-
+    
     # Find large nuclei and high intensity outliers
     large_nuclei_high_int_outliers = find_outliers(
         df=plate_df,
@@ -130,28 +132,28 @@ for plate_name, plate_data in plate_data_dict.items():
     feature_thresholds_low_intensity = {
         "Nuclei_Intensity_IntegratedIntensity_Hoechst": -2,
     }
-
+    
     # Find low intensity nuclei (most likely background)
     low_intensity_outliers = find_outliers(
         df=plate_df,
         metadata_columns=metadata_columns,
         feature_thresholds=feature_thresholds_low_intensity
     )
-
+    
     # UNDER-SEGMENTED CELLS
     ###########################################
     # Set feature thresholds for small cells
     feature_thresholds_small_cells = {
         "Cells_AreaShape_Area": -1.5,
     }
-
+    
     # Find small cells outliers
     small_cells_outliers = find_outliers(
         df=plate_df,
         metadata_columns=metadata_columns,
         feature_thresholds=feature_thresholds_small_cells
     )
-
+    
     # Append the outliers data to the existing dictionary entry for this plate
     plate_data_dict[plate_name].update({
         'low_intensity_outliers': low_intensity_outliers,
@@ -161,10 +163,10 @@ for plate_name, plate_data in plate_data_dict.items():
 
     # Find the outliers indices to determine failed single-cells
     outlier_indices = pd.concat([large_nuclei_high_int_outliers, small_cells_outliers, low_intensity_outliers]).index
-
+    
     # Remove rows with outlier indices from the plate DataFrame
     plate_df_cleaned = plate_df.drop(outlier_indices)
-
+    
     # Calculate the total percentage of nuclei that failed QC
     total_nuclei = plate_df.shape[0]
     total_failed = len(outlier_indices)
@@ -181,7 +183,7 @@ for plate_name, plate_data in plate_data_dict.items():
 # In[5]:
 
 
-# Create scatterplots per plate for nuclei area versus intensity labelled by QC condition failed or passed
+# Create scatterplots per plate for nuclei area versus intensity labelled by QC condition failed or passed 
 for plate_name, plate_data in plate_data_dict.items():
     print(f"Creating QC plot for plate: {plate_name}")
 
@@ -284,3 +286,4 @@ for plate_name, plate_data in plate_data_dict.items():
 
     # Close the plot to prevent it from displaying
     plt.close()
+

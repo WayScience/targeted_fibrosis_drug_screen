@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 # # Convert SQLite outputs to parquet files with CytoTable
 
@@ -7,13 +8,13 @@
 # In[1]:
 
 
-import logging
 import pathlib
-
 import pandas as pd
 
 # cytotable will merge objects from SQLite file into single cells and save as parquet file
 from cytotable import convert, presets
+
+import logging
 
 # Set the logging level to a higher level to avoid outputting unnecessary errors from config file in convert function
 logging.getLogger().setLevel(logging.ERROR)
@@ -78,7 +79,7 @@ print("All plates have been converted with cytotable!")
 
 
 # # Load in converted profiles to update
-#
+# 
 # We will rename some of the columns (e.g., location centroids and cell count per FOV) to include Metadata prefix.
 
 # In[4]:
@@ -122,7 +123,7 @@ for file_path in converted_dir.iterdir():
 
 
 # ## Check output to confirm process worked
-#
+# 
 # To confirm the number of single cells is correct, please use any database browser software to see if the number of rows in the "Per_Cells" compartment matches the number of rows in the data frame.
 
 # In[6]:
@@ -134,3 +135,4 @@ converted_df = pd.read_parquet(
 
 print(converted_df.shape)
 converted_df.head()
+
