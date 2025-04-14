@@ -42,17 +42,17 @@ head(combined_probabilities_df, 2)
 
 # Custom color palette inspired by Dark2
 custom_palette <- c(
-  "#1b9e77",
-  "#d95f02",
-  "#7570b3",
-  "#e7298a",
-  "#66a61e",
-  "#e6ab02",
-  "#a6761d",
-  "#667665",
-  "#b3b3b3",
-  "#8dd3c7",
-  "#fb8072"
+  "Angiogenesis" = "#1b9e77",
+  "Apoptosis" = "#d95f02",
+  "DNA Damage" = "#7570b3",
+  "Endocrinology & Hormones" = "#e7298a",
+  "Epigenetics" = "#66a61e",
+  "MAPK" = "#e6ab02",
+  "Metabolism" = "#a6761d",
+  "Neuronal Signaling" = "#667665",
+  "Others" = "#b3b3b3",
+  "PI3K/Akt/mTOR" = "#8dd3c7",
+  "Stem Cells &  Wnt" = "#fb8072"
 )
 
 # Filter out shuffle models
@@ -125,18 +125,18 @@ head(summary_data, 2)
 
 # Custom color palette inspired by Dark2 (includes one more color for a pathway missing in above plot)
 custom_palette <- c(
-  "#1b9e77",
-  "#d95f02",
-  "#7570b3",
-  "#e7298a",
-  "#66a61e",
-  "#984ea3",
-  "#e6ab02",
-  "#a6761d",
-  "#667665",
-  "#b3b3b3",
-  "#8dd3c7",
-  "#fb8072"
+  "Angiogenesis" = "#1b9e77",
+  "Apoptosis" = "#d95f02",
+  "DNA Damage" = "#7570b3",
+  "Endocrinology & Hormones" = "#e7298a",
+  "Epigenetics" = "#66a61e",
+  "MAPK" = "#e6ab02",
+  "Metabolism" = "#a6761d",
+  "Neuronal Signaling" = "#667665",
+  "Others" = "#b3b3b3",
+  "PI3K/Akt/mTOR" = "#8dd3c7",
+  "Stem Cells &  Wnt" = "#fb8072",
+  "GPCR & G Protein" = "#984ea3"
 )
 
 height <- 10
@@ -150,8 +150,8 @@ count_probas_plot <- ggplot(summary_data, aes(x = cell_count, y = median_predict
                     size = 6, box.padding = 0.35, point.padding = 0.5, max.overlaps = 20, show.legend = FALSE) +  # Add labels
     scale_color_manual(values = custom_palette) +  # Use the custom color palette
     labs(
-        x = "Cell count",
-        y = "Median predicted probability",
+        x = "Cell count\n(across plates)",
+        y = "Median predicted probability\n(combined model)",
         color = "Treatment",
     ) +
     theme_bw() +
@@ -204,8 +204,8 @@ count_probas_plot <- ggplot(summary_data_w_mAP, aes(x = cell_count, y = median_p
     scale_color_manual(values = custom_palette) +  # Use the custom color palette
     scale_size_continuous(name = "Negative mAP score") +
     labs(
-        x = "Cell count",
-        y = "Median predicted probability",
+        x = "Cell count\n(across plates)",
+        y = "Median predicted probability\n(combined model)",
         color = "Treatment",
     ) +
     theme_bw() +
@@ -234,8 +234,8 @@ count_probas_plot <- ggplot(summary_data_w_mAP, aes(x = cell_count, y = median_p
     scale_color_manual(values = custom_palette) +  # Use the custom color palette
     scale_size_continuous(name = "Positive mAP score") +
     labs(
-        x = "Cell count",
-        y = "Median predicted probability",
+        x = "Cell count\n(across plates)",
+        y = "Median predicted probability\n(combined model)",
         color = "Treatment",
     ) +
     theme_bw() +
