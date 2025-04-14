@@ -14,7 +14,7 @@ C,3,C03,19,failing,dilated_cardiomyopathy,UCD-0159359,Others
 C,4,C04,19,failing,dilated_cardiomyopathy,UCD-0159365,TGF-beta/Smad
 C,5,C05,19,failing,dilated_cardiomyopathy,UCD-0159372,Protein Tyrosine Kinase
 C,6,C06,19,failing,dilated_cardiomyopathy,UCD-0159380,GPCR & G Protein
-C,7,C07,19,failing,dilated_cardiomyopathy,UCD-0159388,NF-?B
+C,7,C07,19,failing,dilated_cardiomyopathy,UCD-0159388,NF-κB
 C,8,C08,19,failing,dilated_cardiomyopathy,UCD-0159337,Neuronal Signaling
 C,9,C09,19,failing,dilated_cardiomyopathy,UCD-0001391,Metabolism
 C,10,C10,19,failing,dilated_cardiomyopathy,UCD-0001856,Angiogenesis
@@ -52,10 +52,10 @@ F,11,F11,19,failing,dilated_cardiomyopathy,UCD-0159435,Protein Tyrosine Kinase
 G,2,G02,19,failing,dilated_cardiomyopathy,UCD-0159391,Protein Tyrosine Kinase
 G,3,G03,19,failing,dilated_cardiomyopathy,UCD-0159398,Protein Tyrosine Kinase
 G,4,G04,19,failing,dilated_cardiomyopathy,UCD-0159402,GPCR & G Protein
-G,5,G05,19,failing,dilated_cardiomyopathy,UCD-0159407,NF-?B
+G,5,G05,19,failing,dilated_cardiomyopathy,UCD-0159407,NF-κB
 G,6,G06,19,failing,dilated_cardiomyopathy,UCD-0011462,Endocrinology & Hormones
 G,7,G07,19,failing,dilated_cardiomyopathy,UCD-0159410,Neuronal Signaling
 G,8,G08,19,failing,dilated_cardiomyopathy,UCD-0159415,Ubiquitin
 G,9,G09,19,failing,dilated_cardiomyopathy,UCD-0159423,PI3K/Akt/mTOR
 G,10,G10,19,failing,dilated_cardiomyopathy,UCD-0159431,PI3K/Akt/mTOR
-G,11,G11,19,failing,dilated_cardiomyopathy,UCD-0159436,Stem Cells &  Wnt
+G,11,G11,19,failing,dilated_cardiomyopathy,UCD-0159436,Stem Cells & Wnt

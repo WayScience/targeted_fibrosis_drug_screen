@@ -18,7 +18,7 @@ C,7,C07,19,failing,dilated_cardiomyopathy,UCD-0159487,Others
 C,8,C08,19,failing,dilated_cardiomyopathy,UCD-0159495,Apoptosis
 C,9,C09,19,failing,dilated_cardiomyopathy,UCD-0159503,Cytoskeletal Signaling
 C,10,C10,19,failing,dilated_cardiomyopathy,UCD-0159511,Autophagy
-C,11,C11,19,failing,dilated_cardiomyopathy,UCD-0159519,Stem Cells &  Wnt
+C,11,C11,19,failing,dilated_cardiomyopathy,UCD-0159519,Stem Cells & Wnt
 D,2,D02,19,failing,dilated_cardiomyopathy,UCD-0159449,Ubiquitin
 D,3,D03,19,failing,dilated_cardiomyopathy,UCD-0001927,Epigenetics
 D,4,D04,19,failing,dilated_cardiomyopathy,UCD-0159464,Metabolism
@@ -28,7 +28,7 @@ D,7,D07,19,failing,dilated_cardiomyopathy,UCD-0159488,Epigenetics
 D,8,D08,19,failing,dilated_cardiomyopathy,UCD-0159496,Others
 D,9,D09,19,failing,dilated_cardiomyopathy,UCD-0159504,Others
 D,10,D10,19,failing,dilated_cardiomyopathy,UCD-0159512,Others
-D,11,D11,19,failing,dilated_cardiomyopathy,UCD-0159520,NF-?B
+D,11,D11,19,failing,dilated_cardiomyopathy,UCD-0159520,NF-κB
 E,2,E02,19,failing,dilated_cardiomyopathy,DMSO,
 E,3,E03,19,failing,dilated_cardiomyopathy,UCD-0159450,DNA Damage
 E,4,E04,19,failing,dilated_cardiomyopathy,UCD-0159457,Proteases

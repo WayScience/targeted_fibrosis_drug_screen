@@ -19,11 +19,11 @@ C,8,C08,19,failing,dilated_cardiomyopathy,UCD-0159263,Others
 C,9,C09,19,failing,dilated_cardiomyopathy,UCD-0159269,Others
 C,10,C10,19,failing,dilated_cardiomyopathy,UCD-0159273,Others
 C,11,C11,19,failing,dilated_cardiomyopathy,UCD-0017907,Others
-D,2,D02,19,failing,dilated_cardiomyopathy,UCD-0159284,Stem Cells &  Wnt
+D,2,D02,19,failing,dilated_cardiomyopathy,UCD-0159284,Stem Cells & Wnt
 D,3,D03,19,failing,dilated_cardiomyopathy,UCD-0017999,Endocrinology & Hormones
 D,4,D04,19,failing,dilated_cardiomyopathy,UCD-0000721,Neuronal Signaling
 D,5,D05,19,failing,dilated_cardiomyopathy,UCD-0001014,Neuronal Signaling
-D,6,D06,19,failing,dilated_cardiomyopathy,UCD-0159258,
+D,6,D06,19,failing,dilated_cardiomyopathy,UCD-0159258,Angiogenesis
 D,7,D07,19,failing,dilated_cardiomyopathy,UCD-0159261,Others
 D,8,D08,19,failing,dilated_cardiomyopathy,UCD-0159264,Neuronal Signaling
 D,9,D09,19,failing,dilated_cardiomyopathy,UCD-0001775,Others
@@ -36,7 +36,7 @@ E,5,E05,19,failing,dilated_cardiomyopathy,DMSO,
 E,6,E06,19,failing,dilated_cardiomyopathy,UCD-0018179,MAPK
 E,7,E07,19,failing,dilated_cardiomyopathy,UCD-0001016,Neuronal Signaling
 E,8,E08,19,failing,dilated_cardiomyopathy,DMSO,
-E,9,E09,19,failing,dilated_cardiomyopathy,UCD-0001804,
+E,9,E09,19,failing,dilated_cardiomyopathy,UCD-0001804,MAPK
 E,10,E10,19,failing,dilated_cardiomyopathy,UCD-0018207,Neuronal Signaling
 E,11,E11,19,failing,dilated_cardiomyopathy,DMSO,
 F,2,F02,19,failing,dilated_cardiomyopathy,UCD-0001844,Others

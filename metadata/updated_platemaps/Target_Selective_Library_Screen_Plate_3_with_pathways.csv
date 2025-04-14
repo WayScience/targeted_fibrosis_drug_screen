@@ -27,7 +27,7 @@ D,6,D06,19,failing,dilated_cardiomyopathy,UCD-0000490,Neuronal Signaling
 D,7,D07,19,failing,dilated_cardiomyopathy,UCD-0018439,Microbiology
 D,8,D08,19,failing,dilated_cardiomyopathy,UCD-0001435,Others
 D,9,D09,19,failing,dilated_cardiomyopathy,UCD-0018550,Neuronal Signaling
-D,10,D10,19,failing,dilated_cardiomyopathy,UCD-0159323,Stem Cells &  Wnt
+D,10,D10,19,failing,dilated_cardiomyopathy,UCD-0159323,Stem Cells & Wnt
 D,11,D11,19,failing,dilated_cardiomyopathy,UCD-0159329,JAK/STAT
 E,2,E02,19,failing,dilated_cardiomyopathy,DMSO,
 E,3,E03,19,failing,dilated_cardiomyopathy,UCD-0159300,GPCR & G Protein

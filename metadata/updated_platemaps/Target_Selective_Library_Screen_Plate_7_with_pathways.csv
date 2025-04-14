@@ -4,10 +4,10 @@ B,3,B03,19,failing,dilated_cardiomyopathy,UCD-0159406,Neuronal Signaling
 B,4,B04,19,failing,dilated_cardiomyopathy,UCD-0000841,Neuronal Signaling
 B,5,B05,7,healthy,,DMSO,
 B,6,B06,19,failing,dilated_cardiomyopathy,UCD-0159409,Others
-B,7,B07,19,failing,dilated_cardiomyopathy,UCD-0159413,NF-?B
+B,7,B07,19,failing,dilated_cardiomyopathy,UCD-0159413,NF-κB
 B,8,B08,7,healthy,,DMSO,
 B,9,B09,19,failing,dilated_cardiomyopathy,UCD-0159421,Apoptosis
-B,10,B10,19,failing,dilated_cardiomyopathy,UCD-0159429,Stem Cells &  Wnt
+B,10,B10,19,failing,dilated_cardiomyopathy,UCD-0159429,Stem Cells & Wnt
 B,11,B11,7,healthy,,DMSO,
 C,2,C02,19,failing,dilated_cardiomyopathy,UCD-0159434,Angiogenesis
 C,3,C03,19,failing,dilated_cardiomyopathy,UCD-0159442,Epigenetics
@@ -19,7 +19,7 @@ C,8,C08,19,failing,dilated_cardiomyopathy,UCD-0159474,DNA Damage
 C,9,C09,19,failing,dilated_cardiomyopathy,UCD-0159482,Angiogenesis
 C,10,C10,19,failing,dilated_cardiomyopathy,UCD-0159490,Ubiquitin
 C,11,C11,19,failing,dilated_cardiomyopathy,UCD-0159498,PI3K/Akt/mTOR
-D,2,D02,19,failing,dilated_cardiomyopathy,UCD-0159506,NF-?B
+D,2,D02,19,failing,dilated_cardiomyopathy,UCD-0159506,NF-κB
 D,3,D03,19,failing,dilated_cardiomyopathy,UCD-0159514,Others
 D,4,D04,19,failing,dilated_cardiomyopathy,UCD-0159444,MAPK
 D,5,D05,19,failing,dilated_cardiomyopathy,UCD-0159452,Ubiquitin
