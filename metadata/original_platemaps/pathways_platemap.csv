@@ -19,7 +19,7 @@ UCD-0159263,Plate_1,C08,Others
 UCD-0159269,Plate_1,C09,Others
 UCD-0159273,Plate_1,C10,Others
 UCD-0017907,Plate_1,C11,Others
-UCD-0159284,Plate_1,D02,Stem Cells &  Wnt
+UCD-0159284,Plate_1,D02,Stem Cells & Wnt
 UCD-0017999,Plate_1,D03,Endocrinology & Hormones
 UCD-0000721,Plate_1,D04,Neuronal Signaling
 UCD-0001014,Plate_1,D05,Neuronal Signaling
@@ -147,7 +147,7 @@ UCD-0000490,Plate_3,D06,Neuronal Signaling
 UCD-0018439,Plate_3,D07,Microbiology
 UCD-0001435,Plate_3,D08,Others
 UCD-0018550,Plate_3,D09,Neuronal Signaling
-UCD-0159323,Plate_3,D10,Stem Cells &  Wnt
+UCD-0159323,Plate_3,D10,Stem Cells & Wnt
 UCD-0159329,Plate_3,D11,JAK/STAT
 DMSO,Plate_3,E02,
 UCD-0159300,Plate_3,E03,GPCR & G Protein
@@ -203,7 +203,7 @@ UCD-0159339,Plate_4,D02,Neuronal Signaling
 UCD-0159345,Plate_4,D03,Neuronal Signaling
 UCD-0159351,Plate_4,D04,Others
 UCD-0001790B,Plate_4,D05,Protein Tyrosine Kinase
-UCD-0159362,Plate_4,D06,Stem Cells &  Wnt
+UCD-0159362,Plate_4,D06,Stem Cells & Wnt
 UCD-0159369,Plate_4,D07,Epigenetics
 UCD-0159376,Plate_4,D08,Transmembrane Transporters
 UCD-0159384,Plate_4,D09,NF-κB
@@ -211,7 +211,7 @@ UCD-0159334,Plate_4,D10,Metabolism
 UCD-0159338,Plate_4,D11,Neuronal Signaling
 DMSO,Plate_4,E02,
 UCD-0159340,Plate_4,E03,Others
-UCD-0159346,Plate_4,E04,Stem Cells &  Wnt
+UCD-0159346,Plate_4,E04,Stem Cells & Wnt
 DMSO,Plate_4,E05,
 UCD-0001900,Plate_4,E06,PI3K/Akt/mTOR
 UCD-0159356,Plate_4,E07,Cytoskeletal Signaling
@@ -298,7 +298,7 @@ UCD-0159410,Plate_5,G07,Neuronal Signaling
 UCD-0159415,Plate_5,G08,Ubiquitin
 UCD-0159423,Plate_5,G09,PI3K/Akt/mTOR
 UCD-0159431,Plate_5,G10,PI3K/Akt/mTOR
-UCD-0159436,Plate_5,G11,Stem Cells &  Wnt
+UCD-0159436,Plate_5,G11,Stem Cells & Wnt
 DMSO,Plate_6,B02,
 UCD-0159392,Plate_6,B03,Angiogenesis
 UCD-0159399,Plate_6,B04,Apoptosis
@@ -367,7 +367,7 @@ UCD-0159409,Plate_7,B06,Others
 UCD-0159413,Plate_7,B07,NF-κB
 DMSO,Plate_7,B08,
 UCD-0159421,Plate_7,B09,Apoptosis
-UCD-0159429,Plate_7,B10,Stem Cells &  Wnt
+UCD-0159429,Plate_7,B10,Stem Cells & Wnt
 DMSO,Plate_7,B11,
 UCD-0159434,Plate_7,C02,Angiogenesis
 UCD-0159442,Plate_7,C03,Epigenetics
@@ -438,7 +438,7 @@ UCD-0159487,Plate_8,C07,Others
 UCD-0159495,Plate_8,C08,Apoptosis
 UCD-0159503,Plate_8,C09,Cytoskeletal Signaling
 UCD-0159511,Plate_8,C10,Autophagy
-UCD-0159519,Plate_8,C11,Stem Cells &  Wnt
+UCD-0159519,Plate_8,C11,Stem Cells & Wnt
 UCD-0159449,Plate_8,D02,Ubiquitin
 UCD-0001927,Plate_8,D03,Epigenetics
 UCD-0159464,Plate_8,D04,Metabolism
