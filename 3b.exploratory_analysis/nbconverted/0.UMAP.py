@@ -89,12 +89,6 @@ for plate in cp_dfs:
     # Set dataframe as the current plate
     cp_df = cp_dfs[plate]
 
-    # Prior to running UMAP, fix Pathways bug for two compounds
-    cp_df.loc[cp_df["Metadata_treatment"] == "UCD-0159258", "Metadata_Pathway"] = (
-        "Angiogenesis"
-    )
-    cp_df.loc[cp_df["Metadata_treatment"] == "UCD-0001804", "Metadata_Pathway"] = "MAPK"
-
     # Process cp_df to separate features and metadata
     cp_features = infer_cp_features(cp_df)
     meta_features = infer_cp_features(cp_df, metadata=True)
