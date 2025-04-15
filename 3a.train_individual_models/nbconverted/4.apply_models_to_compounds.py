@@ -12,7 +12,6 @@ import pathlib
 
 import pandas as pd
 import pprint
-import pyarrow.parquet as pq
 from joblib import load
 
 import sys

@@ -116,7 +116,7 @@ summary_data <- filtered_df %>%
         by = "Metadata_treatment"
     ) %>%
     mutate(
-        high_count_and_proba = cell_count > 300 & median_predicted_proba > 0.7
+        high_count_and_proba = cell_count > 300 & median_predicted_proba > 0.65
     )
 
 # Display the summary data

@@ -17,11 +17,11 @@ from sklearn.model_selection import train_test_split
 
 # ## Set paths and variables
 
-# In[2]:
+# In[ ]:
 
 
 # Set random state for the whole notebook to ensure reproducibility
-random_state=0
+random_state = 0
 random.seed(random_state)
 
 # Path to directory with feature selected profiles
@@ -30,7 +30,9 @@ path_to_feature_selected_data = pathlib.Path(
 ).resolve(strict=True)
 
 # Find all feature selected parquet files
-feature_selected_files = list(path_to_feature_selected_data.glob("*_feature_selected.parquet"))
+feature_selected_files = list(
+    path_to_feature_selected_data.glob("*_feature_selected.parquet")
+)
 
 # Make directory for split data
 output_dir = pathlib.Path("./data")
@@ -44,15 +46,30 @@ output_dir.mkdir(exist_ok=True)
 
 # Load in all feature selected files as dataframes
 feature_selected_dfs_dict = {
-    pathlib.Path(file).stem.split('_')[0]: pd.read_parquet(file) for file in feature_selected_files
+    pathlib.Path(file).stem.split("_")[0]: pd.read_parquet(file)
+    for file in feature_selected_files
 }
 
 pprint.pprint(feature_selected_dfs_dict, indent=4)
 
 
+# ### Confirm no NaNs in the Pathway column
+
+# In[ ]:
+
+
+for plate, df in feature_selected_dfs_dict.items():
+    invalid_rows = df[
+        (df["Metadata_treatment"] != "DMSO") & (df["Metadata_Pathway"].isna())
+    ]
+    if not invalid_rows.empty:
+        print(f"NaNs found in Metadata_Pathway for non-DMSO rows in plate: {plate}")
+        print(invalid_rows[["Metadata_treatment", "Metadata_Pathway"]])
+
+
 # ## For each dataframe, take only the DMSO cells and split 70/30 for training and testing
 
-# In[4]:
+# In[5]:
 
 
 # Set the ratio of the test data to 30% (training data will be 70%)
@@ -82,12 +99,16 @@ for plate, df in feature_selected_dfs_dict.items():
 
 # ## Combine the 4 plates together using the common morphology features
 
-# In[5]:
+# In[ ]:
 
 
-# Assuming output_dir is already defined
-train_files = list(output_dir.glob("*_train.parquet"))
-test_files = list(output_dir.glob("*_test.parquet"))
+# Load in the training and testing files from the other plates (do not include combined if it exists or it will be a bug)
+train_files = [
+    f for f in output_dir.glob("*_train.parquet") if not f.name.startswith("combined")
+]
+test_files = [
+    f for f in output_dir.glob("*_test.parquet") if not f.name.startswith("combined")
+]
 
 # Load files
 train_dfs = [pd.read_parquet(f) for f in train_files]
@@ -95,9 +116,9 @@ test_dfs = [pd.read_parquet(f) for f in test_files]
 all_dfs = train_dfs + test_dfs
 
 # Get intersection of feature columns (excluding Metadata_) across the dataframes
-common_features = set.intersection(*[
-    set(df.columns[~df.columns.str.startswith("Metadata_")]) for df in all_dfs
-])
+common_features = set.intersection(
+    *[set(df.columns[~df.columns.str.startswith("Metadata_")]) for df in all_dfs]
+)
 print(len(common_features), "common features across all dataframes")
 
 # Use metadata columns from first df

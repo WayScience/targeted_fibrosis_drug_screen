@@ -18,6 +18,8 @@ head(pr_results)
 
 # Create a mapping for localhost names
 localhost_names <- setdiff(unique(pr_results$plate_trained), "combined_batch1")
+localhost_names <- localhost_names[order(as.numeric(gsub("localhost", "", localhost_names)))]
+
 plate_mapping <- setNames(paste0("plate", seq_along(localhost_names)), localhost_names)
 plate_mapping["combined_batch1"] <- "combined_batch1" # keep the original name for combined_batch1
 
