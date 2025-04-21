@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 
 # ## Set paths and variables
 
-# In[ ]:
+# In[2]:
 
 
 # Set random state for the whole notebook to ensure reproducibility
@@ -50,12 +50,10 @@ feature_selected_dfs_dict = {
     for file in feature_selected_files
 }
 
-pprint.pprint(feature_selected_dfs_dict, indent=4)
-
 
 # ### Confirm no NaNs in the Pathway column
 
-# In[ ]:
+# In[4]:
 
 
 for plate, df in feature_selected_dfs_dict.items():
@@ -99,7 +97,7 @@ for plate, df in feature_selected_dfs_dict.items():
 
 # ## Combine the 4 plates together using the common morphology features
 
-# In[ ]:
+# In[6]:
 
 
 # Load in the training and testing files from the other plates (do not include combined if it exists or it will be a bug)

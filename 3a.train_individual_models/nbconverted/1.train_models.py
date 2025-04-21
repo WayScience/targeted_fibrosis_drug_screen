@@ -73,9 +73,6 @@ training_data_dfs_dict = {
     if (parts := pathlib.Path(file).stem.split("_"))
 }
 
-# Pretty print the dictionary
-pprint.pprint(training_data_dfs_dict, indent=4)
-
 
 # ## Perform downsampling on training data and output as data frame
 
@@ -107,9 +104,25 @@ for plate, info in training_data_dfs_dict.items():
 # In[5]:
 
 
-# Encode classes
-le = LabelEncoder()
+# Collect all unique labels across all plates
+all_labels = set()
+for plate, info in training_data_dfs_dict.items():
+    downsample_df = info["downsample_train_df"]
+    all_labels.update(downsample_df[label].unique())
 
+# Fit the LabelEncoder on the combined set of all labels
+le = LabelEncoder()
+le.fit(list(all_labels))
+
+# Save the label encoder for consistency
+dump(le, f"{encoder_dir}/label_encoder_global.joblib")
+
+# Print the global class mapping to verify consistency
+class_mapping = dict(zip(le.classes_, le.transform(le.classes_)))
+print("Global Class Mapping:")
+print(class_mapping)
+
+# Process each plate with the globally consistent encoder
 for plate, info in training_data_dfs_dict.items():
     # Get downsampled dataframe
     downsample_df = info["downsample_train_df"]
@@ -117,36 +130,22 @@ for plate, info in training_data_dfs_dict.items():
     # Get not shuffled training data from downsampled df (e.g., "final")
     X_train, y_train = get_X_y_data(df=downsample_df, label=label, shuffle=False)
 
-    # Print out the number of features the model will train on per plate
-    print(f"Number of features for plate {plate}: {X_train.shape[1]}")
-
-    # Fit the LabelEncoder on the non-shuffled labels
-    le.fit(y_train)
-
-    # Encode the labels for both non-shuffled data
+    # Encode the labels for non-shuffled data using the global encoder
     y_train_encoded = le.transform(y_train)
 
-    # Get shuffled training data from downsampled df(e.g., "shuffled_baseline")
+    # Get shuffled training data from downsampled df (e.g., "shuffled_baseline")
     X_shuffled_train, y_shuffled_train = get_X_y_data(
         df=downsample_df, label=label, shuffle=True
     )
 
-    # Encode the labels for the shuffled labels
+    # Encode the labels for shuffled data using the global encoder
     y_shuffled_train_encoded = le.transform(y_shuffled_train)
 
     # Store the X and y data under respective keys
     training_data_dfs_dict[plate]["X_train"] = X_train
-    training_data_dfs_dict[plate]["y_train"] = y_train
+    training_data_dfs_dict[plate]["y_train"] = y_train_encoded
     training_data_dfs_dict[plate]["X_shuffled_train"] = X_shuffled_train
     training_data_dfs_dict[plate]["y_shuffled_train"] = y_shuffled_train_encoded
-
-    # Save label encoder
-    dump(le, f"{encoder_dir}/label_encoder_{plate}.joblib")
-
-# Print the class mapping to see the encoding
-class_mapping = dict(zip(le.classes_, le.transform(le.classes_)))
-print("Class Mapping:")
-print(class_mapping)
 
 
 # ## Train the models
@@ -205,7 +204,7 @@ for plate, info in training_data_dfs_dict.items():
     y_train = info["y_train"]
     X_shuffled_train = info["X_shuffled_train"]
     y_shuffled_train = info["y_shuffled_train"]
-
+    
     # Prevent the convergence warning in sklearn, it does not impact the result
     with parallel_backend("multiprocessing"):
         with warnings.catch_warnings():
