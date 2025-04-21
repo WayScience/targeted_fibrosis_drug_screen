@@ -84,24 +84,50 @@ for (plate in names(umap_cp_df)) {
         + facet_grid(Metadata_treatment_type ~ .)
         + theme_bw()
         + scale_color_brewer(palette = "Dark2", name = "Cell type")
+        + theme(legend.position = "none")
 
     )
     
-    ggsave(output_file, umap_dose_gg, dpi = 500, height = 6, width = 6)
+    ggsave(output_file, umap_dose_gg, dpi = 500, height = 6, width = 4)
+}
+
+for (plate in names(umap_cp_df)) {
+    # Filter data for the two treatment types
+    filtered_df <- umap_cp_df[[plate]] %>%
+        dplyr::filter(Metadata_treatment_type %in% c("healthy + DMSO", "failing + DMSO"))
+    
+    # Generate output file path
+    output_file <- output_umap_files[[plate]]
+    output_file <- paste0(output_file, "_healthy_failing.png")
+    
+    # Create UMAP plot
+    umap_gg <- (
+        ggplot(filtered_df, aes(x = UMAP0, y = UMAP1))
+        + geom_point(
+            aes(color = Metadata_treatment_type), size = 0.4, alpha = 0.7
+        )
+        + theme_bw()
+        + facet_wrap(~ Metadata_treatment_type, nrow = 1)
+        + scale_color_manual(values = c("healthy + DMSO" = "#004400", "failing + DMSO" = "#a0004b"), name = "Treatment Type")
+        + theme(legend.position = "none")
+    )
+    
+    # Save the plot
+    ggsave(output_file, umap_gg, dpi = 500, height = 4, width = 6)
 }
 
 custom_palette <- c(
   "Angiogenesis" = "#1b9e77",
   "Apoptosis" = "#d95f02",
   "DNA Damage" = "#7570b3",
-  "Endocrinology & Hormones" = "#e7298a",
+  "Endocrinology &\nHormones" = "#e7298a",
   "Epigenetics" = "#66a61e",
   "MAPK" = "#e6ab02",
   "Metabolism" = "#a6761d",
   "Neuronal Signaling" = "#667665",
   "Others" = "#b3b3b3",
   "PI3K/Akt/mTOR" = "#8dd3c7",
-  "Stem Cells &  Wnt" = "#fb8072",
+  "Stem Cells & Wnt" = "#fb8072",
   "GPCR & G Protein" = "#984ea3",
   "healthy + DMSO" = "#004400",
   "failing + DMSO" = "#a0004b"
@@ -126,7 +152,8 @@ for (plate in names(umap_cp_df)) {
         + theme_bw()
         + facet_wrap(~ Metadata_Pathway, nrow=2)
         + scale_color_manual(values = custom_palette) # Use the custom color palette
+        + theme(legend.position = "none")
     )
     
-    ggsave(output_file, umap_dose_gg, dpi = 500, height = 4, width = 12)
+    ggsave(output_file, umap_dose_gg, dpi = 500, height = 4, width = 10)
 }

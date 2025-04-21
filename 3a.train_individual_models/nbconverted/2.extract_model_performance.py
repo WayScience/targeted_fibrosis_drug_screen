@@ -131,10 +131,13 @@ label = "Metadata_cell_type"
 
 
 # Get the list of encoder files
-encoder_files = list(encoder_dir.glob("label_encoder*"))
+encoder_dir = pathlib.Path("./encoder_results")
 
-# Extract plate names by removing the 'label_encoder' prefix
-plate_names = [file.stem.replace("label_encoder_", "") for file in encoder_files]
+# Extract plate names from model filenames
+plate_names = set(
+    f.stem.replace("_final_downsample", "")
+    for f in model_dir.glob("*_final_downsample.joblib")
+)
 
 # Create a nested dictionary with info per plate
 plates_dict = {}
@@ -144,7 +147,7 @@ for plate in plate_names:
         "testing_data": data_dir / f"{plate}_test.parquet",
         "final_model": model_dir / f"{plate}_final_downsample.joblib",
         "shuffled_model": model_dir / f"{plate}_shuffled_downsample.joblib",
-        "encoder_result": encoder_dir / f"label_encoder_{plate}.joblib",
+        "encoder_result": encoder_dir / "label_encoder_global.joblib",
         "training_indices": train_indices_dir / f"{plate}_training_data_indices.csv",
     }
 
