@@ -1,0 +1,221 @@
+Metadata_Plate,Metadata_Well,cell_count,Metadata_WellRow,Metadata_WellCol,Metadata_heart_number,Metadata_cell_type,Metadata_heart_failure_type,Metadata_treatment,Metadata_Pathway,Metadata_Site
+localhost240926150001,B02,234,B,2,7,healthy,,DMSO,,f17
+localhost240926150001,B03,250,B,3,19,failing,dilated_cardiomyopathy,UCD-0159256,Apoptosis,f14
+localhost240926150001,B04,232,B,4,19,failing,dilated_cardiomyopathy,UCD-0001766,Angiogenesis,f05
+localhost240926150001,B05,59,B,5,7,healthy,,DMSO,,f07
+localhost240926150001,B06,160,B,6,19,failing,dilated_cardiomyopathy,UCD-0159262,Others,f05
+localhost240926150001,B07,240,B,7,19,failing,dilated_cardiomyopathy,UCD-0001915,Others,f18
+localhost240926150001,B08,173,B,8,7,healthy,,DMSO,,f15
+localhost240926150001,B10,186,B,10,19,failing,dilated_cardiomyopathy,UCD-0159279,Others,f11
+localhost240926150001,B11,161,B,11,7,healthy,,DMSO,,f17
+localhost240926150001,C02,439,C,2,19,failing,dilated_cardiomyopathy,UCD-0159283,Endocrinology & Hormones,f11
+localhost240926150001,C03,329,C,3,19,failing,dilated_cardiomyopathy,UCD-0001040,Endocrinology & Hormones,f17
+localhost240926150001,C05,344,C,5,19,failing,dilated_cardiomyopathy,UCD-0000450,Neuronal Signaling,f18
+localhost240926150001,C06,402,C,6,19,failing,dilated_cardiomyopathy,UCD-0159257,DNA Damage,f11
+localhost240926150001,C07,212,C,7,19,failing,dilated_cardiomyopathy,UCD-0001810,DNA Damage,f12
+localhost240926150001,C08,412,C,8,19,failing,dilated_cardiomyopathy,UCD-0159263,Others,f04
+localhost240926150001,C09,444,C,9,19,failing,dilated_cardiomyopathy,UCD-0159269,Others,f05
+localhost240926150001,C10,374,C,10,19,failing,dilated_cardiomyopathy,UCD-0159273,Others,f08
+localhost240926150001,D02,430,D,2,19,failing,dilated_cardiomyopathy,UCD-0159284,Stem Cells & Wnt,f23
+localhost240926150001,D03,420,D,3,19,failing,dilated_cardiomyopathy,UCD-0017999,Endocrinology & Hormones,f00
+localhost240926150001,D05,325,D,5,19,failing,dilated_cardiomyopathy,UCD-0001014,Neuronal Signaling,f11
+localhost240926150001,D06,376,D,6,19,failing,dilated_cardiomyopathy,UCD-0159258,Angiogenesis,f06
+localhost240926150001,D07,306,D,7,19,failing,dilated_cardiomyopathy,UCD-0159261,Others,f18
+localhost240926150001,D08,1,D,8,19,failing,dilated_cardiomyopathy,UCD-0159264,Neuronal Signaling,f03
+localhost240926150001,D09,386,D,9,19,failing,dilated_cardiomyopathy,UCD-0001775,Others,f16
+localhost240926150001,D10,501,D,10,19,failing,dilated_cardiomyopathy,UCD-0159274,Others,f24
+localhost240926150001,D11,1,D,11,19,failing,dilated_cardiomyopathy,UCD-0001792,Others,f08
+localhost240926150001,E02,321,E,2,19,failing,dilated_cardiomyopathy,DMSO,,f21
+localhost240926150001,E03,407,E,3,19,failing,dilated_cardiomyopathy,UCD-0159285,DNA Damage,f08
+localhost240926150001,E04,365,E,4,19,failing,dilated_cardiomyopathy,UCD-0159289,Metabolism,f05
+localhost240926150001,E05,426,E,5,19,failing,dilated_cardiomyopathy,DMSO,,f03
+localhost240926150001,E06,172,E,6,19,failing,dilated_cardiomyopathy,UCD-0018179,MAPK,f04
+localhost240926150001,E07,393,E,7,19,failing,dilated_cardiomyopathy,UCD-0001016,Neuronal Signaling,f02
+localhost240926150001,E08,300,E,8,19,failing,dilated_cardiomyopathy,DMSO,,f04
+localhost240926150001,E09,247,E,9,19,failing,dilated_cardiomyopathy,UCD-0001804,MAPK,f10
+localhost240926150001,E10,286,E,10,19,failing,dilated_cardiomyopathy,UCD-0018207,Neuronal Signaling,f16
+localhost240926150001,E11,348,E,11,19,failing,dilated_cardiomyopathy,DMSO,,f19
+localhost240926150001,F02,23,F,2,19,failing,dilated_cardiomyopathy,UCD-0001844,Others,f24
+localhost240926150001,F03,359,F,3,19,failing,dilated_cardiomyopathy,UCD-0159270,Others,f06
+localhost240926150001,F04,381,F,4,19,failing,dilated_cardiomyopathy,UCD-0159275,Others,f02
+localhost240926150001,F06,449,F,6,19,failing,dilated_cardiomyopathy,UCD-0001613,Endocrinology & Hormones,f16
+localhost240926150001,F07,247,F,7,19,failing,dilated_cardiomyopathy,UCD-0001921,Epigenetics,f04
+localhost240926150001,F08,7,F,8,19,failing,dilated_cardiomyopathy,UCD-0159290,PI3K/Akt/mTOR,f14
+localhost240926150001,F09,312,F,9,19,failing,dilated_cardiomyopathy,UCD-0159293,Others,f20
+localhost240926150001,F10,200,F,10,19,failing,dilated_cardiomyopathy,UCD-0001808,MAPK,f20
+localhost240926150001,F11,152,F,11,19,failing,dilated_cardiomyopathy,UCD-0001801,Endocrinology & Hormones,f12
+localhost240926150001,G02,547,G,2,19,failing,dilated_cardiomyopathy,UCD-0159265,Neuronal Signaling,f11
+localhost240926150001,G03,312,G,3,19,failing,dilated_cardiomyopathy,UCD-0159271,Others,f01
+localhost240926150001,G04,374,G,4,19,failing,dilated_cardiomyopathy,UCD-0001835,Others,f08
+localhost240926150001,G05,395,G,5,19,failing,dilated_cardiomyopathy,UCD-0159280,Others,f14
+localhost240926150001,G06,24,G,6,19,failing,dilated_cardiomyopathy,UCD-0159286,Others,f21
+localhost240926150001,G07,557,G,7,19,failing,dilated_cardiomyopathy,UCD-0018131,Angiogenesis,f14
+localhost240926150001,G08,432,G,8,19,failing,dilated_cardiomyopathy,UCD-0001024,Neuronal Signaling,f11
+localhost240926150001,G09,408,G,9,19,failing,dilated_cardiomyopathy,UCD-0001829,PI3K/Akt/mTOR,f12
+localhost240926150001,G10,351,G,10,19,failing,dilated_cardiomyopathy,UCD-0159259,PI3K/Akt/mTOR,f23
+localhost240926150001,G11,374,G,11,19,failing,dilated_cardiomyopathy,UCD-0001842,Neuronal Signaling,f18
+localhost240927060001,B02,55,B,2,7,healthy,,DMSO,,f07
+localhost240927060001,B03,193,B,3,19,failing,dilated_cardiomyopathy,UCD-0159256,Apoptosis,f11
+localhost240927060001,B04,143,B,4,19,failing,dilated_cardiomyopathy,UCD-0001766,Angiogenesis,f17
+localhost240927060001,B05,82,B,5,7,healthy,,DMSO,,f05
+localhost240927060001,B06,73,B,6,19,failing,dilated_cardiomyopathy,UCD-0159262,Others,f09
+localhost240927060001,B07,135,B,7,19,failing,dilated_cardiomyopathy,UCD-0001915,Others,f22
+localhost240927060001,B08,86,B,8,7,healthy,,DMSO,,f05
+localhost240927060001,B09,2,B,9,19,failing,dilated_cardiomyopathy,UCD-0001783,Others,f10
+localhost240927060001,B10,61,B,10,19,failing,dilated_cardiomyopathy,UCD-0159279,Others,f19
+localhost240927060001,B11,79,B,11,7,healthy,,DMSO,,f18
+localhost240927060001,C02,299,C,2,19,failing,dilated_cardiomyopathy,UCD-0159283,Endocrinology & Hormones,f08
+localhost240927060001,C03,277,C,3,19,failing,dilated_cardiomyopathy,UCD-0001040,Endocrinology & Hormones,f11
+localhost240927060001,C04,1,C,4,19,failing,dilated_cardiomyopathy,UCD-0018091,GPCR & G Protein,f21
+localhost240927060001,C05,304,C,5,19,failing,dilated_cardiomyopathy,UCD-0000450,Neuronal Signaling,f06
+localhost240927060001,C06,392,C,6,19,failing,dilated_cardiomyopathy,UCD-0159257,DNA Damage,f12
+localhost240927060001,C07,180,C,7,19,failing,dilated_cardiomyopathy,UCD-0001810,DNA Damage,f00
+localhost240927060001,C08,282,C,8,19,failing,dilated_cardiomyopathy,UCD-0159263,Others,f02
+localhost240927060001,C09,281,C,9,19,failing,dilated_cardiomyopathy,UCD-0159269,Others,f18
+localhost240927060001,C10,258,C,10,19,failing,dilated_cardiomyopathy,UCD-0159273,Others,f08
+localhost240927060001,D02,355,D,2,19,failing,dilated_cardiomyopathy,UCD-0159284,Stem Cells & Wnt,f05
+localhost240927060001,D03,367,D,3,19,failing,dilated_cardiomyopathy,UCD-0017999,Endocrinology & Hormones,f18
+localhost240927060001,D05,330,D,5,19,failing,dilated_cardiomyopathy,UCD-0001014,Neuronal Signaling,f18
+localhost240927060001,D06,241,D,6,19,failing,dilated_cardiomyopathy,UCD-0159258,Angiogenesis,f05
+localhost240927060001,D07,309,D,7,19,failing,dilated_cardiomyopathy,UCD-0159261,Others,f01
+localhost240927060001,D09,270,D,9,19,failing,dilated_cardiomyopathy,UCD-0001775,Others,f24
+localhost240927060001,D10,376,D,10,19,failing,dilated_cardiomyopathy,UCD-0159274,Others,f12
+localhost240927060001,E02,341,E,2,19,failing,dilated_cardiomyopathy,DMSO,,f21
+localhost240927060001,E03,389,E,3,19,failing,dilated_cardiomyopathy,UCD-0159285,DNA Damage,f10
+localhost240927060001,E04,202,E,4,19,failing,dilated_cardiomyopathy,UCD-0159289,Metabolism,f02
+localhost240927060001,E05,289,E,5,19,failing,dilated_cardiomyopathy,DMSO,,f06
+localhost240927060001,E06,62,E,6,19,failing,dilated_cardiomyopathy,UCD-0018179,MAPK,f09
+localhost240927060001,E07,365,E,7,19,failing,dilated_cardiomyopathy,UCD-0001016,Neuronal Signaling,f17
+localhost240927060001,E08,274,E,8,19,failing,dilated_cardiomyopathy,DMSO,,f07
+localhost240927060001,E09,255,E,9,19,failing,dilated_cardiomyopathy,UCD-0001804,MAPK,f07
+localhost240927060001,E10,272,E,10,19,failing,dilated_cardiomyopathy,UCD-0018207,Neuronal Signaling,f16
+localhost240927060001,E11,320,E,11,19,failing,dilated_cardiomyopathy,DMSO,,f05
+localhost240927060001,F02,37,F,2,19,failing,dilated_cardiomyopathy,UCD-0001844,Others,f13
+localhost240927060001,F03,356,F,3,19,failing,dilated_cardiomyopathy,UCD-0159270,Others,f06
+localhost240927060001,F04,320,F,4,19,failing,dilated_cardiomyopathy,UCD-0159275,Others,f15
+localhost240927060001,F06,145,F,6,19,failing,dilated_cardiomyopathy,UCD-0001613,Endocrinology & Hormones,f19
+localhost240927060001,F07,189,F,7,19,failing,dilated_cardiomyopathy,UCD-0001921,Epigenetics,f10
+localhost240927060001,F08,3,F,8,19,failing,dilated_cardiomyopathy,UCD-0159290,PI3K/Akt/mTOR,f00
+localhost240927060001,F09,197,F,9,19,failing,dilated_cardiomyopathy,UCD-0159293,Others,f00
+localhost240927060001,F10,128,F,10,19,failing,dilated_cardiomyopathy,UCD-0001808,MAPK,f16
+localhost240927060001,F11,139,F,11,19,failing,dilated_cardiomyopathy,UCD-0001801,Endocrinology & Hormones,f03
+localhost240927060001,G02,330,G,2,19,failing,dilated_cardiomyopathy,UCD-0159265,Neuronal Signaling,f06
+localhost240927060001,G03,279,G,3,19,failing,dilated_cardiomyopathy,UCD-0159271,Others,f09
+localhost240927060001,G04,312,G,4,19,failing,dilated_cardiomyopathy,UCD-0001835,Others,f14
+localhost240927060001,G05,309,G,5,19,failing,dilated_cardiomyopathy,UCD-0159280,Others,f12
+localhost240927060001,G06,1,G,6,19,failing,dilated_cardiomyopathy,UCD-0159286,Others,f10
+localhost240927060001,G07,338,G,7,19,failing,dilated_cardiomyopathy,UCD-0018131,Angiogenesis,f02
+localhost240927060001,G08,265,G,8,19,failing,dilated_cardiomyopathy,UCD-0001024,Neuronal Signaling,f05
+localhost240927060001,G09,278,G,9,19,failing,dilated_cardiomyopathy,UCD-0001829,PI3K/Akt/mTOR,f04
+localhost240927060001,G10,240,G,10,19,failing,dilated_cardiomyopathy,UCD-0159259,PI3K/Akt/mTOR,f15
+localhost240927060001,G11,331,G,11,19,failing,dilated_cardiomyopathy,UCD-0001842,Neuronal Signaling,f01
+localhost240927120001,B02,104,B,2,7,healthy,,DMSO,,f16
+localhost240927120001,B03,219,B,3,19,failing,dilated_cardiomyopathy,UCD-0159256,Apoptosis,f08
+localhost240927120001,B04,181,B,4,19,failing,dilated_cardiomyopathy,UCD-0001766,Angiogenesis,f15
+localhost240927120001,B05,92,B,5,7,healthy,,DMSO,,f23
+localhost240927120001,B06,75,B,6,19,failing,dilated_cardiomyopathy,UCD-0159262,Others,f01
+localhost240927120001,B07,203,B,7,19,failing,dilated_cardiomyopathy,UCD-0001915,Others,f16
+localhost240927120001,B08,97,B,8,7,healthy,,DMSO,,f01
+localhost240927120001,B10,64,B,10,19,failing,dilated_cardiomyopathy,UCD-0159279,Others,f17
+localhost240927120001,B11,90,B,11,7,healthy,,DMSO,,f24
+localhost240927120001,C02,298,C,2,19,failing,dilated_cardiomyopathy,UCD-0159283,Endocrinology & Hormones,f06
+localhost240927120001,C03,210,C,3,19,failing,dilated_cardiomyopathy,UCD-0001040,Endocrinology & Hormones,f07
+localhost240927120001,C04,1,C,4,19,failing,dilated_cardiomyopathy,UCD-0018091,GPCR & G Protein,f17
+localhost240927120001,C05,277,C,5,19,failing,dilated_cardiomyopathy,UCD-0000450,Neuronal Signaling,f04
+localhost240927120001,C06,375,C,6,19,failing,dilated_cardiomyopathy,UCD-0159257,DNA Damage,f04
+localhost240927120001,C07,168,C,7,19,failing,dilated_cardiomyopathy,UCD-0001810,DNA Damage,f15
+localhost240927120001,C08,212,C,8,19,failing,dilated_cardiomyopathy,UCD-0159263,Others,f16
+localhost240927120001,C09,258,C,9,19,failing,dilated_cardiomyopathy,UCD-0159269,Others,f15
+localhost240927120001,C10,278,C,10,19,failing,dilated_cardiomyopathy,UCD-0159273,Others,f15
+localhost240927120001,D02,360,D,2,19,failing,dilated_cardiomyopathy,UCD-0159284,Stem Cells & Wnt,f16
+localhost240927120001,D03,319,D,3,19,failing,dilated_cardiomyopathy,UCD-0017999,Endocrinology & Hormones,f06
+localhost240927120001,D05,329,D,5,19,failing,dilated_cardiomyopathy,UCD-0001014,Neuronal Signaling,f03
+localhost240927120001,D06,246,D,6,19,failing,dilated_cardiomyopathy,UCD-0159258,Angiogenesis,f09
+localhost240927120001,D07,260,D,7,19,failing,dilated_cardiomyopathy,UCD-0159261,Others,f04
+localhost240927120001,D09,299,D,9,19,failing,dilated_cardiomyopathy,UCD-0001775,Others,f24
+localhost240927120001,D10,355,D,10,19,failing,dilated_cardiomyopathy,UCD-0159274,Others,f04
+localhost240927120001,D11,1,D,11,19,failing,dilated_cardiomyopathy,UCD-0001792,Others,f11
+localhost240927120001,E02,294,E,2,19,failing,dilated_cardiomyopathy,DMSO,,f22
+localhost240927120001,E03,395,E,3,19,failing,dilated_cardiomyopathy,UCD-0159285,DNA Damage,f02
+localhost240927120001,E04,329,E,4,19,failing,dilated_cardiomyopathy,UCD-0159289,Metabolism,f09
+localhost240927120001,E05,272,E,5,19,failing,dilated_cardiomyopathy,DMSO,,f08
+localhost240927120001,E06,115,E,6,19,failing,dilated_cardiomyopathy,UCD-0018179,MAPK,f09
+localhost240927120001,E07,371,E,7,19,failing,dilated_cardiomyopathy,UCD-0001016,Neuronal Signaling,f10
+localhost240927120001,E08,352,E,8,19,failing,dilated_cardiomyopathy,DMSO,,f21
+localhost240927120001,E09,217,E,9,19,failing,dilated_cardiomyopathy,UCD-0001804,MAPK,f05
+localhost240927120001,E10,297,E,10,19,failing,dilated_cardiomyopathy,UCD-0018207,Neuronal Signaling,f07
+localhost240927120001,E11,213,E,11,19,failing,dilated_cardiomyopathy,DMSO,,f17
+localhost240927120001,F02,33,F,2,19,failing,dilated_cardiomyopathy,UCD-0001844,Others,f19
+localhost240927120001,F03,328,F,3,19,failing,dilated_cardiomyopathy,UCD-0159270,Others,f09
+localhost240927120001,F04,339,F,4,19,failing,dilated_cardiomyopathy,UCD-0159275,Others,f10
+localhost240927120001,F06,308,F,6,19,failing,dilated_cardiomyopathy,UCD-0001613,Endocrinology & Hormones,f17
+localhost240927120001,F07,267,F,7,19,failing,dilated_cardiomyopathy,UCD-0001921,Epigenetics,f04
+localhost240927120001,F08,1,F,8,19,failing,dilated_cardiomyopathy,UCD-0159290,PI3K/Akt/mTOR,f00
+localhost240927120001,F09,249,F,9,19,failing,dilated_cardiomyopathy,UCD-0159293,Others,f07
+localhost240927120001,F10,188,F,10,19,failing,dilated_cardiomyopathy,UCD-0001808,MAPK,f12
+localhost240927120001,F11,169,F,11,19,failing,dilated_cardiomyopathy,UCD-0001801,Endocrinology & Hormones,f13
+localhost240927120001,G02,310,G,2,19,failing,dilated_cardiomyopathy,UCD-0159265,Neuronal Signaling,f07
+localhost240927120001,G03,288,G,3,19,failing,dilated_cardiomyopathy,UCD-0159271,Others,f19
+localhost240927120001,G04,242,G,4,19,failing,dilated_cardiomyopathy,UCD-0001835,Others,f11
+localhost240927120001,G05,320,G,5,19,failing,dilated_cardiomyopathy,UCD-0159280,Others,f04
+localhost240927120001,G06,43,G,6,19,failing,dilated_cardiomyopathy,UCD-0159286,Others,f07
+localhost240927120001,G07,362,G,7,19,failing,dilated_cardiomyopathy,UCD-0018131,Angiogenesis,f13
+localhost240927120001,G08,362,G,8,19,failing,dilated_cardiomyopathy,UCD-0001024,Neuronal Signaling,f10
+localhost240927120001,G09,293,G,9,19,failing,dilated_cardiomyopathy,UCD-0001829,PI3K/Akt/mTOR,f07
+localhost240927120001,G10,275,G,10,19,failing,dilated_cardiomyopathy,UCD-0159259,PI3K/Akt/mTOR,f10
+localhost240927120001,G11,299,G,11,19,failing,dilated_cardiomyopathy,UCD-0001842,Neuronal Signaling,f05
+localhost240928120001,B02,80,B,2,7,healthy,,DMSO,,f04
+localhost240928120001,B03,171,B,3,19,failing,dilated_cardiomyopathy,UCD-0159256,Apoptosis,f19
+localhost240928120001,B04,152,B,4,19,failing,dilated_cardiomyopathy,UCD-0001766,Angiogenesis,f09
+localhost240928120001,B05,131,B,5,7,healthy,,DMSO,,f03
+localhost240928120001,B06,52,B,6,19,failing,dilated_cardiomyopathy,UCD-0159262,Others,f10
+localhost240928120001,B07,140,B,7,19,failing,dilated_cardiomyopathy,UCD-0001915,Others,f02
+localhost240928120001,B08,65,B,8,7,healthy,,DMSO,,f17
+localhost240928120001,B09,1,B,9,19,failing,dilated_cardiomyopathy,UCD-0001783,Others,f02
+localhost240928120001,B10,45,B,10,19,failing,dilated_cardiomyopathy,UCD-0159279,Others,f23
+localhost240928120001,B11,132,B,11,7,healthy,,DMSO,,f08
+localhost240928120001,C02,317,C,2,19,failing,dilated_cardiomyopathy,UCD-0159283,Endocrinology & Hormones,f02
+localhost240928120001,C03,277,C,3,19,failing,dilated_cardiomyopathy,UCD-0001040,Endocrinology & Hormones,f19
+localhost240928120001,C05,292,C,5,19,failing,dilated_cardiomyopathy,UCD-0000450,Neuronal Signaling,f10
+localhost240928120001,C06,322,C,6,19,failing,dilated_cardiomyopathy,UCD-0159257,DNA Damage,f10
+localhost240928120001,C07,147,C,7,19,failing,dilated_cardiomyopathy,UCD-0001810,DNA Damage,f20
+localhost240928120001,C08,283,C,8,19,failing,dilated_cardiomyopathy,UCD-0159263,Others,f02
+localhost240928120001,C09,314,C,9,19,failing,dilated_cardiomyopathy,UCD-0159269,Others,f15
+localhost240928120001,C10,286,C,10,19,failing,dilated_cardiomyopathy,UCD-0159273,Others,f06
+localhost240928120001,D02,341,D,2,19,failing,dilated_cardiomyopathy,UCD-0159284,Stem Cells & Wnt,f20
+localhost240928120001,D03,328,D,3,19,failing,dilated_cardiomyopathy,UCD-0017999,Endocrinology & Hormones,f18
+localhost240928120001,D04,1,D,4,19,failing,dilated_cardiomyopathy,UCD-0000721,Neuronal Signaling,f08
+localhost240928120001,D05,374,D,5,19,failing,dilated_cardiomyopathy,UCD-0001014,Neuronal Signaling,f07
+localhost240928120001,D06,238,D,6,19,failing,dilated_cardiomyopathy,UCD-0159258,Angiogenesis,f23
+localhost240928120001,D07,272,D,7,19,failing,dilated_cardiomyopathy,UCD-0159261,Others,f11
+localhost240928120001,D08,2,D,8,19,failing,dilated_cardiomyopathy,UCD-0159264,Neuronal Signaling,f11
+localhost240928120001,D09,348,D,9,19,failing,dilated_cardiomyopathy,UCD-0001775,Others,f02
+localhost240928120001,D10,334,D,10,19,failing,dilated_cardiomyopathy,UCD-0159274,Others,f23
+localhost240928120001,E02,320,E,2,19,failing,dilated_cardiomyopathy,DMSO,,f00
+localhost240928120001,E03,296,E,3,19,failing,dilated_cardiomyopathy,UCD-0159285,DNA Damage,f21
+localhost240928120001,E04,314,E,4,19,failing,dilated_cardiomyopathy,UCD-0159289,Metabolism,f09
+localhost240928120001,E05,272,E,5,19,failing,dilated_cardiomyopathy,DMSO,,f01
+localhost240928120001,E06,34,E,6,19,failing,dilated_cardiomyopathy,UCD-0018179,MAPK,f07
+localhost240928120001,E07,319,E,7,19,failing,dilated_cardiomyopathy,UCD-0001016,Neuronal Signaling,f18
+localhost240928120001,E08,275,E,8,19,failing,dilated_cardiomyopathy,DMSO,,f18
+localhost240928120001,E09,226,E,9,19,failing,dilated_cardiomyopathy,UCD-0001804,MAPK,f04
+localhost240928120001,E10,257,E,10,19,failing,dilated_cardiomyopathy,UCD-0018207,Neuronal Signaling,f24
+localhost240928120001,E11,298,E,11,19,failing,dilated_cardiomyopathy,DMSO,,f00
+localhost240928120001,F02,41,F,2,19,failing,dilated_cardiomyopathy,UCD-0001844,Others,f07
+localhost240928120001,F03,288,F,3,19,failing,dilated_cardiomyopathy,UCD-0159270,Others,f15
+localhost240928120001,F04,297,F,4,19,failing,dilated_cardiomyopathy,UCD-0159275,Others,f08
+localhost240928120001,F06,280,F,6,19,failing,dilated_cardiomyopathy,UCD-0001613,Endocrinology & Hormones,f02
+localhost240928120001,F07,271,F,7,19,failing,dilated_cardiomyopathy,UCD-0001921,Epigenetics,f02
+localhost240928120001,F09,234,F,9,19,failing,dilated_cardiomyopathy,UCD-0159293,Others,f16
+localhost240928120001,F10,112,F,10,19,failing,dilated_cardiomyopathy,UCD-0001808,MAPK,f01
+localhost240928120001,F11,181,F,11,19,failing,dilated_cardiomyopathy,UCD-0001801,Endocrinology & Hormones,f01
+localhost240928120001,G02,392,G,2,19,failing,dilated_cardiomyopathy,UCD-0159265,Neuronal Signaling,f00
+localhost240928120001,G03,330,G,3,19,failing,dilated_cardiomyopathy,UCD-0159271,Others,f06
+localhost240928120001,G04,262,G,4,19,failing,dilated_cardiomyopathy,UCD-0001835,Others,f18
+localhost240928120001,G05,318,G,5,19,failing,dilated_cardiomyopathy,UCD-0159280,Others,f04
+localhost240928120001,G06,103,G,6,19,failing,dilated_cardiomyopathy,UCD-0159286,Others,f04
+localhost240928120001,G07,263,G,7,19,failing,dilated_cardiomyopathy,UCD-0018131,Angiogenesis,f08
+localhost240928120001,G08,319,G,8,19,failing,dilated_cardiomyopathy,UCD-0001024,Neuronal Signaling,f13
+localhost240928120001,G09,332,G,9,19,failing,dilated_cardiomyopathy,UCD-0001829,PI3K/Akt/mTOR,f11
+localhost240928120001,G10,293,G,10,19,failing,dilated_cardiomyopathy,UCD-0159259,PI3K/Akt/mTOR,f17
+localhost240928120001,G11,373,G,11,19,failing,dilated_cardiomyopathy,UCD-0001842,Neuronal Signaling,f12

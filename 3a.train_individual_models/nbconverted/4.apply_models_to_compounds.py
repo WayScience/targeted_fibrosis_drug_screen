@@ -29,11 +29,17 @@ from training_utils import get_X_y_data
 models_dir = pathlib.Path("./models")
 
 # directory with normalized datasets
-norm_profiles_dir = pathlib.Path("../3.preprocessing_features/data/single_cell_profiles")
+norm_profiles_dir = pathlib.Path(
+    "../3.preprocessing_features/data/single_cell_profiles"
+)
 
 # create a list of the plate names for gathering paths
 plate_names = {
-    "_".join(f.stem.split("_")[:2]) if f.stem.startswith("combined") else f.stem.split("_")[0]
+    (
+        "_".join(f.stem.split("_")[:2])
+        if f.stem.startswith("combined")
+        else f.stem.split("_")[0]
+    )
     for f in models_dir.glob("*.joblib")
 }
 
@@ -52,10 +58,14 @@ model_paths_dir = {}
 # Iterate through each plate name
 for plate in plate_names:
     if plate.startswith("combined"):
-        norm_matches = list(norm_profiles_dir.glob("*sc_normalized.parquet")) # Collect paths to each plate
+        norm_matches = list(
+            norm_profiles_dir.glob("*sc_normalized.parquet")
+        )  # Collect paths to each plate
     else:
-        norm_matches = list(norm_profiles_dir.glob(f"{plate}*sc_normalized.parquet")) # Only collect path for that plate
-    
+        norm_matches = list(
+            norm_profiles_dir.glob(f"{plate}*sc_normalized.parquet")
+        )  # Only collect path for that plate
+
     # Create a dictionary for each plate with paths to final and shuffled models
     model_paths_dir[plate] = {
         "final_model": list(models_dir.glob(f"{plate}*final_downsample.joblib")),
@@ -90,6 +100,28 @@ for plate, items in model_paths_dir.items():
         # Concatenate all plate paths for the combined case
         norm_data_frames = [pd.read_parquet(path) for path in items["norm_path"]]
         norm_data = pd.concat(norm_data_frames, ignore_index=True)
+
+        # Save the cell counts per well per plate w/ metadata
+        cell_counts = (
+            norm_data.groupby(["Metadata_Plate", "Metadata_Well"])
+            .size()
+            .reset_index(name="cell_count")
+        )
+        cell_counts = cell_counts.merge(
+            norm_data.drop_duplicates(subset=["Metadata_Plate", "Metadata_Well"])[
+                [
+                    col
+                    for col in norm_data.columns
+                    if col.startswith("Metadata_")
+                    and not any(
+                        x in col for x in ["Image", "Location", "Parent", "Object"]
+                    )
+                ]
+            ],
+            on=["Metadata_Plate", "Metadata_Well"],
+            how="left",
+        )
+        cell_counts.to_csv("./performance_metrics/batch1_cell_counts.csv", index=False)
     else:
         # Load the single parquet file for non-combined plates (same plate as model)
         norm_path = items["norm_path"][0]
@@ -99,7 +131,9 @@ for plate, items in model_paths_dir.items():
     norm_data = norm_data[norm_data["Metadata_treatment"] != "DMSO"]
 
     # Get the feature columns used in the model to filter the data
-    model_columns = final_model.feature_names_in_  # Feature names are same in shuffled model
+    model_columns = (
+        final_model.feature_names_in_
+    )  # Feature names are same in shuffled model
 
     # Filter the data to only include the model columns including metadata columns
     meta_cols = norm_data.columns[norm_data.columns.str.startswith("Metadata_")]
@@ -120,15 +154,21 @@ for plate, items in model_paths_dir.items():
 
     # Create DataFrames for final and shuffled model predictions
     final_predictions_df = predictions_df.copy()
-    final_predictions_df["predicted_probas"] = y_pred_final_probs[:, 1]  # Probability of the positive class (healthy)
+    final_predictions_df["predicted_probas"] = y_pred_final_probs[
+        :, 1
+    ]  # Probability of the positive class (healthy)
     final_predictions_df["model_type"] = "final"
 
     shuffled_predictions_df = predictions_df.copy()
-    shuffled_predictions_df["predicted_probas"] = y_pred_shuffled_probs[:, 1]  # Probability of the positive class (healthy)
+    shuffled_predictions_df["predicted_probas"] = y_pred_shuffled_probs[
+        :, 1
+    ]  # Probability of the positive class (healthy)
     shuffled_predictions_df["model_type"] = "shuffled"
 
     # Concatenate the two DataFrames
-    predictions_df = pd.concat([final_predictions_df, shuffled_predictions_df], ignore_index=True)
+    predictions_df = pd.concat(
+        [final_predictions_df, shuffled_predictions_df], ignore_index=True
+    )
 
     # Add the model_name column
     predictions_df["model_name"] = plate
@@ -139,12 +179,10 @@ for plate, items in model_paths_dir.items():
 # Concatenate all predictions into a single DataFrame
 all_predictions_df = pd.concat(all_predictions, ignore_index=True)
 
-# Prior to saving, fix Pathways bug for two compounds
-all_predictions_df.loc[all_predictions_df["Metadata_treatment"] == "UCD-0159258", "Metadata_Pathway"] = "Angiogenesis"
-all_predictions_df.loc[all_predictions_df["Metadata_treatment"] == "UCD-0001804", "Metadata_Pathway"] = "MAPK"
-
 # Save all predictions to parquet file
-all_predictions_df.to_parquet("./performance_metrics/batch1_compound_predictions.parquet", index=False)
+all_predictions_df.to_parquet(
+    "./performance_metrics/batch1_compound_predictions.parquet", index=False
+)
 
 # Print the resulting DataFrame for verification
 print(all_predictions_df.shape)

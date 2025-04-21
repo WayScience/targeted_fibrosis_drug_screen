@@ -190,6 +190,11 @@ summary_data_w_mAP <- summary_data_w_mAP %>%
 dim(summary_data_w_mAP)
 head(summary_data_w_mAP)
 
+filtered_summary_data_w_mAP <- summary_data_w_mAP %>%
+  filter(Metadata_treatment %in% c("UCD-0001792", "UCD-0001783"))
+
+filtered_summary_data_w_mAP
+
 setdiff(summary_data$Metadata_treatment, mAP_scores$Metadata_treatment)
 
 height <- 10
