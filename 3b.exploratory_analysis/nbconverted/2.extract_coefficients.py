@@ -25,6 +25,16 @@ model_dir = pathlib.Path("../3a.train_individual_models/models")
 # load final models in to extract coefficients from
 model_files = list(model_dir.glob("*final_downsample.joblib"))
 
+# load in the original model (Circulation paper)
+orig_circ_model = pd.read_csv(
+    pathlib.Path(
+        "/media/18tbdrive/1.Github_Repositories/cellpainting_predicts_cardiac_fibrosis/5.machine_learning/2.interpret_coefficients/coeff_data/all_coeffs.csv"
+    )
+)
+
+# add a column for model name to match the newly trained models
+orig_circ_model["Model"] = "original_circ_model"
+
 # output directory for the coefficients
 output_dir = pathlib.Path("coefficients")
 output_dir.mkdir(parents=True, exist_ok=True)
@@ -35,6 +45,25 @@ fig_dir.mkdir(parents=True, exist_ok=True)
 
 
 # In[3]:
+
+
+# # Get reference/original model coefficients
+# orig_coefs_df = pd.DataFrame(
+#     {
+#         "Feature": orig_circ_model.feature_names_in_,
+#         "Coefficient": orig_circ_model.coef_.flatten(),
+#         "Model": "Original",
+#     }
+# )
+
+# # Container for all coefficients
+# all_coefs_list = [orig_coefs_df]
+
+# # Container for diffs
+# model_diff_list = []
+
+
+# In[4]:
 
 
 # loop through each model and extract the coefficients
@@ -60,7 +89,7 @@ for model_file in model_files:
 
 # ## Print top coefficients for combined model (batch1)
 
-# In[4]:
+# In[5]:
 
 
 # print off combined model coefficients in order from most important for healthy prediction
@@ -69,7 +98,7 @@ print(f"Top 10 coefficients for healthy prediction for model {model_name}:")
 combined_coefs.sort_values(by="Coefficient", ascending=False).head(10)
 
 
-# In[5]:
+# In[6]:
 
 
 # print off combined model coefficients in order from most important for failing prediction
@@ -81,7 +110,7 @@ combined_coefs.sort_values(by="Coefficient", ascending=True).head(10)
 
 # ### Load in all plates from the batch
 
-# In[6]:
+# In[7]:
 
 
 # directory with normalized data
@@ -89,7 +118,9 @@ data_dir = pathlib.Path("../3.preprocessing_features/data/single_cell_profiles")
 
 # get all of the files with normalized data and concat
 data_files = list(data_dir.glob("*_sc_annotated.parquet"))
-norm_combined_df = pd.concat([pd.read_parquet(f) for f in data_files], ignore_index=True)
+norm_combined_df = pd.concat(
+    [pd.read_parquet(f) for f in data_files], ignore_index=True
+)
 
 # show dataframe
 print(norm_combined_df.shape)
@@ -98,23 +129,22 @@ norm_combined_df.head()
 
 # ### Generate the plot for the plates in the batch
 
-# In[7]:
+# In[8]:
 
 
 # Increase font sizes globally
-plt.rcParams.update({
-    "font.size": 16,
-    "axes.titlesize": 18,
-    "axes.labelsize": 16,
-    "xtick.labelsize": 14,
-    "ytick.labelsize": 14,
-    "legend.fontsize": 14
-})
+plt.rcParams.update(
+    {
+        "font.size": 16,
+        "axes.titlesize": 18,
+        "axes.labelsize": 16,
+        "xtick.labelsize": 14,
+        "ytick.labelsize": 14,
+        "legend.fontsize": 14,
+    }
+)
 
-palette_dict = {
-    "healthy": "#004400",
-    "failing": "#a0004b"
-}
+palette_dict = {"healthy": "#004400", "failing": "#a0004b"}
 
 # Filter the dataframe for DMSO treatment
 filtered_df = norm_combined_df[norm_combined_df["Metadata_treatment"] == "DMSO"]
@@ -130,7 +160,7 @@ sns.kdeplot(
     label="Healthy",
     fill=True,
     alpha=0.5,
-    color=palette_dict["healthy"]
+    color=palette_dict["healthy"],
 )
 sns.kdeplot(
     data=filtered_df[filtered_df["Metadata_cell_type"] == "failing"],
@@ -138,7 +168,7 @@ sns.kdeplot(
     label="Failing",
     fill=True,
     alpha=0.5,
-    color=palette_dict["failing"]
+    color=palette_dict["failing"],
 )
 
 # Add labels and legend
@@ -148,20 +178,26 @@ plt.ylabel("Density")
 plt.legend()
 
 # Save the plot
-plt.savefig(f"{fig_dir}/batch1_actin_intensity_distribution.png", dpi=500, bbox_inches="tight")
+plt.savefig(
+    f"{fig_dir}/batch1_actin_intensity_distribution.png", dpi=500, bbox_inches="tight"
+)
 plt.show()
 
 
 # ### Load in the plate data from the original model
 
-# In[8]:
+# In[9]:
 
 
 # directory with normalized data
-orig_data_dir = pathlib.Path("/media/18tbdrive/1.Github_Repositories/cellpainting_predicts_cardiac_fibrosis/3.process_cfret_features/data/single_cell_profiles/")
+orig_data_dir = pathlib.Path(
+    "/media/18tbdrive/1.Github_Repositories/cellpainting_predicts_cardiac_fibrosis/3.process_cfret_features/data/single_cell_profiles/"
+)
 
 # get all of the files with normalized data and concat
-orig_annot_df = pd.read_parquet(pathlib.Path(orig_data_dir / "localhost231120090001_sc_annotated.parquet"))
+orig_annot_df = pd.read_parquet(
+    pathlib.Path(orig_data_dir / "localhost231120090001_sc_annotated.parquet")
+)
 
 # show dataframe
 print(orig_annot_df.shape)
@@ -170,27 +206,28 @@ orig_annot_df.head()
 
 # ### Generate plot with the original data but filter to only the same hearts as the screening data
 
-# In[9]:
+# In[10]:
 
 
 # Increase font sizes globally
-plt.rcParams.update({
-    "font.size": 16,
-    "axes.titlesize": 18,
-    "axes.labelsize": 16,
-    "xtick.labelsize": 14,
-    "ytick.labelsize": 14,
-    "legend.fontsize": 14
-})
+plt.rcParams.update(
+    {
+        "font.size": 16,
+        "axes.titlesize": 18,
+        "axes.labelsize": 16,
+        "xtick.labelsize": 14,
+        "ytick.labelsize": 14,
+        "legend.fontsize": 14,
+    }
+)
 
-palette_dict = {
-    "healthy": "#004400",
-    "failing": "#a0004b"
-}
+palette_dict = {"healthy": "#004400", "failing": "#a0004b"}
 
 # Filter the dataframe only media treatment and hearts 7 and 19
 filtered_orig_df = orig_annot_df[orig_annot_df["Metadata_treatment"] != "DMSO"]
-filtered_orig_df = filtered_orig_df[filtered_orig_df["Metadata_heart_number"].isin([7, 19])]
+filtered_orig_df = filtered_orig_df[
+    filtered_orig_df["Metadata_heart_number"].isin([7, 19])
+]
 
 # Select a feature to plot
 feature = "Cells_Intensity_IntegratedIntensity_Actin"
@@ -203,7 +240,7 @@ sns.kdeplot(
     label="Healthy",
     fill=True,
     alpha=0.5,
-    color=palette_dict["healthy"]
+    color=palette_dict["healthy"],
 )
 sns.kdeplot(
     data=orig_annot_df[orig_annot_df["Metadata_cell_type"] == "Failing"],
@@ -211,7 +248,7 @@ sns.kdeplot(
     label="Failing",
     fill=True,
     alpha=0.5,
-    color=palette_dict["failing"]
+    color=palette_dict["failing"],
 )
 
 # Add labels and legend
@@ -219,6 +256,44 @@ plt.title("Actin intensity distribution for the original model data (media only)
 plt.xlabel(feature)
 plt.ylabel("Density")
 plt.legend()
-plt.savefig(f"{fig_dir}/orig_model_actin_intensity_distribution.png", dpi=500, bbox_inches="tight")
+plt.savefig(
+    f"{fig_dir}/orig_model_actin_intensity_distribution.png",
+    dpi=500,
+    bbox_inches="tight",
+)
 plt.show()
+
+
+# ## Perform a outer merge of the circulation model and combined model coefficients
+# 
+# NaNs will be filled with 0.
+
+# In[11]:
+
+
+# Perform an outer merge of the circulation model and the combined model
+merged_coefs = pd.merge(
+    orig_circ_model,
+    combined_coefs,
+    on="Feature",
+    how="outer",
+    suffixes=("_orig_circ_model", "_combined_batch1_model"),
+)
+
+# Drop model column as it doesn't add any information
+merged_coefs = merged_coefs.drop(
+    columns=[col for col in merged_coefs.columns if "Model" in col]
+)
+
+# Fill NaN values with 0
+merged_coefs.fillna(0, inplace=True)
+
+# Save the merged coefficients to a CSV file
+merged_coefs.to_csv(
+    output_dir / "merged_coefficients_circ_model_combined_batch1.csv", index=False
+)
+
+# Display the merged dataframe
+print(merged_coefs.shape)
+merged_coefs.head()
 
