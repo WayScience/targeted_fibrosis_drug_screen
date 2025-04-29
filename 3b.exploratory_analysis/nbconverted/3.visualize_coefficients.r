@@ -180,6 +180,8 @@ scatterplot_models <- ggplot(merged_coefficients, aes(
     x = Coefficient_orig_circ_model, y = Coefficient_combined_batch1_model,
     color = feature_group, shape = organelle
 )) +
+    geom_vline(xintercept = 0, linetype = "dotted", color = "black") +
+    geom_hline(yintercept = 0, linetype = "dotted", color = "black") +
     geom_point(size = 4, alpha = 0.5) +
     theme_bw() +
     theme(

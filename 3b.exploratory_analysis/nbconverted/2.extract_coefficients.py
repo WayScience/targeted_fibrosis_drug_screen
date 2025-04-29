@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 
 
 # set model directory
-model_dir = pathlib.Path("../3a.train_individual_models/models")
+model_dir = pathlib.Path("../3a.train_individual_models/models").resolve(strict=True)
 
 # load final models in to extract coefficients from
 model_files = list(model_dir.glob("*final_downsample.joblib"))
@@ -29,7 +29,7 @@ model_files = list(model_dir.glob("*final_downsample.joblib"))
 orig_circ_model = pd.read_csv(
     pathlib.Path(
         "/media/18tbdrive/1.Github_Repositories/cellpainting_predicts_cardiac_fibrosis/5.machine_learning/2.interpret_coefficients/coeff_data/all_coeffs.csv"
-    )
+    ).resolve(strict=True)
 )
 
 # add a column for model name to match the newly trained models
@@ -45,25 +45,6 @@ fig_dir.mkdir(parents=True, exist_ok=True)
 
 
 # In[3]:
-
-
-# # Get reference/original model coefficients
-# orig_coefs_df = pd.DataFrame(
-#     {
-#         "Feature": orig_circ_model.feature_names_in_,
-#         "Coefficient": orig_circ_model.coef_.flatten(),
-#         "Model": "Original",
-#     }
-# )
-
-# # Container for all coefficients
-# all_coefs_list = [orig_coefs_df]
-
-# # Container for diffs
-# model_diff_list = []
-
-
-# In[4]:
 
 
 # loop through each model and extract the coefficients
@@ -89,7 +70,7 @@ for model_file in model_files:
 
 # ## Print top coefficients for combined model (batch1)
 
-# In[5]:
+# In[4]:
 
 
 # print off combined model coefficients in order from most important for healthy prediction
@@ -98,7 +79,7 @@ print(f"Top 10 coefficients for healthy prediction for model {model_name}:")
 combined_coefs.sort_values(by="Coefficient", ascending=False).head(10)
 
 
-# In[6]:
+# In[5]:
 
 
 # print off combined model coefficients in order from most important for failing prediction
@@ -110,11 +91,13 @@ combined_coefs.sort_values(by="Coefficient", ascending=True).head(10)
 
 # ### Load in all plates from the batch
 
-# In[7]:
+# In[6]:
 
 
 # directory with normalized data
-data_dir = pathlib.Path("../3.preprocessing_features/data/single_cell_profiles")
+data_dir = pathlib.Path(
+    "../3.preprocessing_features/data/single_cell_profiles"
+).resolve(strict=True)
 
 # get all of the files with normalized data and concat
 data_files = list(data_dir.glob("*_sc_annotated.parquet"))
@@ -129,7 +112,7 @@ norm_combined_df.head()
 
 # ### Generate the plot for the plates in the batch
 
-# In[8]:
+# In[7]:
 
 
 # Increase font sizes globally
@@ -186,7 +169,7 @@ plt.show()
 
 # ### Load in the plate data from the original model
 
-# In[9]:
+# In[8]:
 
 
 # directory with normalized data
@@ -206,7 +189,7 @@ orig_annot_df.head()
 
 # ### Generate plot with the original data but filter to only the same hearts as the screening data
 
-# In[10]:
+# In[9]:
 
 
 # Increase font sizes globally
@@ -266,9 +249,9 @@ plt.show()
 
 # ## Perform a outer merge of the circulation model and combined model coefficients
 # 
-# NaNs will be filled with 0.
+# To avoid losing important features from each model, we are using outer merge so all unique features from each model are included. Given the each model did not use all the same features, NaNs will be added where there is not a match. We change these NaNs to 0's so we can still compare all the features across models.
 
-# In[11]:
+# In[10]:
 
 
 # Perform an outer merge of the circulation model and the combined model
