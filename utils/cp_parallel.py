@@ -11,145 +11,125 @@ import subprocess
 from concurrent.futures import Future, ProcessPoolExecutor
 from typing import List
 
-from errors.exceptions import MaxWorkerError
-
-
-def results_to_log(
-    results: list[subprocess.CompletedProcess], log_dir: pathlib.Path, run_name: str
-) -> None:
-    """
-    This function will take the list of subprocess.results from a CellProfiler parallelization run and
-    convert into a log file for each process.
-
-    Args:
-        results (List[subprocess.CompletedProcess]): the outputs from a subprocess.run
-        log_dir (pathlib.Path): directory for log files
-        run_name (str): a given name for the type of CellProfiler run being done on the plates (example: whole image features)
-    """
-    # Access the command (args) and stderr (output) for each CompletedProcess object
-    for result in results:
-        # assign plate name and decode the CellProfiler output to use in log file
-        plate_name = result.args[6].name
-        output_string = result.stderr.decode("utf-8")
-
-        # set log file name as plate name from command
-        log_file_path = pathlib.Path(f"{log_dir}/{plate_name}_{run_name}_run.log")
-
-        # create a new logger for each plate
-        logger = logging.getLogger(f"{plate_name}_logger")
-        logger.setLevel(logging.INFO)
-
-        # clear any previous handlers
-        logger.handlers = []
-
-        # create file handler and set its format
-        file_handler = logging.FileHandler(log_file_path)
-        file_handler.setFormatter(
-            logging.Formatter("[%(asctime)s] [Process ID: %(process)d] %(message)s")
-        )
-
-        # add the file handler to the logger
-        logger.addHandler(file_handler)
-
-        # log plate name and output string
-        logger.info(f"Plate Name: {plate_name}")
-        logger.info(f"Output String: {output_string}")
-
-        # remove the file handler to avoid duplication in the next loop iteration
-        logger.removeHandler(file_handler)
-
-
 def run_cellprofiler_parallel(
     plate_info_dictionary: dict,
     run_name: str,
+    group_level: str = "plate",
 ) -> None:
     """
-    This function utilizes multi-processing to run CellProfiler pipelines in parallel.
+    Run CellProfiler pipelines in parallel using multiprocessing.
 
     Args:
-        plate_info_dictionary (dict): dictionary with all paths for CellProfiler to run a pipeline
-        run_name (str): a given name for the type of CellProfiler run being done on the plates (example: whole image features)
+        plate_info_dictionary (dict): Dictionary of info to run CellProfiler. 
+            If group_level="plate", keys are plate names.
+            If group_level="well", keys are well names and each value must include a "plate_name".
+        run_name (str): A name for this CellProfiler run (e.g., "whole_image_features").
+        group_level (str): Indicates processing level, either "plate" or "well". Default is "plate".
 
     Raises:
-        FileNotFoundError: if paths to pipeline and images do not exist
+        FileNotFoundError: If required paths don't exist.
+        ValueError: If group_level is invalid.
+        KeyError: If plate_name is missing when group_level is "well".
     """
-    # create a list of commands for each plate with their respective log file
+    # Check if that group level is set properly
+    if group_level not in {"plate", "well"}:
+        raise ValueError("group_level must be either 'plate' or 'well'")
+
     commands = []
-
-    # make logs directory
     log_dir = pathlib.Path("./logs")
-    os.makedirs(log_dir, exist_ok=True)
+    log_dir.mkdir(parents=True, exist_ok=True)
 
-    # iterate through each plate in the dictionary
-    for _, info in plate_info_dictionary.items():
-        # set paths for CellProfiler
+    # Confirm that the plate info dictionary contains the necessary keys
+    for name, info in plate_info_dictionary.items():
+        if group_level == "well":
+            if "plate_name" not in info:
+                raise KeyError(
+                    f"Missing 'plate_name' for well '{name}'",
+                    "Please include 'plate_name' in each entry when running at the well level."
+                )
+            plate_name = info["plate_name"]
+        else:
+            plate_name = name
+
+        # Set paths for pipeline and output
         path_to_pipeline = info["path_to_pipeline"]
-        path_to_images = info["path_to_images"]
         path_to_output = info["path_to_output"]
+        pathlib.Path(path_to_output).mkdir(exist_ok=True)
 
-        # check to make sure paths to pipeline and directory of images are correct before running the pipeline
+        # Confirm that the pipeline exists
         if not pathlib.Path(path_to_pipeline).resolve(strict=True):
             raise FileNotFoundError(
                 f"The file '{pathlib.Path(path_to_pipeline).name}' does not exist"
             )
-        if not pathlib.Path(path_to_images).is_dir():
-            raise FileNotFoundError(
-                f"Directory '{pathlib.Path(path_to_images).name}' does not exist or is not a directory"
-            )
-        # make output directory if it is not already created
-        pathlib.Path(path_to_output).mkdir(exist_ok=True)
 
-        # creates a command for each plate in the list
-        command = [
-            "cellprofiler",
-            "-c",
-            "-r",
-            "-p",
-            path_to_pipeline,
-            "-o",
-            path_to_output,
-            "-i",
-            path_to_images,
-        ]
-        # creates a list of commands
-        commands.append(command)
+        # If running with a loaddata CSV, run the correct command
+        if "path_to_loaddata" in info:
+            path_to_loaddata = info["path_to_loaddata"]
+            command = [
+                "cellprofiler",
+                "-c",
+                "-r",
+                "-p",
+                path_to_pipeline,
+                "-o",
+                path_to_output,
+                "--data-file",
+                path_to_loaddata,
+            ]
+        else:
+            path_to_images = info["path_to_images"]
+            if not pathlib.Path(path_to_images).is_dir():
+                raise FileNotFoundError(
+                    f"Directory '{pathlib.Path(path_to_images).name}' does not exist or is not a directory"
+                )
+            command = [
+                "cellprofiler",
+                "-c",
+                "-r",
+                "-p",
+                path_to_pipeline,
+                "-o",
+                path_to_output,
+                "-i",
+                path_to_images,
+            ]
+            if group_level == "well":
+                command.extend(["-g", f"Well={name}"])
 
-    # set the number of CPUs/workers as the number of commands
-    num_processes = len(commands)
+        # Append the command to the commands list
+        commands.append((command, name, plate_name))
 
-    # make sure that the number of workers does not exceed the maximum number of workers for the machine
-    if num_processes > multiprocessing.cpu_count():
-        raise MaxWorkerError(
-            "Exception occurred: The number of commands exceeds the number of CPUs/workers. Please reduce the number of commands."
-        )
-
-    # set parallelization executer to the number of commands
-    executor = ProcessPoolExecutor(max_workers=num_processes)
-
-    # creates a list of futures that are each CellProfiler process for each plate
-    futures: list[Future] = [
-        executor.submit(
-            subprocess.run,
-            args=command,
-            capture_output=True,
-        )
-        for command in commands
+    # Check CPU count
+    cpu_count = os.cpu_count()
+    if cpu_count is None:
+        raise RuntimeError("Unable to determine CPU count with os.cpu_count(). Please check your system.")
+    # Set maximum workers to CPU count minus one
+    executor = ProcessPoolExecutor(max_workers=cpu_count - 1)
+    futures = [
+        executor.submit(subprocess.run, args=cmd, capture_output=True)
+        for cmd, _, _ in commands
     ]
 
-    # the list of CompletedProcesses holds all the information from the CellProfiler run
-    results: list[subprocess.CompletedProcess] = [future.result() for future in futures]
-
+    # Collect results
+    results = [future.result() for future in futures]
     print("All processes have been completed!")
 
-    # for each process, confirm that the process completed successfully and return a log file
-    for result in results:
-        plate_name = result.args[6].name
-        # convert the results into log files
-        results_to_log(results=results, log_dir=log_dir, run_name=run_name)
-        if result.returncode == 1:
+    # Write results to log files
+    for result, (_, name, plate_name) in zip(results, commands):
+        if group_level == "plate":
+            log_path = log_dir / f"{name}_{run_name}_run.log"
+        else:
+            sublog_dir = log_dir / plate_name
+            sublog_dir.mkdir(parents=True, exist_ok=True)
+            log_path = sublog_dir / f"{name}_{run_name}_run.log"
+
+        with open(log_path, "w") as f:
+            f.write(result.stderr.decode("utf-8"))
+
+        if result.returncode != 0:
             print(
-                f"A return code of {result.returncode} was returned for {plate_name}, which means there was an error in the CellProfiler run."
+                f"A return code of {result.returncode} was returned for {name}, which means there was an error."
             )
 
-    # to avoid having multiple print statements due to for loop, confirmation that logs are converted is printed here
     print("All results have been converted to log files!")
+

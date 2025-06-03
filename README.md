@@ -26,12 +26,12 @@ For this dataset, the Cell Painting staining switches the cytoplasmic RNA/nucleo
 
 ## Environments
 
-We utilize three environments for our repository.
+We utilize four environments for our repository, all located in the [environments folder](./environments/).
 
-1. [CellProfiler environment](./cellprofiler_env.yml): This environment installs CellProfiler, which we use for the illumination correction and feature extraction modules.
-2. [R environment](./r_fibrosis_env.yml): This environment is specific to R, which we use for generating figures.
-3. [Preprocessing environment](./preprocessing_env.yml): This environment installs preprocessing softwares (pycytominer, CytoTable, coSMicQC) to format the morphological readouts as single-cell profiles.
-4. [Machine learning environment](./machine_learning_env.yml): This environment is used in the module for applying the pre-trained model on the data and evaluating the results for "hits" that could be reversing fibrosis.
+1. [CellProfiler environment](./environments/cellprofiler_env.yml): This environment installs CellProfiler, which we use for the illumination correction and feature extraction modules.
+2. [R environment](./environments/r_fibrosis_env.yml): This environment is specific to R, which we use for generating figures.
+3. [Preprocessing environment](./environments/preprocessing_env.yml): This environment installs preprocessing softwares (pycytominer, CytoTable, coSMicQC) to format the morphological readouts as single-cell profiles.
+4. [Machine learning environment](./environments/machine_learning_env.yml): This environment is used in the module for applying the pre-trained model on the data and evaluating the results for "hits" that could be reversing fibrosis.
 
 These environments can be installed either via conda or mamba.
 Below is an example of how to install via the terminal.

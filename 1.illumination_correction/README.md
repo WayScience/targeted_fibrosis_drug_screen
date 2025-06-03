@@ -1,7 +1,7 @@
 # Illumination correction & whole image quality control (QC)
 
-In this module, we apply the CellProfiler illumination correction pipeline from the [cellpainting_predicts_cardiac_fibroblasts](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis) repository.
-We will download the most recent version of the cppipe file.
+In this module, we apply a modified version of the CellProfiler illumination correction pipeline from the [cellpainting_predicts_cardiac_fibroblasts](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis) repository.
+We have modified the pipeline to save the illumination correction functions as `npy` files per channel over saving the images to avoid losing memory space.
 
 ## CellProfiler pipeline
 
