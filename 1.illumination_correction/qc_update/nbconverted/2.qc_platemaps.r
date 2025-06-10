@@ -57,7 +57,7 @@ for (plate in unique_plates) {
         theme(plot.title = element_text(size = 10, face = "bold")) +
         scale_fill_gradientn(
             name = "Percent failing\nFOVs",
-            colours = c("#ffffff", "#adc4e6", "#00008B"), # white → lightblue → darkblue
+            colors = c("#1a9850", "#fee08b", "#d73027"), # green → yellow → red
             values = scales::rescale(c(0, 40, 100)),
             limits = c(0, 100)
         )
@@ -89,7 +89,7 @@ merged_fov_platemap <- platetools::raw_map(
     theme(plot.title = element_text(size = 10, face = "bold")) +
     scale_fill_gradientn(
         name = "Percent failing\nFOVs",
-        colours = c("#ffffff", "#adc4e6", "#00008B"), # white → lightblue → darkblue
+        colors = c("#1a9850", "#fee08b", "#d73027"), # green → yellow → red
         values = scales::rescale(c(0, 40, 100)),
         limits = c(0, 100)
     )
@@ -99,3 +99,4 @@ output_file_merged <- file.path(output_directory, "merged_batch1_fov_platemap.pn
 ggsave(output_file_merged, plot = merged_fov_platemap, width = 8, height = 6)
 
 print(merged_fov_platemap)
+

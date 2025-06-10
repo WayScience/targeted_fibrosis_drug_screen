@@ -1,21 +1,24 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 # ## Generate QC report of the whole image quality control flags
 
 # ## Import libraries
 
-# In[1]:
+# In[ ]:
 
 
+import pandas as pd
 import pathlib
 import re
-import warnings
 
-import matplotlib.pyplot as plt
-import pandas as pd
 import seaborn as sns
 from upsetplot import from_indicators, plot
+import matplotlib.pyplot as plt
 
+import warnings
+
+# Ignore upset plot warning regarding  behavior change that will occur in pandas 3.0
 warnings.filterwarnings("ignore", category=FutureWarning, module="upsetplot")
 
 
@@ -126,7 +129,7 @@ combined_df.head()
 
 # ## Plot the percentage of failed FOVs across plates regardless of condition
 
-# In[6]:
+# In[10]:
 
 
 # Calculate percentage of rows that failed any QC check, grouped by plate
@@ -140,15 +143,13 @@ failed_percent_by_plate = (
 )
 failed_percent_by_plate["Percent_Failed"] *= 100
 
-# Create bar plot
+# Create bar plot with a single color
 plt.figure(figsize=(8, 5))
 sns.barplot(
     data=failed_percent_by_plate,
     x="Metadata_Plate",
     y="Percent_Failed",
-    hue="Metadata_Plate",
-    palette="Blues_d",
-    legend=False,
+    color="steelblue",
 )
 plt.ylabel("Percentage of FOVs failing QC (%)")
 plt.title("QC Failure Rate per Plate")
@@ -310,3 +311,4 @@ plt.ylabel("QC Condition")
 plt.tight_layout()
 plt.savefig(output_directory / "qc_failure_rates_heatmap.png", dpi=500)
 plt.show()
+
