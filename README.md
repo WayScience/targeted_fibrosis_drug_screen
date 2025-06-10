@@ -26,7 +26,7 @@ For this dataset, the Cell Painting staining switches the cytoplasmic RNA/nucleo
 
 ## Environments
 
-We utilize four environments for our repository, all located in the [environments folder](./environments/).
+We utilize environments defined in the [environments folder](./environments/).
 
 1. [CellProfiler environment](./environments/cellprofiler_env.yml): This environment installs CellProfiler, which we use for the illumination correction and feature extraction modules.
 2. [R environment](./environments/r_fibrosis_env.yml): This environment is specific to R, which we use for generating figures.
