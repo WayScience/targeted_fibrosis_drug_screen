@@ -146,7 +146,7 @@ options(repr.plot.width = width, repr.plot.height = height)
 # Generate scatterplot for probability and cell count
 count_probas_plot <- ggplot(summary_data, aes(x = cell_count, y = median_predicted_proba, color = Metadata_Pathway)) +
     geom_point(size = 4, alpha = 0.7) +
-    geom_text_repel(data = subset(summary_data, high_count_and_proba == TRUE), aes(label = Metadata_treatment), 
+    geom_text_repel(data = subset(summary_data, high_count_and_proba == TRUE), aes(label = Metadata_treatment),
                     size = 6, box.padding = 0.35, point.padding = 0.5, max.overlaps = 20, show.legend = FALSE) +  # Add labels
     scale_color_manual(values = custom_palette) +  # Use the custom color palette
     labs(
@@ -178,7 +178,7 @@ summary_data$Metadata_treatment <- as.character(summary_data$Metadata_treatment)
 
 # Merge the mAP scores with the summary_data using the Metadata_treatment column
 summary_data_w_mAP <- summary_data %>%
-    left_join(mAP_scores %>% select(Metadata_treatment, negative_mean_average_precision, positive_mean_average_precision), 
+    left_join(mAP_scores %>% select(Metadata_treatment, negative_mean_average_precision, positive_mean_average_precision),
         by = "Metadata_treatment")
 
 # Drop rows with NaNs in the mAP scores
@@ -204,7 +204,7 @@ options(repr.plot.width = width, repr.plot.height = height)
 # Generate scatterplot for probability and cell count
 count_probas_plot <- ggplot(summary_data_w_mAP, aes(x = cell_count, y = median_predicted_proba, color = Metadata_Pathway)) +
     geom_point(aes(size = negative_mean_average_precision), alpha = 0.7) +
-    geom_text_repel(data = subset(summary_data, high_count_and_proba == TRUE), aes(label = Metadata_treatment), 
+    geom_text_repel(data = subset(summary_data, high_count_and_proba == TRUE), aes(label = Metadata_treatment),
                     size = 6, box.padding = 0.35, point.padding = 0.5, max.overlaps = 20, show.legend = FALSE) +  # Add labels
     scale_color_manual(values = custom_palette) +  # Use the custom color palette
     scale_size_continuous(name = "Negative mAP score") +
@@ -234,7 +234,7 @@ options(repr.plot.width = width, repr.plot.height = height)
 # Generate scatterplot for probability and cell count
 count_probas_plot <- ggplot(summary_data_w_mAP, aes(x = cell_count, y = median_predicted_proba, color = Metadata_Pathway)) +
     geom_point(aes(size = positive_mean_average_precision), alpha = 0.7) +
-    geom_text_repel(data = subset(summary_data, high_count_and_proba == TRUE), aes(label = Metadata_treatment), 
+    geom_text_repel(data = subset(summary_data, high_count_and_proba == TRUE), aes(label = Metadata_treatment),
                     size = 6, box.padding = 0.35, point.padding = 0.5, max.overlaps = 20, show.legend = FALSE) +  # Add labels
     scale_color_manual(values = custom_palette) +  # Use the custom color palette
     scale_size_continuous(name = "Positive mAP score") +

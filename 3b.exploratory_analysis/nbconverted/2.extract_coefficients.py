@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # ## Extract coefficient values from all plates
 
@@ -8,13 +7,12 @@
 # In[1]:
 
 
-from joblib import load
 import pathlib
-import pandas as pd
 
-import seaborn as sns
 import matplotlib.pyplot as plt
-
+import pandas as pd
+import seaborn as sns
+from joblib import load
 
 # In[2]:
 
@@ -248,7 +246,7 @@ plt.show()
 
 
 # ## Perform a outer merge of the circulation model and combined model coefficients
-# 
+#
 # To avoid losing important features from each model, we are using outer merge so all unique features from each model are included. Given the each model did not use all the same features, NaNs will be added where there is not a match. We change these NaNs to 0's so we can still compare all the features across models.
 
 # In[10]:
@@ -279,4 +277,3 @@ merged_coefs.to_csv(
 # Display the merged dataframe
 print(merged_coefs.shape)
 merged_coefs.head()
-

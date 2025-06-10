@@ -99,4 +99,3 @@ output_file_merged <- file.path(output_directory, "merged_batch1_fov_platemap.pn
 ggsave(output_file_merged, plot = merged_fov_platemap, width = 8, height = 6)
 
 print(merged_fov_platemap)
-

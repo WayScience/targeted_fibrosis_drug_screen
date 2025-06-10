@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # ## Train machine learning models to predict failing or healthy cell status
-# 
+#
 # Each model will be trained on an individual plate or all plates from a batch combined.
 
 # ## Import libraries
@@ -11,7 +10,6 @@
 
 
 import pathlib
-import pprint
 import sys
 import warnings
 
@@ -27,7 +25,6 @@ from sklearn.utils import parallel_backend
 
 sys.path.append("../utils")
 from training_utils import downsample_data, get_X_y_data
-
 
 # ## Set paths and variables
 
@@ -149,8 +146,8 @@ for plate, info in training_data_dfs_dict.items():
 
 
 # ## Train the models
-# 
-# These hyperparameters are set based on the model training from the [`cellpainting_predicts_cardiac_fibrosis` repository](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis). 
+#
+# These hyperparameters are set based on the model training from the [`cellpainting_predicts_cardiac_fibrosis` repository](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis).
 # The following model training code is derived from the [model training notebook](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis/blob/main/5.machine_learning/0.train_logistic_regression/1.train_models.ipynb).
 # We will be using RandomizedSearchCV to hyperparameterize the model since that is how the original model was trained and we want to remain consistent.
 
@@ -204,7 +201,7 @@ for plate, info in training_data_dfs_dict.items():
     y_train = info["y_train"]
     X_shuffled_train = info["X_shuffled_train"]
     y_shuffled_train = info["y_shuffled_train"]
-    
+
     # Prevent the convergence warning in sklearn, it does not impact the result
     with parallel_backend("multiprocessing"):
         with warnings.catch_warnings():
@@ -244,4 +241,3 @@ for plate, info in training_data_dfs_dict.items():
             )
             dump(shuffled_random_search.best_estimator_, shuffled_final_model_filename)
             print(f"Model saved as: {shuffled_final_model_filename}")
-

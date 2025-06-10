@@ -3,26 +3,51 @@ This collection of functions runs CellProfiler in parallel and can convert the r
 for each process.
 """
 
-import logging
-import multiprocessing
 import os
 import pathlib
 import subprocess
-from concurrent.futures import Future, ProcessPoolExecutor
-from typing import List
+from concurrent.futures import ProcessPoolExecutor
+from typing import Literal
+
 
 def run_cellprofiler_parallel(
     plate_info_dictionary: dict,
     run_name: str,
-    group_level: str = "plate",
+    group_level: Literal['plate', 'well'] = "plate"
 ) -> None:
     """
     Run CellProfiler pipelines in parallel using multiprocessing.
 
     Args:
-        plate_info_dictionary (dict): Dictionary of info to run CellProfiler. 
-            If group_level="plate", keys are plate names.
-            If group_level="well", keys are well names and each value must include a "plate_name".
+        plate_info_dictionary (dict): Dictionary of info to run CellProfiler.
+            If group_level="plate", keys are plate names, e.g.:
+                {
+                    "PlateA": {
+                        "path_to_pipeline": "/path/to/pipeline.cppipe",
+                        "path_to_output": "/path/to/output",
+                        "path_to_images": "/path/to/images"
+                    },
+                    "PlateB": {
+                        "path_to_pipeline": "/path/to/pipeline.cppipe",
+                        "path_to_output": "/path/to/output",
+                        "path_to_loaddata": "/path/to/loaddata.csv"
+                    }
+                }
+            If group_level="well", keys are well names and each value must include a "plate_name", e.g.:
+                {
+                    "A01": {
+                        "plate_name": "PlateA",
+                        "path_to_pipeline": "/path/to/pipeline.cppipe",
+                        "path_to_output": "/path/to/output",
+                        "path_to_images": "/path/to/images"
+                    },
+                    "B02": {
+                        "plate_name": "PlateB",
+                        "path_to_pipeline": "/path/to/pipeline.cppipe",
+                        "path_to_output": "/path/to/output",
+                        "path_to_loaddata": "/path/to/loaddata.csv"
+                    }
+                }
         run_name (str): A name for this CellProfiler run (e.g., "whole_image_features").
         group_level (str): Indicates processing level, either "plate" or "well". Default is "plate".
 
@@ -41,12 +66,11 @@ def run_cellprofiler_parallel(
 
     # Confirm that the plate info dictionary contains the necessary keys
     for name, info in plate_info_dictionary.items():
-        if group_level == "well":
-            if "plate_name" not in info:
-                raise KeyError(
-                    f"Missing 'plate_name' for well '{name}'",
-                    "Please include 'plate_name' in each entry when running at the well level."
-                )
+        if group_level == "well" and "plate_name" not in info:
+            raise KeyError(
+            f"Missing 'plate_name' for well '{name}'",
+            "Please include 'plate_name' in each entry when running at the well level."
+            )
             plate_name = info["plate_name"]
         else:
             plate_name = name
@@ -126,10 +150,12 @@ def run_cellprofiler_parallel(
         with open(log_path, "w") as f:
             f.write(result.stderr.decode("utf-8"))
 
+        # If error occurred, print the last 10 lines of stderr in terminal
         if result.returncode != 0:
-            print(
-                f"A return code of {result.returncode} was returned for {name}, which means there was an error."
-            )
+            stderr_lines = result.stderr.decode("utf-8").splitlines()
+            print("Process failed with return code", result.returncode)
+            print("Last 10 lines of stderr:")
+            print("\n".join(stderr_lines[-10:]))
+            print("See log file for more details:", log_path)
 
     print("All results have been converted to log files!")
-

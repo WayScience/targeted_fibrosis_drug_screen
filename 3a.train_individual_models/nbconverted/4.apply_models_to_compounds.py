@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # # Apply models to the cells from wells treated with a small-molecule compound and extract probabilities
 
@@ -9,16 +8,14 @@
 
 
 import pathlib
+import pprint
+import sys
 
 import pandas as pd
-import pprint
 from joblib import load
-
-import sys
 
 sys.path.append("../utils")
 from training_utils import get_X_y_data
-
 
 # ## Set paths and variables
 
@@ -187,4 +184,3 @@ all_predictions_df.to_parquet(
 # Print the resulting DataFrame for verification
 print(all_predictions_df.shape)
 all_predictions_df.head()
-

@@ -3,7 +3,6 @@ This utility file contains the function to load in training data as final or shu
 """
 
 import pathlib
-from typing import Tuple
 
 import numpy as np
 import pandas as pd

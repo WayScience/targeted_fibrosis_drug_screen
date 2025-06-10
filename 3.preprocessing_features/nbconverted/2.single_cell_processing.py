@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # # Process single cell profiles
-# 
+#
 # NOTE: We are normalizing the plates for all samples as we only have three wells associated with the healthy controls, which is insufficient for normalization.
 
 # ## Import libraries
@@ -14,9 +13,7 @@ import pathlib
 import pprint
 
 import pandas as pd
-
-from pycytominer import annotate, normalize, feature_select
-
+from pycytominer import annotate, feature_select, normalize
 
 # ## Set paths and variables
 
@@ -160,4 +157,3 @@ print(test_df.shape)
 print("Plate:", test_df.Metadata_Plate.unique())
 print("Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")])
 test_df.head(2)
-

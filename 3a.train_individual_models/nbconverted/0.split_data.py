@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # # Split each plate from the batch data into training, testing, and holdout data
 
@@ -9,11 +8,8 @@
 import pathlib
 import random
 
-import pprint
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
-
 
 # ## Set paths and variables
 
@@ -139,4 +135,3 @@ print("Test shape:", combined_test_df.shape)
 
 # Print on dataframe to verify
 combined_train_df.head()
-

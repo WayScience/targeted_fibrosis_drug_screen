@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # # Extract model performance metrics
-# 
+#
 # In this notebook, we extract metrics to evaluate performance such as:
-# 
+#
 # 1. Precision-recall
 # 2. Predicted probabilities
 
@@ -19,12 +18,11 @@ import sys
 import pandas as pd
 from joblib import load
 from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import precision_recall_curve
+from sklearn.preprocessing import LabelEncoder
 
 sys.path.append("../utils")
 from training_utils import get_X_y_data
-
 
 # ## Helper function to collect precision-recall results and predicted probabilities
 
@@ -134,10 +132,10 @@ label = "Metadata_cell_type"
 encoder_dir = pathlib.Path("./encoder_results")
 
 # Extract plate names from model filenames
-plate_names = set(
+plate_names = {
     f.stem.replace("_final_downsample", "")
     for f in model_dir.glob("*_final_downsample.joblib")
-)
+}
 
 # Create a nested dictionary with info per plate
 plates_dict = {}
@@ -394,4 +392,3 @@ probabilities_df.to_parquet(
 # Check the shape of the final DataFrame
 print(probabilities_df.shape)
 probabilities_df.head()
-

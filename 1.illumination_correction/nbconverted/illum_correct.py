@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # # Run illumination correction on data
-# 
+#
 # Note: We load in the CellProfiler IC pipeline to use for this process.
 
 # ## Import libraries
@@ -12,12 +11,10 @@
 
 import pathlib
 import pprint
-
 import sys
 
 sys.path.append("../utils")
 import cp_parallel
-
 
 # ## Set paths and variables
 
@@ -90,7 +87,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 
 # ## Run CellProfiler Parallel
-# 
+#
 # Note: We do not run this code cell as we will run this process through the script.
 
 # In[ ]:
@@ -99,4 +96,3 @@ pprint.pprint(plate_info_dictionary, indent=4)
 cp_parallel.run_cellprofiler_parallel(
     plate_info_dictionary=plate_info_dictionary, run_name=run_name, group_level="plate"
 )
-

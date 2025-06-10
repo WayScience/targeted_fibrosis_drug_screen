@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # # Extract UMAP embeddings for each plate of CellProfiler features
-# 
+#
 # NOTE: We are using the feature selected profiles per plate.
 
 # In[1]:
@@ -10,12 +9,11 @@
 
 import glob
 import pathlib
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 import umap
-
 from pycytominer.cyto_utils import infer_cp_features
-
 
 # ## Generate Embeddings
 
@@ -281,4 +279,3 @@ print(f"Combined UMAP embeddings saved to {combined_output_umap_file}")
 
 
 combined_cp_umap_with_metadata_df.head()
-

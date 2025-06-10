@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # ## Generate QC report of the whole image quality control flags
 
@@ -8,15 +7,14 @@
 # In[1]:
 
 
-import pandas as pd
 import pathlib
 import re
-
-import seaborn as sns
-from upsetplot import UpSet, from_indicators, plot
-import matplotlib.pyplot as plt
-
 import warnings
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from upsetplot import from_indicators, plot
 
 warnings.filterwarnings("ignore", category=FutureWarning, module="upsetplot")
 
@@ -312,4 +310,3 @@ plt.ylabel("QC Condition")
 plt.tight_layout()
 plt.savefig(output_directory / "qc_failure_rates_heatmap.png", dpi=500)
 plt.show()
-

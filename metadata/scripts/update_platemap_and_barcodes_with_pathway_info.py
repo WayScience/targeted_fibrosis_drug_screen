@@ -1,16 +1,15 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # In[1]:
 
 
-import sys
 import pathlib
+import sys
+
 import pandas as pd
 
 sys.path.append("../")
 from utils import io_utils
-
 
 # Setting up paths
 
@@ -42,7 +41,7 @@ updated_barcode_path = (
 
 
 # This process adds pathway metadata to experimental platemaps to provide more biological context for single-cell image-based profiles. Here's how it works:
-# 
+#
 # 1. Pathway metadata, which includes treatment identifiers, well positions, and pathway information, is filtered for each specific plate.
 # 2. This filtered metadata is merged with the platemap, linking treatments and well positions to their corresponding pathways.
 # 3. The final augmented platemaps offer a clear view that connects experimental treatments to their associated pathways.
@@ -126,4 +125,3 @@ updated_barcodes_df.to_csv(updated_barcode_path, index=False)
 
 # Display new barcode file
 updated_barcodes_df.head()
-
