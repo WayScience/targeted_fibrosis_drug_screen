@@ -16,7 +16,7 @@ plate_suffix <- ".parquet"
 # Define output figure paths
 output_umap_files <- setNames(
   file.path(
-    output_fig_dir, 
+    output_fig_dir,
     stringr::str_remove(basename(umap_files), plate_suffix) # Remove only .parquet
   ),
   basename(umap_files) # Use full original filenames as names
@@ -36,26 +36,26 @@ umap_cp_df <- list()
 for (plate in names(output_umap_files)) {
     # Find the umap file associated with the plate
     umap_file <- umap_files[stringr::str_detect(umap_files, plate)]
-    
+
     if (length(umap_file) > 0) {
         # Load the umap data directly from Parquet file
         df <- arrow::read_parquet(umap_file)
-         
+
         # Group by Metadata_Well and count cells
         cell_count_df <- df %>%
             dplyr::group_by(Metadata_Well) %>%
             dplyr::count() %>%
             dplyr::rename(Metadata_Cell_Count = n)
-        
+
         # Merge the cell count data with the original dataframe
         umap_cp_df[[plate]] <- df %>%
             dplyr::left_join(cell_count_df, by = "Metadata_Well")
-        
+
         # Update 'Endocrinology & Hormones' in Metadata_Pathway
         umap_cp_df[[plate]] <- umap_cp_df[[plate]] %>%
             dplyr::mutate(Metadata_Pathway = dplyr::recode(Metadata_Pathway,
                                                            "Endocrinology & Hormones" = "Endocrinology &\nHormones"))
-            
+
     } else {
         message(paste("No file found for plate:", plate))
     }
@@ -75,7 +75,7 @@ for (plate in names(umap_cp_df)) {
     # cell type UMAP
     output_file <- output_umap_files[[plate]]
     output_file <- paste0(output_file, "_cell_type.png")
-    
+
     umap_dose_gg <- (
         ggplot(umap_cp_df[[plate]], aes(x = UMAP0, y = UMAP1))
         + geom_point(
@@ -87,7 +87,7 @@ for (plate in names(umap_cp_df)) {
         + theme(legend.position = "none")
 
     )
-    
+
     ggsave(output_file, umap_dose_gg, dpi = 500, height = 6, width = 4)
 }
 
@@ -95,11 +95,11 @@ for (plate in names(umap_cp_df)) {
     # Filter data for the two treatment types
     filtered_df <- umap_cp_df[[plate]] %>%
         dplyr::filter(Metadata_treatment_type %in% c("healthy + DMSO", "failing + DMSO"))
-    
+
     # Generate output file path
     output_file <- output_umap_files[[plate]]
     output_file <- paste0(output_file, "_healthy_failing.png")
-    
+
     # Create UMAP plot
     umap_gg <- (
         ggplot(filtered_df, aes(x = UMAP0, y = UMAP1))
@@ -111,7 +111,7 @@ for (plate in names(umap_cp_df)) {
         + scale_color_manual(values = c("healthy + DMSO" = "#004400", "failing + DMSO" = "#a0004b"), name = "Treatment Type")
         + theme(legend.position = "none")
     )
-    
+
     # Save the plot
     ggsave(output_file, umap_gg, dpi = 500, height = 4, width = 6)
 }
@@ -154,6 +154,6 @@ for (plate in names(umap_cp_df)) {
         + scale_color_manual(values = custom_palette) # Use the custom color palette
         + theme(legend.position = "none")
     )
-    
+
     ggsave(output_file, umap_dose_gg, dpi = 500, height = 4, width = 10)
 }

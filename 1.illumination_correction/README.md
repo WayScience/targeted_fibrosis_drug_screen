@@ -1,7 +1,8 @@
 # Illumination correction & whole image quality control (QC)
 
-In this module, we apply the CellProfiler illumination correction pipeline from the [cellpainting_predicts_cardiac_fibroblasts](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis) repository.
-We will download the most recent version of the cppipe file.
+In this module, we apply a modified version of the CellProfiler illumination correction pipeline from the [cellpainting_predicts_cardiac_fibroblasts](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis) repository.
+We have modified the pipeline to save the illumination correction images (or as CellProfiler names them as function) as `npy` files per channel over correcting the raw TIFF images and save as TIFF images to avoid losing storage space.
+For example, each `npy` per channel is a few MB while saving all the corrected TIFF images would be duplicating how many raw images you have (e.g., a 50 GB plate means saving another 50 GB of the corrected plate).
 
 ## CellProfiler pipeline
 

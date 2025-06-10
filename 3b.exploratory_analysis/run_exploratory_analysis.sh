@@ -15,14 +15,14 @@ jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
 python nbconverted/0.UMAP.py
 
 # deactivate conda env and activate R based env
-conda deactivate 
+conda deactivate
 conda activate r_fibrosis_env
 
 # run R script to generate performance plots
 Rscript nbconverted/1.visualize_UMAP.r
 
 # deactivate conda env and activate preprocessing env
-conda deactivate 
+conda deactivate
 conda activate fibrosis_preprocessing_env
 
 #############################
@@ -32,7 +32,7 @@ conda activate fibrosis_preprocessing_env
 python nbconverted/2.extract_coefficients.py
 
 # deactivate conda env and activate R based env
-conda deactivate 
+conda deactivate
 conda activate r_fibrosis_env
 
 # run R script to generate coefficient plots

@@ -15,7 +15,7 @@ python nbconverted/2.extract_model_performance.py
 python nbconverted/4.apply_models_to_compounds.py
 
 # deactivate conda env and activate R based env
-conda deactivate 
+conda deactivate
 conda activate r_fibrosis_env
 
 # run R script to generate performance plots

@@ -13,12 +13,12 @@ import pathlib
 import pprint
 import sys
 
-import requests
-
 sys.path.append("../utils")
 import cp_parallel
 
 # ## Set paths and variables
+
+# ### Set the constants
 
 # In[2]:
 
@@ -26,12 +26,30 @@ import cp_parallel
 # set the run type for the parallelization
 run_name = "illum_correction"
 
+# set up the batch name for the plate(s) being processed
+batch_name = "batch_1"
+
+
+# ### Set up paths
+
+# In[3]:
+
+
 # set main output dir for all plates if it doesn't exist
-output_dir = pathlib.Path("./Corrected_Images")
+output_dir = pathlib.Path("./illum_directory")
 output_dir.mkdir(exist_ok=True)
 
-# directory where images are located within folders (held in DropBox specific directory)
-images_dir = pathlib.Path("../../Way Science Lab Dropbox/Jenna  Tomkinson/McKinseyLab_WayLab_CardiacFibroblasts/Compound Screen")
+# ensure the directory for the batch_name exists within the illum_directory
+batch_output_dir = output_dir / batch_name
+batch_output_dir.mkdir(exist_ok=True)
+
+# set base directory for where the images are located (WILL NEED TO CHANGE ON YOUR LOCAL MACHINE)
+base_dir = pathlib.Path(
+    "../../Way Science Lab Dropbox/Jenna  Tomkinson/McKinseyLab_WayLab_CardiacFibroblasts/Compound Screen/"
+).resolve(strict=True)
+
+# folder where images are located within folders
+images_dir = pathlib.Path(f"{base_dir}/Plate 1").resolve(strict=True)
 
 # list for plate names based on folders to use to create dictionary
 plate_names = []
@@ -44,36 +62,13 @@ for plate in plate_names:
     print(plate)
 
 
-# ## Load in `illum.cppipe` file to process data
-
-# In[3]:
-
-
-# Define the GitHub raw file link (this link will get whatever file is in main)
-github_url = "https://raw.githubusercontent.com/WayScience/cellpainting_predicts_cardiac_fibrosis/refs/heads/main/1.preprocessing_data/pipelines/illum.cppipe"
-
-# Create the pipeline directory if it doesn't exist
-pipeline_dir = pathlib.Path("pipeline")
-pipeline_dir.mkdir(exist_ok=True)
-
-# Download the file
-response = requests.get(github_url)
-response.raise_for_status()  # Raise an error for bad responses (4xx, 5xx)
-
-# Save the file contents
-file_path = pipeline_dir / github_url.split("/")[-1]
-file_path.write_bytes(response.content)
-
-print(f"File downloaded successfully to {file_path}")
-
-# Create a variable to store the resolved path
-path_to_pipeline = file_path.resolve(strict=True)
-
-
 # ## Create dictionary with all plate data to run CellProfiler in parallel
 
 # In[4]:
 
+
+# set path to the illum pipeline
+path_to_pipeline = pathlib.Path("./pipeline/illum.cppipe").resolve(strict=True)
 
 # create plate info dictionary with all parts of the CellProfiler CLI command to run in parallel
 plate_info_dictionary = {
@@ -81,7 +76,7 @@ plate_info_dictionary = {
         "path_to_images": pathlib.Path(list(images_dir.rglob(name))[0]).resolve(
             strict=True
         ),
-        "path_to_output": pathlib.Path(f"{output_dir}/{name}"),
+        "path_to_output": pathlib.Path(f"{output_dir}/{batch_name}/{name}"),
         "path_to_pipeline": path_to_pipeline,
     }
     for name in plate_names
@@ -99,5 +94,5 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 
 cp_parallel.run_cellprofiler_parallel(
-    plate_info_dictionary=plate_info_dictionary, run_name=run_name
+    plate_info_dictionary=plate_info_dictionary, run_name=run_name, group_level="plate"
 )

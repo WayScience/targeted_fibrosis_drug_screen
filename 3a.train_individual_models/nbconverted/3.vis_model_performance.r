@@ -182,7 +182,7 @@ ridge_plot_controls <- ggplot(DMSO_test_performance_df, aes(x = predicted_probab
   geom_density_ridges(aes(fill = Metadata_treatment), alpha = 0.7, scale = 2, rel_min_height = 0.01, bandwidth = 0.1) +
   scale_fill_manual(values = c("DMSO" = brewer.pal(8, "Dark2")[7])) +  # Only include DMSO color
   scale_x_continuous(breaks = seq(0, 1, 0.5)) +
-  facet_grid(model_type ~ plate_trained, scales = "free_y") + 
+  facet_grid(model_type ~ plate_trained, scales = "free_y") +
   labs(x = "Probability of healthy prediction", y = "Heart Type") +  # Update x-axis label
   theme_bw() +
   theme(
