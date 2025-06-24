@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 # # Run illumination correction on data
-#
+# 
 # Note: We load in the CellProfiler IC pipeline to use for this process.
 
 # ## Import libraries
@@ -11,10 +12,12 @@
 
 import pathlib
 import pprint
+
 import sys
 
 sys.path.append("../utils")
 import cp_parallel
+
 
 # ## Set paths and variables
 
@@ -27,7 +30,7 @@ import cp_parallel
 run_name = "illum_correction"
 
 # set up the batch name for the plate(s) being processed
-batch_name = "batch_1"
+batch_name = "batch_2"
 
 
 # ### Set up paths
@@ -49,7 +52,7 @@ base_dir = pathlib.Path(
 ).resolve(strict=True)
 
 # folder where images are located within folders
-images_dir = pathlib.Path(f"{base_dir}/Plate 1").resolve(strict=True)
+images_dir = pathlib.Path(f"{base_dir}/Plate 2").resolve(strict=True)
 
 # list for plate names based on folders to use to create dictionary
 plate_names = []
@@ -87,7 +90,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 
 # ## Run CellProfiler Parallel
-#
+# 
 # Note: We do not run this code cell as we will run this process through the script.
 
 # In[ ]:
@@ -96,3 +99,4 @@ pprint.pprint(plate_info_dictionary, indent=4)
 cp_parallel.run_cellprofiler_parallel(
     plate_info_dictionary=plate_info_dictionary, run_name=run_name, group_level="plate"
 )
+
