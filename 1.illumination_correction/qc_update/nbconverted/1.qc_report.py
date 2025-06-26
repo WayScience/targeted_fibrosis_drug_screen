@@ -155,7 +155,7 @@ sns.barplot(
     color="steelblue",
 )
 plt.ylabel("Percentage of FOVs failing QC (%)")
-plt.title("QC Failure Rate per Plate")
+plt.title("Proportion of FOVs failing QC per plate")
 plt.ylim(0, 100)
 plt.xticks(rotation=45, ha="right")
 plt.tight_layout()
@@ -218,8 +218,8 @@ plt.figure(figsize=(8, 6))
 sns.barplot(data=qc_summary, x="Metadata_Plate", y="Percent_Failed", hue="QC_Flag")
 plt.xticks(rotation=45, ha="right")
 plt.ylabel("Percent failed FOV (%)")
-plt.title("Percent of FOVs failing QC based on type per plate")
-plt.legend(title="QC Flag Type")
+plt.title("Proportion of FOVs failing QC based on condition per plate")
+plt.legend(title="QC flag")
 plt.tight_layout()
 plt.savefig(output_directory / "qc_failure_rate_by_flag_type_per_plate.png", dpi=500)
 plt.show()
@@ -306,9 +306,9 @@ sns.heatmap(
     annot=True,
     fmt=".1f",
     cmap="Reds",
-    cbar_kws={"label": "Percent Failed"},
+    cbar_kws={"label": "Percent FOVs failing QC (%)"},
 )
-plt.title("QC Failure Rates per Channel")
+plt.title("QC failure rates per channel and condition\nacross all plates in batch")
 plt.xlabel("Channel")
 plt.ylabel("QC Condition")
 plt.tight_layout()
@@ -369,9 +369,7 @@ percentages.head()
 # In[11]:
 
 
-import seaborn as sns
-import matplotlib.pyplot as plt
-
+# Create a bar plot for healthy wells
 g = sns.catplot(
     data=percentages,
     x="Metadata_Well",
@@ -383,7 +381,7 @@ g = sns.catplot(
     aspect=1,
 )
 
-g.set_axis_labels("Well", "% Failed")
+g.set_axis_labels("Well", "% FOV failed")
 g.set_titles("{col_name}")
 plt.tight_layout()
 plt.savefig(output_directory / "qc_failure_healthy_wells.png", dpi=500)

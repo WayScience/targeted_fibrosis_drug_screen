@@ -53,7 +53,7 @@ for (plate in unique_plates) {
         plate = 96,
         size = 8
     ) +
-        ggtitle(paste("Plate:", plate)) +
+        ggtitle(paste("Plate:", plate, "(49 FOVs per well)")) +
         theme(plot.title = element_text(size = 10, face = "bold")) +
         scale_fill_gradientn(
             name = "Percent failing\nFOVs",
@@ -85,7 +85,7 @@ merged_fov_platemap <- platetools::raw_map(
     plate = 96,
     size = 8
 ) +
-    ggtitle(paste("All plates in batch")) +
+    ggtitle(paste("All plates in batch (49 FOVs per well)")) +
     theme(plot.title = element_text(size = 10, face = "bold")) +
     scale_fill_gradientn(
         name = "Percent failing\nFOVs",
