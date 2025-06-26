@@ -4,15 +4,15 @@ suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(platetools))
 
 
+# Set the name of batch being processed
+batch_name <- "batch_2"
+
 # Output directory for the plots
-output_directory <- "./qc_plots"
+output_directory <- file.path("./qc_plots", batch_name)
 # Create the output directory if it doesn't exist
 if (!dir.exists(output_directory)) {
-  dir.create(output_directory)
+  dir.create(output_directory, recursive = TRUE)
 }
-
-# Set the name of batch being processed
-batch_name <- "batch_1"
 
 # Define the directory containing the folders for each plate
 illum_directory <- paste0("../illum_directory/", batch_name)
@@ -53,7 +53,7 @@ for (plate in unique_plates) {
         plate = 96,
         size = 8
     ) +
-        ggtitle(paste("Plate:", plate)) +
+        ggtitle(paste("Plate:", plate, "(49 FOVs per well)")) +
         theme(plot.title = element_text(size = 10, face = "bold")) +
         scale_fill_gradientn(
             name = "Percent failing\nFOVs",
@@ -85,7 +85,7 @@ merged_fov_platemap <- platetools::raw_map(
     plate = 96,
     size = 8
 ) +
-    ggtitle(paste("All batch 1 plates")) +
+    ggtitle(paste("All plates in batch (49 FOVs per well)")) +
     theme(plot.title = element_text(size = 10, face = "bold")) +
     scale_fill_gradientn(
         name = "Percent failing\nFOVs",
@@ -94,8 +94,8 @@ merged_fov_platemap <- platetools::raw_map(
         limits = c(0, 100)
     )
 
-# Save the merged plot to the output directory
-output_file_merged <- file.path(output_directory, "merged_batch1_fov_platemap.png")
+# Save the merged plot to the output directory, including the batch name in the filename
+output_file_merged <- file.path(output_directory, paste0("merged_", batch_name, "_fov_platemap.png"))
 ggsave(output_file_merged, plot = merged_fov_platemap, width = 8, height = 6)
 
 print(merged_fov_platemap)

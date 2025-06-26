@@ -8,7 +8,7 @@ HasImagePlaneDetails:False
 Images:[module_num:1|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:['This pipeline is modified from the cellpainting_predicts_cardiac_fibrosis repository.', '', 'Add the plate images to view when testing parameters.', '']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     :
     Filter images?:Images only
-    Select the rule criteria:and (extension does isimage) (file does contain "C06")
+    Select the rule criteria:and (extension does isimage) (file does contain "B02, B03")
 
 Metadata:[module_num:2|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:['There is no need to extract metadata since we are not using the GUI to processes each plate.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Extract metadata?:Yes
@@ -96,7 +96,7 @@ MeasureImageQuality:[module_num:5|svn_version:'Unknown'|variable_revision_number
     Minimize the weighted variance or the entropy?:Weighted variance
     Assign pixels in the middle intensity class to the foreground or the background?:Foreground
 
-FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Measurements were manually updated or calculated (e.g., max value set as 0.10 or 10% can be at max value for better identification of highly overlaping cells).', 'Blur thresholds per channel calculated with IQR method.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Measurements were manually updated or calculated (e.g., max value set as 0.10 or 0.10% can be at max value for better identification of highly overlaping cells).', 'Blur thresholds per channel calculated with IQR method.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Hidden:2
     Hidden:5
     Name the flag's category:Metadata

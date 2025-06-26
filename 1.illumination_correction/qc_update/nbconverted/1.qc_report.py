@@ -5,7 +5,7 @@
 
 # ## Import libraries
 
-# In[ ]:
+# In[1]:
 
 
 import pandas as pd
@@ -27,12 +27,15 @@ warnings.filterwarnings("ignore", category=FutureWarning, module="upsetplot")
 # In[2]:
 
 
+# Batch name for processing
+batch_name = "batch_2"
+
 # Output directory for plots
-output_directory = pathlib.Path("./qc_plots")
+output_directory = pathlib.Path(f"./qc_plots/{batch_name}")
 output_directory.mkdir(exist_ok=True)
 
 # path to illumination directory with the qc results and ic functions
-illum_directory = pathlib.Path("../illum_directory")
+illum_directory = pathlib.Path(f"../illum_directory/{batch_name}")
 
 # Find all Image.csv files in the directory
 csv_files = list(illum_directory.rglob("Image.csv"))
@@ -129,7 +132,7 @@ combined_df.head()
 
 # ## Plot the percentage of failed FOVs across plates regardless of condition
 
-# In[10]:
+# In[6]:
 
 
 # Calculate percentage of rows that failed any QC check, grouped by plate
@@ -152,7 +155,7 @@ sns.barplot(
     color="steelblue",
 )
 plt.ylabel("Percentage of FOVs failing QC (%)")
-plt.title("QC Failure Rate per Plate")
+plt.title("Proportion of FOVs failing QC per plate")
 plt.ylim(0, 100)
 plt.xticks(rotation=45, ha="right")
 plt.tight_layout()
@@ -215,8 +218,8 @@ plt.figure(figsize=(8, 6))
 sns.barplot(data=qc_summary, x="Metadata_Plate", y="Percent_Failed", hue="QC_Flag")
 plt.xticks(rotation=45, ha="right")
 plt.ylabel("Percent failed FOV (%)")
-plt.title("Percent of FOVs failing QC based on type per plate")
-plt.legend(title="QC Flag Type")
+plt.title("Proportion of FOVs failing QC based on condition per plate")
+plt.legend(title="QC flag")
 plt.tight_layout()
 plt.savefig(output_directory / "qc_failure_rate_by_flag_type_per_plate.png", dpi=500)
 plt.show()
@@ -259,7 +262,7 @@ plot(
     show_percentages=True,
     min_subset_size=30,
 )
-plt.suptitle("UpSet plot of channel-wise QC failures\nacross batch 1 plates")
+plt.suptitle("UpSet plot of channel-wise QC failures\nacross plates in batch")
 plt.savefig(
     output_directory / "upset_plot_channel_qc_failures.png",
     bbox_inches="tight",
@@ -303,12 +306,84 @@ sns.heatmap(
     annot=True,
     fmt=".1f",
     cmap="Reds",
-    cbar_kws={"label": "Percent Failed"},
+    cbar_kws={"label": "Percent FOVs failing QC (%)"},
 )
-plt.title("QC Failure Rates per Channel")
+plt.title("QC failure rates per channel and condition\nacross all plates in batch")
 plt.xlabel("Channel")
 plt.ylabel("QC Condition")
 plt.tight_layout()
 plt.savefig(output_directory / "qc_failure_rates_heatmap.png", dpi=500)
+plt.show()
+
+
+# ## Check only the images from healthy wells and see what is the biggest reason images are failing QC
+
+# In[10]:
+
+
+# Filter for healthy wells
+healthy_wells = ["B02", "B05", "B08", "B11"]
+healthy_df = combined_df[combined_df["Metadata_Well"].isin(healthy_wells)]
+
+# Get total FOVs per well
+total_per_well = (
+    healthy_df.groupby("Metadata_Well").size().reset_index(name="Total_FOVs")
+)
+
+# Prepare melted DataFrame
+melted = healthy_df.melt(
+    id_vars=["Metadata_Well"],
+    value_vars=qc_columns,
+    var_name="QC_Channel_Condition",
+    value_name="Failed",
+)
+
+# Only failed
+failed_melted = melted[melted["Failed"]].copy()
+
+# Split channel and condition
+failed_melted[["Channel", "Condition"]] = failed_melted[
+    "QC_Channel_Condition"
+].str.extract(r"(Orig\w+)_(Saturated|Blur)")
+
+# Count number failed per well/channel/condition
+failed_counts = (
+    failed_melted.groupby(["Metadata_Well", "Channel", "Condition"])
+    .size()
+    .reset_index(name="Failed_Count")
+)
+
+# Merge with total to get percentages
+percentages = failed_counts.merge(total_per_well, on="Metadata_Well")
+percentages["Percent_Failed"] = (
+    100 * percentages["Failed_Count"] / percentages["Total_FOVs"]
+)
+
+# Sort (optional)
+percentages = percentages.sort_values(["Metadata_Well", "Condition", "Channel"])
+
+# Show some data
+percentages.head()
+
+
+# In[11]:
+
+
+# Create a bar plot for healthy wells
+g = sns.catplot(
+    data=percentages,
+    x="Metadata_Well",
+    y="Percent_Failed",
+    hue="Channel",
+    col="Condition",
+    kind="bar",
+    height=5,
+    aspect=1,
+)
+
+g.set_axis_labels("Well", "% FOV failed")
+g.set_titles("{col_name}")
+plt.tight_layout()
+plt.savefig(output_directory / "qc_failure_healthy_wells.png", dpi=500)
 plt.show()
 
