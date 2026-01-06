@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Run illumination correction on data
+# # Run image QC on data
 # 
-# Note: We load in the CellProfiler IC pipeline to use for this process.
+# Note: We load in the CellProfiler QC pipeline to use for this process.
 
 # ## Import libraries
 
@@ -15,7 +15,7 @@ import pprint
 
 import sys
 
-sys.path.append("../utils")
+sys.path.append("../../utils")
 import cp_parallel
 
 
@@ -27,7 +27,7 @@ import cp_parallel
 
 
 # set the run type for the parallelization
-run_name = "illum_correction"
+run_name = "image_qc"
 
 
 # ### Set up paths
@@ -65,10 +65,10 @@ for plate in plate_names:
 
 
 # set path to the illum pipeline
-path_to_pipeline = pathlib.Path("./pipeline/illum.cppipe").resolve(strict=True)
+path_to_pipeline = pathlib.Path("./pipeline/image_qc.cppipe").resolve(strict=True)
 
 # set main output dir for all plates if it doesn't exist
-output_dir = pathlib.Path("./Corrected_Images").resolve(strict=False)
+output_dir = pathlib.Path("./qc_results")
 output_dir.mkdir(exist_ok=True)
 
 # create plate info dictionary
@@ -80,7 +80,7 @@ for platemap_folder in base_dir.glob("platemap_*"):
             if alias_folder.is_dir():
                 for plate_folder in alias_folder.iterdir():
                     if plate_folder.is_dir() and plate_folder.name.startswith("CARD"):
-                        # create nested output dir: Corrected_Images/platemap_#/plate
+                        # create nested output dir: qc_results/platemap_#/plate
                         plate_output_dir = (
                             output_dir / platemap_folder.name / plate_folder.name
                         )
@@ -113,7 +113,11 @@ pprint.pprint(plate_info_dictionary, indent=4)
 # In[ ]:
 
 
-cp_parallel.run_cellprofiler_parallel(
-    plate_info_dictionary=plate_info_dictionary, run_name=run_name, group_level="plate"
-)
+# if dictionary is not empty, run CellProfiler in parallel
+if plate_info_dictionary:
+    cp_parallel.run_cellprofiler_parallel(
+        plate_info_dictionary=plate_info_dictionary, run_name=run_name, group_level="plate"
+    )
+else:
+    print("No new plates to process. Exiting script.")
 

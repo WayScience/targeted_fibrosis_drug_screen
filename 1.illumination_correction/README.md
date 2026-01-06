@@ -1,8 +1,7 @@
 # Illumination correction & whole image quality control (QC)
 
 In this module, we apply a modified version of the CellProfiler illumination correction pipeline from the [cellpainting_predicts_cardiac_fibroblasts](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis) repository.
-We have modified the pipeline to save the illumination correction images (or as CellProfiler names them as function) as `npy` files per channel over correcting the raw TIFF images and save as TIFF images to avoid losing storage space.
-For example, each `npy` per channel is a few MB while saving all the corrected TIFF images would be duplicating how many raw images you have (e.g., a 50 GB plate means saving another 50 GB of the corrected plate).
+We have modified the pipeline to update the quality control thresholds per channel [see below for moe info].
 
 ## CellProfiler pipeline
 
@@ -31,7 +30,7 @@ Images that pass the QC flags will be corrected for uneven illumination and save
 
 ## Perform IC on data
 
-To calculate, apply, and save images that have been corrected, run the bash script [perform_ic.sh](./perform_ic.sh) using the command below:
+To calculate, apply, and save images that have been corrected, run the bash script [`perform_ic`](./perform_ic.sh) using the command below:
 
 ```bash
 # Make sure your current working dir is the 1.illumination_correction folder
@@ -40,3 +39,12 @@ source perform_ic.sh
 
 **It took approximately 1 hour and 50 minutes to run illumination correction on 4 plates at the same time with 1,500 image sets (group of channels per FOV) per plate using a Linux-based machine running Pop_OS! LTS 22.04 with an AMD Ryzen 7 3700X 8-Core Processor.**
 **There is a total of 16 CPUs with 125 GB of MEM.**
+
+## Perform QC results reporting
+
+To perform QC results reporting, you must move into the [`qc_update`](./qc_update/) folder and run the bash script [`perform_image_qc`](./qc_update/perform_image_qc.sh) using the command below.
+
+```bash
+# Make sure your current working dir is the qc_update folder
+source perform_image_qc.sh
+```

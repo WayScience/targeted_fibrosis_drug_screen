@@ -7,18 +7,29 @@ HasImagePlaneDetails:False
 
 Images:[module_num:1|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:['This pipeline is modified from the cellpainting_predicts_cardiac_fibrosis repository.', '', 'Add the plate images to view when testing parameters.', '']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     :
-    Filter images?:Images only
-    Select the rule criteria:and (extension does isimage) (file does contain "B02, B03")
+    Filter images?:Custom
+    Select the rule criteria:and (extension does istif)
 
 Metadata:[module_num:2|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:['There is no need to extract metadata since we are not using the GUI to processes each plate.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Extract metadata?:Yes
     Metadata data type:Text
     Metadata types:{}
-    Extraction method count:1
+    Extraction method count:2
     Metadata extraction method:Extract from file/folder names
     Metadata source:File name
-    Regular expression to extract from file name:(?P<Plate>.*)_(?P<Well>[A-Z]{1}[0-9]{2})(?P<Site>f[0-9]{2})(?P<Channel>d[0-9]{1})
+    Regular expression to extract from file name:(?P<Well>[A-Z]{1}[0-9]{2})(?P<Site>f[0-9]{2})(?P<Channel>d[0-9]{1})
     Regular expression to extract from folder name:(?P<Plate>localhost220512140003_KK22-05-198|localhost220513100001_KK22-05-198_FactinAdjusted|localhost230405150001)
+    Extract metadata from:All images
+    Select the filtering criteria:and (file does contain "")
+    Metadata file location:Elsewhere...|
+    Match file and image metadata:[]
+    Use case insensitive matching?:No
+    Metadata file name:None
+    Does cached metadata exist?:No
+    Metadata extraction method:Extract from file/folder names
+    Metadata source:Folder name
+    Regular expression to extract from file name:^(?P<Plate>.*)_(?P<Well>[A-P][0-9]{2})_s(?P<Site>[0-9])_w(?P<ChannelNumber>[0-9])
+    Regular expression to extract from folder name:(?P<platemap_layout>platemap_[0-9]{1,2})/(?P<plate_id>[0-9]{1}[a-z]{1})/(?P<Plate>.*)
     Extract metadata from:All images
     Select the filtering criteria:and (file does contain "")
     Metadata file location:Elsewhere...|
@@ -41,13 +52,13 @@ NamesAndTypes:[module_num:3|svn_version:'Unknown'|variable_revision_number:8|sho
     Relative pixel spacing in X:1.0
     Relative pixel spacing in Y:1.0
     Relative pixel spacing in Z:1.0
-    Select the rule criteria:and (file does contain "d0")
+    Select the rule criteria:and (file does contain "d4")
     Name to assign these images:OrigDNA
     Name to assign these objects:Cell
     Select the image type:Grayscale image
     Set intensity range from:Image metadata
     Maximum intensity:255.0
-    Select the rule criteria:and (file does contain "d1")
+    Select the rule criteria:and (file does contain "d3")
     Name to assign these images:OrigER
     Name to assign these objects:Nucleus
     Select the image type:Grayscale image
@@ -59,13 +70,13 @@ NamesAndTypes:[module_num:3|svn_version:'Unknown'|variable_revision_number:8|sho
     Select the image type:Grayscale image
     Set intensity range from:Image metadata
     Maximum intensity:255.0
-    Select the rule criteria:and (file does contain "d3")
+    Select the rule criteria:and (file does contain "d1")
     Name to assign these images:OrigMito
     Name to assign these objects:Speckle
     Select the image type:Grayscale image
     Set intensity range from:Image metadata
     Maximum intensity:255.0
-    Select the rule criteria:and (file does contain "d4")
+    Select the rule criteria:and (file does contain "d0")
     Name to assign these images:OrigActin
     Name to assign these objects:Object1
     Select the image type:Grayscale image
@@ -220,7 +231,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Allow fuzzy feature matching?:No
     Ignore flag skips on last cycle?:No
 
-ExportToSpreadsheet:[module_num:7|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:['Export QC results to spreadsheet for evaluation']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+ExportToSpreadsheet:[module_num:7|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:['Export QC results to spreadsheet for evaluation']|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:True]
     Select the column delimiter:Comma (",")
     Add image metadata columns to your object data file?:No
     Add image file and folder names to your object data file?:No
@@ -252,7 +263,7 @@ CorrectIlluminationCalculate:[module_num:8|svn_version:'Unknown'|variable_revisi
     Dilation radius:1
     Block size:100
     Rescale the illumination function?:No
-    Calculate function for each image individually, or based on all images?:All: Across cycles
+    Calculate function for each image individually, or based on all images?:Each
     Smoothing method:Fit Polynomial
     Method to calculate smoothing filter size:Automatic
     Approximate object diameter:10
@@ -277,7 +288,7 @@ CorrectIlluminationCalculate:[module_num:9|svn_version:'Unknown'|variable_revisi
     Dilation radius:1
     Block size:60
     Rescale the illumination function?:No
-    Calculate function for each image individually, or based on all images?:All: Across cycles
+    Calculate function for each image individually, or based on all images?:Each
     Smoothing method:Fit Polynomial
     Method to calculate smoothing filter size:Automatic
     Approximate object diameter:10
@@ -302,7 +313,7 @@ CorrectIlluminationCalculate:[module_num:10|svn_version:'Unknown'|variable_revis
     Dilation radius:1
     Block size:60
     Rescale the illumination function?:No
-    Calculate function for each image individually, or based on all images?:All: Across cycles
+    Calculate function for each image individually, or based on all images?:Each
     Smoothing method:Fit Polynomial
     Method to calculate smoothing filter size:Automatic
     Approximate object diameter:10
@@ -327,7 +338,7 @@ CorrectIlluminationCalculate:[module_num:11|svn_version:'Unknown'|variable_revis
     Dilation radius:1
     Block size:60
     Rescale the illumination function?:No
-    Calculate function for each image individually, or based on all images?:All: Across cycles
+    Calculate function for each image individually, or based on all images?:Each
     Smoothing method:Fit Polynomial
     Method to calculate smoothing filter size:Automatic
     Approximate object diameter:10
@@ -352,7 +363,7 @@ CorrectIlluminationCalculate:[module_num:12|svn_version:'Unknown'|variable_revis
     Dilation radius:1
     Block size:100
     Rescale the illumination function?:No
-    Calculate function for each image individually, or based on all images?:All: Across cycles
+    Calculate function for each image individually, or based on all images?:Each
     Smoothing method:Fit Polynomial
     Method to calculate smoothing filter size:Automatic
     Approximate object diameter:10
@@ -403,18 +414,18 @@ CorrectIlluminationApply:[module_num:15|svn_version:'Unknown'|variable_revision_
 
 SaveImages:[module_num:16|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:['Save illumination correction function as npy.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Select the type of image to save:Image
-    Select the image to save:IllumDNA
-    Select method for constructing file names:Single name
+    Select the image to save:CorrDNA
+    Select method for constructing file names:From image filename
     Select image name for file prefix:OrigDNA
     Enter single file name:\g<Plate>_IllumDNA
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:_illumcorrect
-    Saved file format:npy
+    Saved file format:tiff
     Output file location:Default Output Folder|CFReT_data/1.preprocessing_data/Corrected_Images/\g<Plate>
     Image bit depth:16-bit integer
     Overwrite existing files without warning?:No
-    When to save:Last cycle
+    When to save:Every cycle
     Record the file and path information to the saved image?:No
     Create subfolders in the output folder?:No
     Base image folder:Elsewhere...|
@@ -423,18 +434,18 @@ SaveImages:[module_num:16|svn_version:'Unknown'|variable_revision_number:16|show
 
 SaveImages:[module_num:17|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:['Save illumination correction function as npy.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Select the type of image to save:Image
-    Select the image to save:IllumER
-    Select method for constructing file names:Single name
-    Select image name for file prefix:OrigDNA
+    Select the image to save:CorrER
+    Select method for constructing file names:From image filename
+    Select image name for file prefix:OrigER
     Enter single file name:\g<Plate>_IllumER
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:_illumcorrect
-    Saved file format:npy
+    Saved file format:tiff
     Output file location:Default Output Folder|CFReT_data/1.preprocessing_data/Corrected_Images/\g<Plate>
     Image bit depth:16-bit integer
     Overwrite existing files without warning?:No
-    When to save:Last cycle
+    When to save:Every cycle
     Record the file and path information to the saved image?:No
     Create subfolders in the output folder?:No
     Base image folder:Elsewhere...|
@@ -443,18 +454,18 @@ SaveImages:[module_num:17|svn_version:'Unknown'|variable_revision_number:16|show
 
 SaveImages:[module_num:18|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:['Save illumination correction function as npy.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Select the type of image to save:Image
-    Select the image to save:IllumPM
-    Select method for constructing file names:Single name
-    Select image name for file prefix:OrigDNA
+    Select the image to save:CorrPM
+    Select method for constructing file names:From image filename
+    Select image name for file prefix:OrigPM
     Enter single file name:\g<Plate>_IllumPM
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:_illumcorrect
-    Saved file format:npy
+    Saved file format:tiff
     Output file location:Default Output Folder|CFReT_data/1.preprocessing_data/Corrected_Images/\g<Plate>
     Image bit depth:16-bit integer
     Overwrite existing files without warning?:No
-    When to save:Last cycle
+    When to save:Every cycle
     Record the file and path information to the saved image?:No
     Create subfolders in the output folder?:No
     Base image folder:Elsewhere...|
@@ -463,18 +474,18 @@ SaveImages:[module_num:18|svn_version:'Unknown'|variable_revision_number:16|show
 
 SaveImages:[module_num:19|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:['Save illumination correction function as npy.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Select the type of image to save:Image
-    Select the image to save:IllumMito
-    Select method for constructing file names:Single name
-    Select image name for file prefix:OrigDNA
+    Select the image to save:CorrMito
+    Select method for constructing file names:From image filename
+    Select image name for file prefix:OrigMito
     Enter single file name:\g<Plate>_IllumMito
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:_illumcorrect
-    Saved file format:npy
+    Saved file format:tiff
     Output file location:Default Output Folder|CFReT_data/1.preprocessing_data/Corrected_Images/\g<Plate>
     Image bit depth:16-bit integer
     Overwrite existing files without warning?:No
-    When to save:Last cycle
+    When to save:Every cycle
     Record the file and path information to the saved image?:No
     Create subfolders in the output folder?:No
     Base image folder:Elsewhere...|
@@ -483,18 +494,18 @@ SaveImages:[module_num:19|svn_version:'Unknown'|variable_revision_number:16|show
 
 SaveImages:[module_num:20|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:['Save illumination correction function as npy.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Select the type of image to save:Image
-    Select the image to save:IllumActin
-    Select method for constructing file names:Single name
-    Select image name for file prefix:OrigDNA
+    Select the image to save:CorrActin
+    Select method for constructing file names:From image filename
+    Select image name for file prefix:OrigActin
     Enter single file name:\g<Plate>_IllumActin
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:_illumcorrect
-    Saved file format:npy
+    Saved file format:tiff
     Output file location:Default Output Folder|CFReT_data/1.preprocessing_data/Corrected_Images/\g<Plate>
     Image bit depth:16-bit integer
     Overwrite existing files without warning?:No
-    When to save:Last cycle
+    When to save:Every cycle
     Record the file and path information to the saved image?:No
     Create subfolders in the output folder?:No
     Base image folder:Elsewhere...|
