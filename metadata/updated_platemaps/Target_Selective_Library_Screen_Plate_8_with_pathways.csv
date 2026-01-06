@@ -1,61 +1,61 @@
 WellRow,WellCol,well_position,heart_number,cell_type,heart_failure_type,treatment,Pathway
 B,2,B02,7,healthy,,DMSO,
-B,3,B03,19,failing,dilated_cardiomyopathy,UCD-0159478,Cell Cycle
-B,4,B04,19,failing,dilated_cardiomyopathy,UCD-0159486,Others
+B,3,B03,25,failing,dilated_cardiomyopathy,UCD-0159478,Cell Cycle
+B,4,B04,25,failing,dilated_cardiomyopathy,UCD-0159486,Others
 B,5,B05,7,healthy,,DMSO,
-B,6,B06,19,failing,dilated_cardiomyopathy,UCD-0159494,Protein Tyrosine Kinase
-B,7,B07,19,failing,dilated_cardiomyopathy,UCD-0159502,MAPK
+B,6,B06,25,failing,dilated_cardiomyopathy,UCD-0159494,Protein Tyrosine Kinase
+B,7,B07,25,failing,dilated_cardiomyopathy,UCD-0159502,MAPK
 B,8,B08,7,healthy,,DMSO,
-B,9,B09,19,failing,dilated_cardiomyopathy,UCD-0159510,Autophagy
-B,10,B10,19,failing,dilated_cardiomyopathy,UCD-0159518,Proteases
+B,9,B09,25,failing,dilated_cardiomyopathy,UCD-0159510,Autophagy
+B,10,B10,25,failing,dilated_cardiomyopathy,UCD-0159518,Proteases
 B,11,B11,7,healthy,,DMSO,
-C,2,C02,19,failing,dilated_cardiomyopathy,UCD-0159448,Ubiquitin
-C,3,C03,19,failing,dilated_cardiomyopathy,UCD-0159456,Apoptosis
-C,4,C04,19,failing,dilated_cardiomyopathy,UCD-0159463,GPCR & G Protein
-C,5,C05,19,failing,dilated_cardiomyopathy,UCD-0159471,Proteases
-C,6,C06,19,failing,dilated_cardiomyopathy,UCD-0159479,Transmembrane Transporters
-C,7,C07,19,failing,dilated_cardiomyopathy,UCD-0159487,Others
-C,8,C08,19,failing,dilated_cardiomyopathy,UCD-0159495,Apoptosis
-C,9,C09,19,failing,dilated_cardiomyopathy,UCD-0159503,Cytoskeletal Signaling
-C,10,C10,19,failing,dilated_cardiomyopathy,UCD-0159511,Autophagy
-C,11,C11,19,failing,dilated_cardiomyopathy,UCD-0159519,Stem Cells & Wnt
-D,2,D02,19,failing,dilated_cardiomyopathy,UCD-0159449,Ubiquitin
-D,3,D03,19,failing,dilated_cardiomyopathy,UCD-0001927,Epigenetics
-D,4,D04,19,failing,dilated_cardiomyopathy,UCD-0159464,Metabolism
-D,5,D05,19,failing,dilated_cardiomyopathy,UCD-0159472,TGF-beta/Smad
-D,6,D06,19,failing,dilated_cardiomyopathy,UCD-0159480,Transmembrane Transporters
-D,7,D07,19,failing,dilated_cardiomyopathy,UCD-0159488,Epigenetics
-D,8,D08,19,failing,dilated_cardiomyopathy,UCD-0159496,Others
-D,9,D09,19,failing,dilated_cardiomyopathy,UCD-0159504,Others
-D,10,D10,19,failing,dilated_cardiomyopathy,UCD-0159512,Others
-D,11,D11,19,failing,dilated_cardiomyopathy,UCD-0159520,NF-κB
-E,2,E02,19,failing,dilated_cardiomyopathy,DMSO,
-E,3,E03,19,failing,dilated_cardiomyopathy,UCD-0159450,DNA Damage
-E,4,E04,19,failing,dilated_cardiomyopathy,UCD-0159457,Proteases
-E,5,E05,19,failing,dilated_cardiomyopathy,DMSO,
-E,6,E06,19,failing,dilated_cardiomyopathy,UCD-0159465,Metabolism
-E,7,E07,19,failing,dilated_cardiomyopathy,UCD-0159473,Epigenetics
-E,8,E08,19,failing,dilated_cardiomyopathy,DMSO,
-E,9,E09,19,failing,dilated_cardiomyopathy,UCD-0159481,Cell Cycle
-E,10,E10,19,failing,dilated_cardiomyopathy,UCD-0159489,Epigenetics
-E,11,E11,19,failing,dilated_cardiomyopathy,DMSO,
-F,2,F02,19,failing,dilated_cardiomyopathy,UCD-0159497,PI3K/Akt/mTOR
-F,3,F03,19,failing,dilated_cardiomyopathy,UCD-0159505,Others
-F,4,F04,19,failing,dilated_cardiomyopathy,UCD-0159513,Others
-F,5,F05,19,failing,dilated_cardiomyopathy,UCD-0159521,Others
-F,6,F06,19,failing,dilated_cardiomyopathy,UCD-0159522,Proteases
-F,7,F07,19,failing,dilated_cardiomyopathy,UCD-0159529,Cell Cycle
-F,8,F08,19,failing,dilated_cardiomyopathy,UCD-0159537,Others
-F,9,F09,19,failing,dilated_cardiomyopathy,UCD-0159545,Autophagy
-F,10,F10,19,failing,dilated_cardiomyopathy,UCD-0159552,Protein Tyrosine Kinase
-F,11,F11,19,failing,dilated_cardiomyopathy,UCD-0159560,DNA Damage
-G,2,G02,19,failing,dilated_cardiomyopathy,UCD-0159568,Others
-G,3,G03,19,failing,dilated_cardiomyopathy,UCD-0159576,Others
-G,4,G04,19,failing,dilated_cardiomyopathy,UCD-0159584,Cell Cycle
-G,5,G05,19,failing,dilated_cardiomyopathy,UCD-0159591,Epigenetics
-G,6,G06,19,failing,dilated_cardiomyopathy,UCD-0159523,Proteases
-G,7,G07,19,failing,dilated_cardiomyopathy,UCD-0159530,Proteases
-G,8,G08,19,failing,dilated_cardiomyopathy,UCD-0159538,MAPK
-G,9,G09,19,failing,dilated_cardiomyopathy,UCD-0159546,Ubiquitin
-G,10,G10,19,failing,dilated_cardiomyopathy,UCD-0159553,PI3K/Akt/mTOR
-G,11,G11,19,failing,dilated_cardiomyopathy,UCD-0159561,JAK/STAT
+C,2,C02,25,failing,dilated_cardiomyopathy,UCD-0159448,Ubiquitin
+C,3,C03,25,failing,dilated_cardiomyopathy,UCD-0159456,Apoptosis
+C,4,C04,25,failing,dilated_cardiomyopathy,UCD-0159463,GPCR & G Protein
+C,5,C05,25,failing,dilated_cardiomyopathy,UCD-0159471,Proteases
+C,6,C06,25,failing,dilated_cardiomyopathy,UCD-0159479,Transmembrane Transporters
+C,7,C07,25,failing,dilated_cardiomyopathy,UCD-0159487,Others
+C,8,C08,25,failing,dilated_cardiomyopathy,UCD-0159495,Apoptosis
+C,9,C09,25,failing,dilated_cardiomyopathy,UCD-0159503,Cytoskeletal Signaling
+C,10,C10,25,failing,dilated_cardiomyopathy,UCD-0159511,Autophagy
+C,11,C11,25,failing,dilated_cardiomyopathy,UCD-0159519,Stem Cells & Wnt
+D,2,D02,25,failing,dilated_cardiomyopathy,UCD-0159449,Ubiquitin
+D,3,D03,25,failing,dilated_cardiomyopathy,UCD-0001927,Epigenetics
+D,4,D04,25,failing,dilated_cardiomyopathy,UCD-0159464,Metabolism
+D,5,D05,25,failing,dilated_cardiomyopathy,UCD-0159472,TGF-beta/Smad
+D,6,D06,25,failing,dilated_cardiomyopathy,UCD-0159480,Transmembrane Transporters
+D,7,D07,25,failing,dilated_cardiomyopathy,UCD-0159488,Epigenetics
+D,8,D08,25,failing,dilated_cardiomyopathy,UCD-0159496,Others
+D,9,D09,25,failing,dilated_cardiomyopathy,UCD-0159504,Others
+D,10,D10,25,failing,dilated_cardiomyopathy,UCD-0159512,Others
+D,11,D11,25,failing,dilated_cardiomyopathy,UCD-0159520,NF-κB
+E,2,E02,25,failing,dilated_cardiomyopathy,DMSO,
+E,3,E03,25,failing,dilated_cardiomyopathy,UCD-0159450,DNA Damage
+E,4,E04,25,failing,dilated_cardiomyopathy,UCD-0159457,Proteases
+E,5,E05,25,failing,dilated_cardiomyopathy,DMSO,
+E,6,E06,25,failing,dilated_cardiomyopathy,UCD-0159465,Metabolism
+E,7,E07,25,failing,dilated_cardiomyopathy,UCD-0159473,Epigenetics
+E,8,E08,25,failing,dilated_cardiomyopathy,DMSO,
+E,9,E09,25,failing,dilated_cardiomyopathy,UCD-0159481,Cell Cycle
+E,10,E10,25,failing,dilated_cardiomyopathy,UCD-0159489,Epigenetics
+E,11,E11,25,failing,dilated_cardiomyopathy,DMSO,
+F,2,F02,25,failing,dilated_cardiomyopathy,UCD-0159497,PI3K/Akt/mTOR
+F,3,F03,25,failing,dilated_cardiomyopathy,UCD-0159505,Others
+F,4,F04,25,failing,dilated_cardiomyopathy,UCD-0159513,Others
+F,5,F05,25,failing,dilated_cardiomyopathy,UCD-0159521,Others
+F,6,F06,25,failing,dilated_cardiomyopathy,UCD-0159522,Proteases
+F,7,F07,25,failing,dilated_cardiomyopathy,UCD-0159529,Cell Cycle
+F,8,F08,25,failing,dilated_cardiomyopathy,UCD-0159537,Others
+F,9,F09,25,failing,dilated_cardiomyopathy,UCD-0159545,Autophagy
+F,10,F10,25,failing,dilated_cardiomyopathy,UCD-0159552,Protein Tyrosine Kinase
+F,11,F11,25,failing,dilated_cardiomyopathy,UCD-0159560,DNA Damage
+G,2,G02,25,failing,dilated_cardiomyopathy,UCD-0159568,Others
+G,3,G03,25,failing,dilated_cardiomyopathy,UCD-0159576,Others
+G,4,G04,25,failing,dilated_cardiomyopathy,UCD-0159584,Cell Cycle
+G,5,G05,25,failing,dilated_cardiomyopathy,UCD-0159591,Epigenetics
+G,6,G06,25,failing,dilated_cardiomyopathy,UCD-0159523,Proteases
+G,7,G07,25,failing,dilated_cardiomyopathy,UCD-0159530,Proteases
+G,8,G08,25,failing,dilated_cardiomyopathy,UCD-0159538,MAPK
+G,9,G09,25,failing,dilated_cardiomyopathy,UCD-0159546,Ubiquitin
+G,10,G10,25,failing,dilated_cardiomyopathy,UCD-0159553,PI3K/Akt/mTOR
+G,11,G11,25,failing,dilated_cardiomyopathy,UCD-0159561,JAK/STAT

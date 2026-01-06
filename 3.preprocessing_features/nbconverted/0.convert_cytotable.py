@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 # # Convert SQLite outputs to parquet files with CytoTable
 
@@ -7,13 +8,15 @@
 # In[1]:
 
 
-import logging
 import pathlib
-
 import pandas as pd
+import pprint
+import os
 
 # cytotable will merge objects from SQLite file into single cells and save as parquet file
 from cytotable import convert, presets
+
+import logging
 
 # Set the logging level to a higher level to avoid outputting unnecessary errors from config file in convert function
 logging.getLogger().setLevel(logging.ERROR)
@@ -21,7 +24,28 @@ logging.getLogger().setLevel(logging.ERROR)
 
 # ## Set paths and variables
 
-# In[2]:
+# In[ ]:
+
+
+# Optional: set `PLATEMAP_LAYOUT` env var to process only a single platemap (e.g. 'platemap_1')
+platemap_to_process = os.environ.get("PLATEMAP_LAYOUT")
+# platemap_to_process = "platemap_1"  # for testing only
+
+# set base directory for where the SQLite files are located (should be local to repo)
+base_dir = pathlib.Path("../2.cellprofiler_processing/cp_output/").resolve(strict=True)
+
+# Decide what to process
+if platemap_to_process:
+    print(f"Processing {platemap_to_process}")
+    layouts = [platemap_to_process]
+else:
+    print("No specific layout set, processing all available platemaps")
+    layouts = [p.name for p in base_dir.glob("platemap_*") if p.is_dir()]
+
+pprint.pprint(layouts)
+
+
+# In[3]:
 
 
 # preset configurations based on typical CellProfiler outputs
@@ -37,7 +61,7 @@ joins = presets.config["cellprofiler_sqlite_pycytominer"]["CONFIG_JOINS"].replac
 dest_datatype = "parquet"
 
 # set path to directory with SQLite files
-sqlite_dir = pathlib.Path("../2.cellprofiler_processing/cp_output")
+sqlite_dir = pathlib.Path(f"{base_dir}/{platemap_to_process}").resolve(strict=True)
 
 # directory for processed data
 output_dir = pathlib.Path("data")
@@ -56,12 +80,12 @@ for name in plate_names:
 
 # ## Convert SQLite to parquet files
 
-# In[3]:
+# In[4]:
 
 
 for file_path in sqlite_dir.iterdir():
     output_path = pathlib.Path(
-        f"{output_dir}/converted_profiles/{file_path.stem}_converted.parquet"
+        f"{output_dir}/{platemap_to_process}/converted_profiles/{file_path.stem}_converted.parquet"
     )
     print("Starting conversion with cytotable for plate:", file_path.stem)
     # Merge single cells and output as parquet file
@@ -78,14 +102,16 @@ print("All plates have been converted with cytotable!")
 
 
 # # Load in converted profiles to update
-#
+# 
 # We will rename some of the columns (e.g., location centroids and cell count per FOV) to include Metadata prefix.
 
-# In[4]:
+# In[5]:
 
 
 # Directory with converted profiles
-converted_dir = pathlib.Path(f"{output_dir}/converted_profiles")
+converted_dir = pathlib.Path(
+    f"{output_dir}/{platemap_to_process}/converted_profiles/"
+).resolve(strict=True)
 
 # List of columns to update with the "Metadata_" prefix
 metadata_columns_to_update = [
@@ -93,7 +119,7 @@ metadata_columns_to_update = [
     "Nuclei_Location_Center_Y",
     "Cells_Location_Center_X",
     "Cells_Location_Center_Y",
-    "Image_Count_Cells"
+    "Image_Count_Cells",
 ]
 
 for file_path in converted_dir.iterdir():
@@ -106,11 +132,7 @@ for file_path in converted_dir.iterdir():
     # Rearrange columns and add "Metadata" prefix in one line
     df = df[
         metadata_columns_to_update
-        + [
-            col
-            for col in df.columns
-            if col not in metadata_columns_to_update
-        ]
+        + [col for col in df.columns if col not in metadata_columns_to_update]
     ].rename(
         columns=lambda col: (
             "Metadata_" + col if col in metadata_columns_to_update else col
@@ -122,15 +144,16 @@ for file_path in converted_dir.iterdir():
 
 
 # ## Check output to confirm process worked
-#
+# 
 # To confirm the number of single cells is correct, please use any database browser software to see if the number of rows in the "Per_Cells" compartment matches the number of rows in the data frame.
 
 # In[6]:
 
 
 converted_df = pd.read_parquet(
-    f"./data/converted_profiles/{plate_names[1]}_converted.parquet"
+    f"./data/{platemap_to_process}/converted_profiles/{plate_names[1]}_converted.parquet"
 )
 
 print(converted_df.shape)
 converted_df.head()
+

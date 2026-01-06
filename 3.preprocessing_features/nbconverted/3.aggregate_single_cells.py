@@ -1,9 +1,10 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 # ## Aggregating feature-selected single cells
-#
-# In this notebook, we process single-cell feature-selected profiles to generate compound-level aggregated profiles for each plate using the pycytominer.
-# The single-cell profiles are grouped by treatment (Metadata_treatment) and are saved as Parquet files in the aggregated_profiles directory.
+# 
+# In this notebook, we process single-cell feature-selected profiles to generate compound-level aggregated profiles for each plate using the pycytominer. 
+# The single-cell profiles are grouped by treatment (Metadata_treatment) and are saved as Parquet files in the aggregated_profiles directory. 
 # These aggregated profiles provide concise and interpretable data for downstream analysis at the compound level.
 
 # ## Import libraries
@@ -14,13 +15,36 @@
 import pathlib
 import pprint
 import random
-
 import pandas as pd
+import os
+
 from pycytominer import aggregate, annotate
+
 
 # ## Set paths and variables
 
-# In[2]:
+# In[ ]:
+
+
+# Optional: set `PLATEMAP_LAYOUT` env var to process only a single platemap (e.g. 'platemap_1')
+platemap_to_process = os.environ.get("PLATEMAP_LAYOUT")
+# platemap_to_process = "platemap_1"  # for testing only
+
+# set base directory for where the SQLite files are located (should be local to repo)
+base_dir = pathlib.Path("../2.cellprofiler_processing/cp_output/").resolve(strict=True)
+
+# Decide what to process
+if platemap_to_process:
+    print(f"Processing only {platemap_to_process}")
+    layouts = [platemap_to_process]
+else:
+    print("No specific layout set, processing all available platemaps")
+    layouts = [p.name for p in base_dir.glob("platemap_*") if p.is_dir()]
+
+pprint.pprint(layouts)
+
+
+# In[3]:
 
 
 # parameters
@@ -30,7 +54,7 @@ agg_tag = "aggregated_post_fs"
 # setting up paths
 data_dir = pathlib.Path("./data").resolve(strict=True)
 sc_data_dir = pathlib.Path(
-    "../3.preprocessing_features/data/single_cell_profiles/"
+    f"../3.preprocessing_features/data/{platemap_to_process}/single_cell_profiles"
 ).resolve(strict=True)
 
 # setting metadata paths
@@ -41,15 +65,20 @@ updated_barcode_path = (metadata_dir / "updated_barcode_platemap.csv").resolve(
 all_profiles_paths = list(sc_data_dir.glob("*sc_feature_selected.parquet"))
 
 # output files paths
-aggregated_dir_path = (data_dir / "aggregated_profiles").resolve()
+aggregated_dir_path = (
+    data_dir / f"{platemap_to_process}/aggregated_profiles"
+).resolve()
 aggregated_dir_path.mkdir(exist_ok=True)
 
 # Extract the plate names from the file name
-plate_names = [file.stem.split("_")[0] for file in all_profiles_paths]
+plate_names = [
+    "_".join(parts[:2]) if len(parts) >= 2 else parts[0]
+    for parts in (file.stem.split("_") for file in all_profiles_paths)
+]
 print(plate_names)
 
 
-# In[3]:
+# In[4]:
 
 
 # Load the barcode_platemap file
@@ -75,7 +104,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 # Next, we use the aggregation functionality provided by pycytominer to consolidate single-cell profiles into well-level summaries for each plate. This step groups the data by a specified metadata column and computes aggregate statistics by using the median.
 
-# In[4]:
+# In[5]:
 
 
 # Iterate over all profile file paths to process and aggregate data
@@ -111,7 +140,7 @@ for plate, info in plate_info_dictionary.items():
     )
 
 
-# In[5]:
+# In[6]:
 
 
 # Get a list of Parquet files in the directory
@@ -134,3 +163,4 @@ print(
     "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
 )
 test_df.head(2)
+
