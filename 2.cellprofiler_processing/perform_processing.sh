@@ -1,12 +1,15 @@
 #!/bin/bash
 
-# initialize the correct shell for your machine to allow conda to work (see README for note on shell names)
+# initialize and activate env
 conda init bash
-# activate the CellProfiler environment
 conda activate fibrosis_cp_env
 
-# convert Jupyter notebook(s) to script
-jupyter nbconvert --to script --output-dir=scripts/ *.ipynb
+# convert notebooks to scripts
+jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
 
-# run Python script for CellProfiler segmentation and feature extraction
-python scripts/cp_analysis.py
+# loop through platemap_1 to platemap_4
+for i in {1..4}; do
+    export PLATEMAP_LAYOUT="platemap_${i}"
+    echo ">>> Running analysis for ${PLATEMAP_LAYOUT}"
+    python nbconverted/cp_analysis.py
+done

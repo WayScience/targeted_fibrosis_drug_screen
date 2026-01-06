@@ -1,7 +1,6 @@
 # CellProfiler segmentation and feature extraction
 
-In this module, we apply the CellProfiler processing/analysis pipeline from the [cellpainting_predicts_cardiac_fibroblasts](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis) repository.
-We will download the most recent version of the cppipe file.
+In this module, we apply a modified version of the CellProfiler processing/analysis pipeline from the [cellpainting_predicts_cardiac_fibroblasts](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis) repository.
 After careful manual evaluation of the segmentation parameters on this dataset, we decided to update the parameters in the dataset after downloading slightly to get better segmentation results.
 
 ## Perform analysis on data
