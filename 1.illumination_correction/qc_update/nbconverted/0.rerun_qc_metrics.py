@@ -13,13 +13,15 @@
 # As well, the QC for saturation has already been updated to have a universal threshold of 0.10 or 10% of pixels can be at the maximum value. 
 # This is a stricter threshold that better accounts for the FOVs where cells are growing on top of each other.
 
-# In[5]:
+# In[1]:
 
 
 import pandas as pd
+import pathlib
+import json
 
 
-# In[6]:
+# In[2]:
 
 
 # URL of the CSV file on GitHub
@@ -28,12 +30,8 @@ github_url = "https://raw.githubusercontent.com/WayScience/cellpainting_predicts
 # Load the CSV file into a pandas DataFrame
 qc_df = pd.read_csv(github_url)
 
-# Display the first few rows of the DataFrame
-print(qc_df.shape)
-qc_df.head()
 
-
-# In[4]:
+# In[3]:
 
 
 # Calculate thresholds for each channel
@@ -55,4 +53,15 @@ for channel in channels:
 print("Calculated blur thresholds:")
 for channel, threshold in blur_thresholds.items():
     print(f"{channel}: {threshold}")
+
+
+# In[4]:
+
+
+# Save thresholds as JSON
+output_path = pathlib.Path("blur_qc_thresholds.json")
+with output_path.open("w") as f:
+    json.dump(blur_thresholds, f, indent=4)
+
+print(f"Saved thresholds to {output_path.resolve()}")
 

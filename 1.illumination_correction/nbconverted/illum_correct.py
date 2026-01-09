@@ -29,8 +29,8 @@ import cp_parallel
 # set the run type for the parallelization
 run_name = "illum_correction"
 
-# set up the batch name for the plate(s) being processed
-batch_name = "batch_2"
+# batch to process
+batch = "batch_1"
 
 
 # ### Set up paths
@@ -38,27 +38,16 @@ batch_name = "batch_2"
 # In[3]:
 
 
-# set main output dir for all plates if it doesn't exist
-output_dir = pathlib.Path("./illum_directory")
-output_dir.mkdir(exist_ok=True)
-
-# ensure the directory for the batch_name exists within the illum_directory
-batch_output_dir = output_dir / batch_name
-batch_output_dir.mkdir(exist_ok=True)
-
-# set base directory for where the images are located (WILL NEED TO CHANGE ON YOUR LOCAL MACHINE)
+# set base directory for where the images are located
 base_dir = pathlib.Path(
-    "../../Way Science Lab Dropbox/Jenna  Tomkinson/McKinseyLab_WayLab_CardiacFibroblasts/Compound Screen/"
+    f"/media/18tbdrive/CFReT_screening_data/compound_screen/{batch}"
 ).resolve(strict=True)
 
-# folder where images are located within folders
-images_dir = pathlib.Path(f"{base_dir}/Plate 2").resolve(strict=True)
-
-# list for plate names based on folders to use to create dictionary
+# list for plate names
 plate_names = []
-# iterate through 0.download_data and append plate names from folder names that contain image data from that plate
-for file_path in images_dir.iterdir():
-    plate_names.append(str(file_path.stem))
+
+# iterate through each platemap folder
+plate_names = [p.name for p in base_dir.rglob("platemap_*/**/CARD*") if p.is_dir()]
 
 print("There are a total of", len(plate_names), "plates. The names of the plates are:")
 for plate in plate_names:
@@ -73,19 +62,40 @@ for plate in plate_names:
 # set path to the illum pipeline
 path_to_pipeline = pathlib.Path("./pipeline/illum.cppipe").resolve(strict=True)
 
-# create plate info dictionary with all parts of the CellProfiler CLI command to run in parallel
-plate_info_dictionary = {
-    name: {
-        "path_to_images": pathlib.Path(list(images_dir.rglob(name))[0]).resolve(
-            strict=True
-        ),
-        "path_to_output": pathlib.Path(f"{output_dir}/{batch_name}/{name}"),
-        "path_to_pipeline": path_to_pipeline,
-    }
-    for name in plate_names
-}
+# set main output dir for all plates
+output_dir = pathlib.Path("./Corrected_Images").resolve(strict=False)
+output_dir.mkdir(exist_ok=True)
 
-# view the dictionary to assess that all info is added correctly
+# create plate info dictionary
+plate_info_dictionary = {}
+
+# recursively find all CARD* folders under platemap_*
+for plate_folder in base_dir.rglob("platemap_*/**/CARD*"):
+    if plate_folder.is_dir():
+        # determine the parent platemap folder name
+        platemap_folder_name = plate_folder.parents[
+            1
+        ].name  # 1 level up from plate_folder inside rglob pattern
+
+        # create nested output dir: Corrected_Images/platemap_#/plate
+        plate_output_dir = output_dir / platemap_folder_name / plate_folder.name
+
+        # only create output dir if it doesn't exist or is empty
+        if not plate_output_dir.exists() or not any(plate_output_dir.iterdir()):
+            plate_output_dir.mkdir(parents=True, exist_ok=True)
+
+            # add info to dictionary
+            plate_info_dictionary[plate_folder.name] = {
+                "path_to_images": plate_folder.resolve(strict=True),
+                "path_to_output": plate_output_dir.resolve(strict=True),
+                "path_to_pipeline": path_to_pipeline,
+            }
+        else:
+            print(
+                f"{plate_output_dir} already exists and contains files, skipping creation and dictionary."
+            )
+
+# view the dictionary
 pprint.pprint(plate_info_dictionary, indent=4)
 
 
@@ -96,7 +106,11 @@ pprint.pprint(plate_info_dictionary, indent=4)
 # In[ ]:
 
 
-cp_parallel.run_cellprofiler_parallel(
-    plate_info_dictionary=plate_info_dictionary, run_name=run_name, group_level="plate"
-)
+# if dictionary is not empty, run CellProfiler in parallel
+if plate_info_dictionary:
+    cp_parallel.run_cellprofiler_parallel(
+        plate_info_dictionary=plate_info_dictionary, run_name=run_name, group_level="plate"
+    )
+else:
+    print("No new plates to process. Exiting script.")
 

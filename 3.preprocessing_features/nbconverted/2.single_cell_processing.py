@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 # # Process single cell profiles
-#
+# 
 # NOTE: We are normalizing the plates for all samples as we only have three wells associated with the healthy controls, which is insufficient for normalization.
 
 # ## Import libraries
@@ -9,26 +10,56 @@
 # In[1]:
 
 
+import os
 import pathlib
 import pprint
 
 import pandas as pd
-from pycytominer import annotate, feature_select, normalize
+
+from pycytominer import annotate, normalize, feature_select
+
 
 # ## Set paths and variables
 
-# In[2]:
+# In[ ]:
+
+
+# Optional: set `PLATEMAP_LAYOUT` env var to process only a single platemap (e.g. 'platemap_1')
+platemap_to_process = os.environ.get("PLATEMAP_LAYOUT")
+# platemap_to_process = "platemap_1"  # for testing only
+
+# set base directory for where the SQLite files are located (should be local to repo)
+base_dir = pathlib.Path("../2.cellprofiler_processing/cp_output/").resolve(strict=True)
+
+# Decide what to process
+if platemap_to_process:
+    print(f"Processing only {platemap_to_process}")
+    layouts = [platemap_to_process]
+else:
+    print("No specific layout set, processing all available platemaps")
+    layouts = [p.name for p in base_dir.glob("platemap_*") if p.is_dir()]
+
+pprint.pprint(layouts)
+
+
+# In[ ]:
 
 
 # Path to dir with cleaned data from single-cell QC
-converted_dir = pathlib.Path("./data/cleaned_profiles")
+converted_dir = pathlib.Path(f"./data/{platemap_to_process}/cleaned_profiles/").resolve(
+    strict=True
+)
 
 # output path for single-cell profiles
-output_dir = pathlib.Path("./data/single_cell_profiles")
+output_dir = pathlib.Path(f"./data/{platemap_to_process}/single_cell_profiles")
 output_dir.mkdir(parents=True, exist_ok=True)
 
 # Extract the plate names from the file name
-plate_names = [file.stem.split("_")[0] for file in converted_dir.glob("*.parquet")]
+plate_names = [
+    "_".join(parts[:2]) if len(parts) >= 2 else parts[0]
+    for parts in (file.stem.split("_") for file in converted_dir.glob("*.parquet"))
+]
+
 
 # path for platemap directory
 platemap_dir = pathlib.Path("../metadata/updated_platemaps/")
@@ -44,7 +75,7 @@ feature_select_ops = [
 
 # ## Set dictionary with plates to process
 
-# In[3]:
+# In[4]:
 
 
 # Load the barcode_platemap file
@@ -72,7 +103,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 # ## Process data with pycytominer
 
-# In[4]:
+# In[5]:
 
 
 for plate, info in plate_info_dictionary.items():
@@ -135,7 +166,7 @@ for plate, info in plate_info_dictionary.items():
     )
 
 
-# In[5]:
+# In[6]:
 
 
 # Check output file
@@ -143,11 +174,13 @@ test_df = pd.read_parquet(output_feature_select_file)
 
 print(test_df.shape)
 print("Plate:", test_df.Metadata_Plate.unique())
-print("Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")])
+print(
+    "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
+)
 test_df.head(2)
 
 
-# In[6]:
+# In[7]:
 
 
 # Check output file
@@ -155,5 +188,8 @@ test_df = pd.read_parquet(output_annotated_file)
 
 print(test_df.shape)
 print("Plate:", test_df.Metadata_Plate.unique())
-print("Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")])
+print(
+    "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
+)
 test_df.head(2)
+

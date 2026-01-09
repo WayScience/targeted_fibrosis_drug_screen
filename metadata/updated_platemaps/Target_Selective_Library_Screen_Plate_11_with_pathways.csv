@@ -1,47 +1,47 @@
 WellRow,WellCol,well_position,heart_number,cell_type,heart_failure_type,treatment,Pathway
 B,2,B02,7,healthy,,DMSO,
-B,3,B03,19,failing,dilated_cardiomyopathy,UCD-0159632,Angiogenesis
-B,4,B04,19,failing,dilated_cardiomyopathy,UCD-0159640,Epigenetics
+B,3,B03,25,failing,dilated_cardiomyopathy,UCD-0159632,Angiogenesis
+B,4,B04,25,failing,dilated_cardiomyopathy,UCD-0159640,Epigenetics
 B,5,B05,7,healthy,,DMSO,
-B,6,B06,19,failing,dilated_cardiomyopathy,UCD-0001952,Epigenetics
-B,7,B07,19,failing,dilated_cardiomyopathy,UCD-0159654,Epigenetics
+B,6,B06,25,failing,dilated_cardiomyopathy,UCD-0001952,Epigenetics
+B,7,B07,25,failing,dilated_cardiomyopathy,UCD-0159654,Epigenetics
 B,8,B08,7,healthy,,DMSO,
-B,9,B09,19,failing,dilated_cardiomyopathy,UCD-0159662,GPCR & G Protein
-B,10,B10,19,failing,dilated_cardiomyopathy,UCD-0159602,Angiogenesis
+B,9,B09,25,failing,dilated_cardiomyopathy,UCD-0159662,GPCR & G Protein
+B,10,B10,25,failing,dilated_cardiomyopathy,UCD-0159602,Angiogenesis
 B,11,B11,7,healthy,,DMSO,
-C,2,C02,19,failing,dilated_cardiomyopathy,UCD-0159609,Others
-C,3,C03,19,failing,dilated_cardiomyopathy,UCD-0159617,Endocrinology & Hormones
-C,4,C04,19,failing,dilated_cardiomyopathy,UCD-0159625,Endocrinology & Hormones
-C,5,C05,19,failing,dilated_cardiomyopathy,UCD-0159633,Apoptosis
-C,6,C06,19,failing,dilated_cardiomyopathy,UCD-0159641,JAK/STAT
-C,7,C07,19,failing,dilated_cardiomyopathy,UCD-0001953,Epigenetics
-C,8,C08,19,failing,dilated_cardiomyopathy,UCD-0159655,Epigenetics
-C,9,C09,19,failing,dilated_cardiomyopathy,UCD-0159663,Protein Tyrosine Kinase
-C,10,C10,19,failing,dilated_cardiomyopathy,UCD-0159603,GPCR & G Protein
-C,11,C11,19,failing,dilated_cardiomyopathy,UCD-0159610,Transmembrane Transporters
-D,2,D02,19,failing,dilated_cardiomyopathy,UCD-0159618,MAPK
-D,3,D03,19,failing,dilated_cardiomyopathy,UCD-0159626,Neuronal Signaling
-D,4,D04,19,failing,dilated_cardiomyopathy,UCD-0159634,Cytoskeletal Signaling
-D,5,D05,19,failing,dilated_cardiomyopathy,UCD-0159642,Proteases
-D,6,D06,19,failing,dilated_cardiomyopathy,UCD-0159648,GPCR & G Protein
-D,7,D07,19,failing,dilated_cardiomyopathy,UCD-0159656,GPCR & G Protein
-D,8,D08,19,failing,dilated_cardiomyopathy,UCD-0159604,Autophagy
-D,9,D09,19,failing,dilated_cardiomyopathy,UCD-0159611,Others
-D,10,D10,19,failing,dilated_cardiomyopathy,UCD-0159619,GPCR & G Protein
-D,11,D11,19,failing,dilated_cardiomyopathy,UCD-0159627,Metabolism
-E,2,E02,19,failing,dilated_cardiomyopathy,DMSO,
-E,3,E03,19,failing,dilated_cardiomyopathy,UCD-0159635,MAPK
-E,4,E04,19,failing,dilated_cardiomyopathy,UCD-0159643,Metabolism
-E,5,E05,19,failing,dilated_cardiomyopathy,DMSO,
-E,6,E06,19,failing,dilated_cardiomyopathy,UCD-0159649,Angiogenesis
-E,7,E07,19,failing,dilated_cardiomyopathy,UCD-0159657,Others
-E,8,E08,19,failing,dilated_cardiomyopathy,DMSO,
-E,11,E11,19,failing,dilated_cardiomyopathy,DMSO,
+C,2,C02,25,failing,dilated_cardiomyopathy,UCD-0159609,Others
+C,3,C03,25,failing,dilated_cardiomyopathy,UCD-0159617,Endocrinology & Hormones
+C,4,C04,25,failing,dilated_cardiomyopathy,UCD-0159625,Endocrinology & Hormones
+C,5,C05,25,failing,dilated_cardiomyopathy,UCD-0159633,Apoptosis
+C,6,C06,25,failing,dilated_cardiomyopathy,UCD-0159641,JAK/STAT
+C,7,C07,25,failing,dilated_cardiomyopathy,UCD-0001953,Epigenetics
+C,8,C08,25,failing,dilated_cardiomyopathy,UCD-0159655,Epigenetics
+C,9,C09,25,failing,dilated_cardiomyopathy,UCD-0159663,Protein Tyrosine Kinase
+C,10,C10,25,failing,dilated_cardiomyopathy,UCD-0159603,GPCR & G Protein
+C,11,C11,25,failing,dilated_cardiomyopathy,UCD-0159610,Transmembrane Transporters
+D,2,D02,25,failing,dilated_cardiomyopathy,UCD-0159618,MAPK
+D,3,D03,25,failing,dilated_cardiomyopathy,UCD-0159626,Neuronal Signaling
+D,4,D04,25,failing,dilated_cardiomyopathy,UCD-0159634,Cytoskeletal Signaling
+D,5,D05,25,failing,dilated_cardiomyopathy,UCD-0159642,Proteases
+D,6,D06,25,failing,dilated_cardiomyopathy,UCD-0159648,GPCR & G Protein
+D,7,D07,25,failing,dilated_cardiomyopathy,UCD-0159656,GPCR & G Protein
+D,8,D08,25,failing,dilated_cardiomyopathy,UCD-0159604,Autophagy
+D,9,D09,25,failing,dilated_cardiomyopathy,UCD-0159611,Others
+D,10,D10,25,failing,dilated_cardiomyopathy,UCD-0159619,GPCR & G Protein
+D,11,D11,25,failing,dilated_cardiomyopathy,UCD-0159627,Metabolism
+E,2,E02,25,failing,dilated_cardiomyopathy,DMSO,
+E,3,E03,25,failing,dilated_cardiomyopathy,UCD-0159635,MAPK
+E,4,E04,25,failing,dilated_cardiomyopathy,UCD-0159643,Metabolism
+E,5,E05,25,failing,dilated_cardiomyopathy,DMSO,
+E,6,E06,25,failing,dilated_cardiomyopathy,UCD-0159649,Angiogenesis
+E,7,E07,25,failing,dilated_cardiomyopathy,UCD-0159657,Others
+E,8,E08,25,failing,dilated_cardiomyopathy,DMSO,
+E,11,E11,25,failing,dilated_cardiomyopathy,DMSO,
 F,2,F02,7,healthy,,TGFRi,
 F,5,F05,7,healthy,,TGFRi,
 F,8,F08,7,healthy,,TGFRi,
 F,11,F11,7,healthy,,TGFRi,
-G,2,G02,19,failing,dilated_cardiomyopathy,TGFRi,
-G,5,G05,19,failing,dilated_cardiomyopathy,TGFRi,
-G,8,G08,19,failing,dilated_cardiomyopathy,TGFRi,
-G,11,G11,19,failing,dilated_cardiomyopathy,TGFRi,
+G,2,G02,25,failing,dilated_cardiomyopathy,TGFRi,
+G,5,G05,25,failing,dilated_cardiomyopathy,TGFRi,
+G,8,G08,25,failing,dilated_cardiomyopathy,TGFRi,
+G,11,G11,25,failing,dilated_cardiomyopathy,TGFRi,
