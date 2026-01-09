@@ -17,6 +17,8 @@
 
 
 import pandas as pd
+import pathlib
+import json
 
 
 # In[2]:
@@ -51,4 +53,15 @@ for channel in channels:
 print("Calculated blur thresholds:")
 for channel, threshold in blur_thresholds.items():
     print(f"{channel}: {threshold}")
+
+
+# In[4]:
+
+
+# Save thresholds as JSON
+output_path = pathlib.Path("blur_qc_thresholds.json")
+with output_path.open("w") as f:
+    json.dump(blur_thresholds, f, indent=4)
+
+print(f"Saved thresholds to {output_path.resolve()}")
 

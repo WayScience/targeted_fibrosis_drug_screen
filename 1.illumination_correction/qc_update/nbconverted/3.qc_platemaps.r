@@ -115,7 +115,7 @@ merged_fov_platemap <- platetools::raw_map(
     data = merged_well_qc_data$Percent_Failing,
     well = merged_well_qc_data$Metadata_Well,
     plate = 96,
-    size = 8
+    size = 12
 ) +
     ggtitle(paste("All plates in batch (25 FOVs per well)")) +
     theme(plot.title = element_text(size = 10, face = "bold")) +
@@ -125,8 +125,8 @@ merged_fov_platemap <- platetools::raw_map(
         values = scales::rescale(c(0, 40, 100)),
         limits = c(0, 100)
     ) +
-    geom_point(aes(shape = merged_well_qc_data$treatment)) +
-    scale_shape_discrete(name = "Treatment")
+    geom_point(aes(shape = merged_well_qc_data$treatment), size = 2.5) +
+    scale_shape_discrete(name = "Treatment", guide = guide_legend(override.aes = list(size = 2.5)))
 
 # Save the merged plot to the output directory, including the batch name in the filename
 output_file_merged <- file.path(output_directory, paste0("merged_", batch_name, "_fov_platemap.png"))

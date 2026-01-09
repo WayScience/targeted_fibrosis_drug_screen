@@ -24,7 +24,7 @@ logging.getLogger().setLevel(logging.ERROR)
 
 # ## Set paths and variables
 
-# In[ ]:
+# In[2]:
 
 
 # Optional: set `PLATEMAP_LAYOUT` env var to process only a single platemap (e.g. 'platemap_1')

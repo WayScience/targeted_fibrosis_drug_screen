@@ -29,6 +29,9 @@ import cp_parallel
 # set the run type for the parallelization
 run_name = "image_qc"
 
+# batch to process
+batch = "batch_1"
+
 
 # ### Set up paths
 
@@ -37,22 +40,14 @@ run_name = "image_qc"
 
 # set base directory for where the images are located
 base_dir = pathlib.Path(
-    "/media/18tbdrive/CFReT_screening_data/compound_screen/"
+    f"/media/18tbdrive/CFReT_screening_data/compound_screen/{batch}"
 ).resolve(strict=True)
 
 # list for plate names
 plate_names = []
 
 # iterate through each platemap folder
-for platemap_folder in base_dir.glob("platemap_*"):
-    if platemap_folder.is_dir():
-        # iterate through the layout folders inside platemap
-        for layout_folder in platemap_folder.iterdir():
-            if layout_folder.is_dir():
-                # now iterate through CARD plates inside the layout folder
-                for plate_folder in layout_folder.iterdir():
-                    if plate_folder.is_dir() and plate_folder.name.startswith("CARD"):
-                        plate_names.append(plate_folder.name)
+plate_names = [p.name for p in base_dir.rglob("platemap_*/**/CARD*") if p.is_dir()]
 
 print("There are a total of", len(plate_names), "plates. The names of the plates are:")
 for plate in plate_names:
@@ -67,42 +62,40 @@ for plate in plate_names:
 # set path to the illum pipeline
 path_to_pipeline = pathlib.Path("./pipeline/image_qc.cppipe").resolve(strict=True)
 
-# set main output dir for all plates if it doesn't exist
-output_dir = pathlib.Path("./qc_results")
+# set main output dir for all plates
+output_dir = pathlib.Path("./qc_results").resolve(strict=False)
 output_dir.mkdir(exist_ok=True)
 
 # create plate info dictionary
 plate_info_dictionary = {}
 
-for platemap_folder in base_dir.glob("platemap_*"):
-    if platemap_folder.is_dir():
-        for alias_folder in platemap_folder.iterdir():
-            if alias_folder.is_dir():
-                for plate_folder in alias_folder.iterdir():
-                    if plate_folder.is_dir() and plate_folder.name.startswith("CARD"):
-                        # create nested output dir: qc_results/platemap_#/plate
-                        plate_output_dir = (
-                            output_dir / platemap_folder.name / plate_folder.name
-                        )
+# recursively find all CARD* folders under platemap_*
+for plate_folder in base_dir.rglob("platemap_*/**/CARD*"):
+    if plate_folder.is_dir():
+        # determine the parent platemap folder name
+        platemap_folder_name = plate_folder.parents[
+            1
+        ].name  # 1 level up from plate_folder inside rglob pattern
 
-                        # create output dir and set dictionary if plate hasn't been processed
-                        if not plate_output_dir.exists() or not any(
-                            plate_output_dir.iterdir()
-                        ):
-                            plate_output_dir.mkdir(parents=True, exist_ok=True)
+        # create nested output dir: Corrected_Images/platemap_#/plate
+        plate_output_dir = output_dir / platemap_folder_name / plate_folder.name
 
-                            # add info to dictionary
-                            plate_info_dictionary[plate_folder.name] = {
-                                "path_to_images": plate_folder.resolve(strict=True),
-                                "path_to_output": plate_output_dir.resolve(strict=True),
-                                "path_to_pipeline": path_to_pipeline,
-                            }
-                        else:
-                            print(
-                                f"{plate_output_dir} already exists and contains files, skipping creation and dictionary."
-                            )
+        # only create output dir if it doesn't exist or is empty
+        if not plate_output_dir.exists() or not any(plate_output_dir.iterdir()):
+            plate_output_dir.mkdir(parents=True, exist_ok=True)
 
-# view the dictionary to check
+            # add info to dictionary
+            plate_info_dictionary[plate_folder.name] = {
+                "path_to_images": plate_folder.resolve(strict=True),
+                "path_to_output": plate_output_dir.resolve(strict=True),
+                "path_to_pipeline": path_to_pipeline,
+            }
+        else:
+            print(
+                f"{plate_output_dir} already exists and contains files, skipping creation and dictionary."
+            )
+
+# view the dictionary
 pprint.pprint(plate_info_dictionary, indent=4)
 
 

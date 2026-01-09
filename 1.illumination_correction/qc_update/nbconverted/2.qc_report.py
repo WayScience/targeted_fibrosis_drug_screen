@@ -13,10 +13,12 @@
 import pandas as pd
 import pathlib
 import re
+import json
 
 import seaborn as sns
 from upsetplot import from_indicators, plot
 import matplotlib.pyplot as plt
+from functools import reduce
 
 import warnings
 
@@ -24,16 +26,60 @@ import warnings
 warnings.filterwarnings("ignore", category=FutureWarning, module="upsetplot")
 
 
-# # Set paths and load in data
+# ## Helper functions
 
 # In[2]:
 
 
+# Helper to check if filename matches keywords (special handling for d1)
+def keyword_match(name, keywords):
+    name_lower = name.lower()
+    for k in keywords:
+        if k.lower() == "d1":
+            # match if filename ends with 'd1' before the extension
+            if any(name_lower.endswith(f"d1{ext}") for ext in exts):
+                return True
+        elif k.lower() in name_lower:
+            return True
+    return False
+
+
+# Helper to find image for a row ensuring correct plate
+def find_image_for_row_correct_plate(row, search_base, exts, keywords):
+    well = str(row["Metadata_Well"]).lower()
+    site = str(row["Metadata_Site"]).lower()
+    plate = str(row["Metadata_Plate"]).lower()  # ensure correct plate match
+
+    # Walk recursively through all subfolders
+    for p in search_base.rglob("*"):
+        if p.is_file() and p.suffix.lower() in exts:
+            name = p.name.lower()
+            parent_plate = p.parent.name.lower()
+            # Require exact match of plate folder + well + site + mito keyword
+            if (
+                parent_plate == plate
+                and well in name
+                and site in name
+                and keyword_match(name, keywords)
+            ):
+                return p, parent_plate
+    return None, None
+
+
+# # Set paths and load in data
+
+# In[3]:
+
+
 # Platemap name for processing (e.g., platemap_#)
-platemap_name = "platemap_4"
+platemap_name = "platemap_5"
 
 # Set constants for prefixes we want to keep for the dataframes
 prefixes = ("Metadata_", "ImageQuality_PercentMaximal", "ImageQuality_PowerLogLogSlope")
+
+# Load in blur thresholds from JSON file
+with open("blur_qc_thresholds.json", "r") as f:
+    blur_thresholds = json.load(f)
 
 # Output directory for plots
 output_directory = pathlib.Path(f"./qc_plots/{platemap_name}")
@@ -46,7 +92,7 @@ csv_files = list(qc_results.rglob("Image.csv"))
 print(f"Found {len(csv_files)} CSV files for {platemap_name}.")
 
 
-# In[3]:
+# In[4]:
 
 
 dataframes = []
@@ -82,7 +128,7 @@ else:
     print("✅ All CSV files had consistent plate names.")
 
 
-# In[4]:
+# In[5]:
 
 
 # Concatenate the CSV dataframes
@@ -94,7 +140,7 @@ combined_df.head()
 
 # ## Update plate names to be easier to read
 
-# In[5]:
+# In[6]:
 
 
 # Extract numeric suffixes directly into a list
@@ -122,7 +168,7 @@ combined_df.head()
 
 # ## Add flags per channel
 
-# In[6]:
+# In[7]:
 
 
 # Start by assuming no channel is flagged
@@ -147,17 +193,8 @@ print(combined_df.shape)
 combined_df.head()
 
 
-# In[7]:
+# In[8]:
 
-
-# dictionary with blur thresholds per channel
-blur_thresholds = {
-    "OrigActin": -1.8891791699802942,
-    "OrigDNA": -2.2456075474546515,
-    "OrigER": -2.2825812279725524,
-    "OrigMito": -2.012531942517173,
-    "OrigPM": -2.4309820530015642,
-}
 
 # Boolean mask for Blur flag
 blur_flagged_mask = combined_df["Metadata_Blur_Flag"].astype(bool)
@@ -176,7 +213,7 @@ print(combined_df.shape)
 combined_df.head()
 
 
-# In[8]:
+# In[9]:
 
 
 # Ensure Failed_Any column exists
@@ -194,7 +231,7 @@ plate_fov_counts = (
 print(plate_fov_counts)
 
 
-# In[9]:
+# In[10]:
 
 
 # Count image-sets that failed due to blur only (blur True, saturation False)
@@ -231,7 +268,7 @@ if "plate_fov_counts" in globals():
 
 # ## Plot the percentage of failed FOVs across plates regardless of condition
 
-# In[10]:
+# In[11]:
 
 
 # Calculate percentage of rows that failed any QC check, grouped by plate
@@ -277,7 +314,7 @@ plt.show()
 
 # ## Plot percentage failed FOV based on blur or saturation regardless of channel
 
-# In[11]:
+# In[12]:
 
 
 # Add a column for "failed both"
@@ -349,7 +386,7 @@ plt.show()
 
 # ## Create upset plot for all plates in combination with the breakdown of channels failing QC
 
-# In[12]:
+# In[13]:
 
 
 # Define the relevant QC columns
@@ -395,7 +432,7 @@ plt.show()
 
 # ## Generate heatmap to visualize which channels and conditions most impact the failing image sets
 
-# In[13]:
+# In[14]:
 
 
 # Get boolean DataFrames for saturation and blur separately
@@ -440,19 +477,10 @@ plt.savefig(output_directory / "qc_failure_rates_heatmap.png", dpi=500)
 plt.show()
 
 
-# In[14]:
+# In[15]:
 
 
-# Use blur_thresholds dict for thresholds in the plot
-blur_thresholds = {
-    "OrigActin": -1.8891791699802942,
-    "OrigDNA": -2.2456075474546515,
-    "OrigER": -2.2825812279725524,
-    "OrigMito": -2.012531942517173,
-    "OrigPM": -2.4309820530015642,
-}
-
-
+# Plot distributions of PowerLogLogSlope per channel with blur thresholds
 channels = ["OrigActin", "OrigDNA", "OrigER", "OrigMito", "OrigPM"]
 
 plt.figure(figsize=(18, 4))
@@ -480,7 +508,7 @@ plt.tight_layout(rect=[0, 0, 1, 0.95])
 plt.show()
 
 
-# In[15]:
+# In[16]:
 
 
 # Find all FOVs that failed DNA blur QC
@@ -506,7 +534,7 @@ middle_examples = sorted_failed.iloc[indices][
 middle_examples
 
 
-# In[66]:
+# In[17]:
 
 
 # Find rows that are saturated for OrigMito and have no other saturation or blur failures
@@ -553,54 +581,30 @@ else:
     display(sample_n[cols].reset_index(drop=True))
 
 
-# In[67]:
+# In[18]:
 
-
-from pathlib import Path
-import matplotlib.pyplot as plt
 
 # Base directory and platemap
-images_base_dir = Path("/media/18tbdrive/CFReT_screening_data/compound_screen")
-search_base = images_base_dir / platemap_name  # search within this platemap folder
+images_base_dir = pathlib.Path(
+    "/media/18tbdrive/CFReT_screening_data/compound_screen"
+).resolve(strict=True)
+
+# Find the platemap folder no matter what intermediate folder is there
+matches = list(images_base_dir.rglob(platemap_name))
+
+if len(matches) == 0:
+    raise FileNotFoundError(
+        f"No folder named '{platemap_name}' found under {images_base_dir}"
+    )
+elif len(matches) > 1:
+    print(f"Warning: multiple matches found for {platemap_name}, using the first one")
+
+search_base = matches[0]
+print(f"Search base set to: {search_base}")
+
 
 exts = [".tif", ".tiff", ".png", ".jpg", ".jpeg", ".ome"]
 keywords = ["d1", "mito", "origmito"]
-
-
-# Helper to check if filename matches keywords (special handling for d1)
-def keyword_match(name, keywords):
-    name_lower = name.lower()
-    for k in keywords:
-        if k.lower() == "d1":
-            # match if filename ends with 'd1' before the extension
-            if any(name_lower.endswith(f"d1{ext}") for ext in exts):
-                return True
-        elif k.lower() in name_lower:
-            return True
-    return False
-
-
-# Helper to find image for a row ensuring correct plate
-def find_image_for_row_correct_plate(row, search_base, exts, keywords):
-    well = str(row["Metadata_Well"]).lower()
-    site = str(row["Metadata_Site"]).lower()
-    plate = str(row["Metadata_Plate"]).lower()  # ensure correct plate match
-
-    # Walk recursively through all subfolders
-    for p in search_base.rglob("*"):
-        if p.is_file() and p.suffix.lower() in exts:
-            name = p.name.lower()
-            parent_plate = p.parent.name.lower()
-            # Require exact match of plate folder + well + site + mito keyword
-            if (
-                parent_plate == plate
-                and well in name
-                and site in name
-                and keyword_match(name, keywords)
-            ):
-                return p, parent_plate
-    return None, None
-
 
 # Prepare list of image paths for up to 3 sampled rows
 rows = sample_n.reset_index(drop=True)
@@ -640,62 +644,37 @@ for i, (p, pl) in enumerate(zip(image_paths, plates_found), 1):
     print(f"{i}: {p if p is not None else 'NOT FOUND'} (Plate folder: {pl})")
 
 
-# In[71]:
+# In[19]:
 
 
-import pathlib
-import pandas as pd
-
-# Load all Image.csv under qc_results, fix plate names per-file, then compute failed FOVs
+# --- Load all Image.csv ---
 qc_root = pathlib.Path("qc_results")
 all_csvs = list(qc_root.rglob("Image.csv"))
 print(f"Found {len(all_csvs)} Image.csv files under {qc_root}")
 
 loaded = []
-skipped = []
-
-prefixes = ["Metadata_"]  # adjust if needed
+prefixes = ["Metadata_"]
 
 for csv_file in all_csvs:
     try:
         df = pd.read_csv(
-            csv_file, usecols=lambda c: any(c.startswith(p) for p in prefixes)
+            csv_file,
+            usecols=lambda c: any(c.startswith(p) for p in prefixes)
+            or c.startswith("ImageQuality_PowerLogLogSlope_")
+            or c.startswith("ImageQuality_PercentMaximal"),
         )
     except Exception as e:
         print(f"Skipping {csv_file}: failed to read ({e})")
-        skipped.append((csv_file, "read_error"))
         continue
 
-    plate_name = csv_file.parent.name  # folder name is authoritative per-file
-    if "Metadata_Plate" in df.columns and df["Metadata_Plate"].nunique() > 1:
-        print(
-            f"⚠️ {csv_file} had multiple plate names {df['Metadata_Plate'].unique()}, fixing to {plate_name}"
-        )
-
-    # Overwrite to ensure single unique plate name per file
+    plate_name = csv_file.parent.name
     df["Metadata_Plate"] = plate_name
-
-    # Save the platemap layout as the parent folder of the plate folder
     df["Platemap"] = str(csv_file.parent.parent.name)
 
-    # required columns for the downstream aggregation
-    required = {
-        "Metadata_Plate",
-        "Metadata_Well",
-        "Metadata_Site",
-        "Metadata_Blur_Flag",
-        "Metadata_Saturation_Flag",
-        "Platemap",
-    }
-    missing = required - set(df.columns)
-    if missing:
-        print(f"Skipping {csv_file}: missing required columns {missing}")
-        skipped.append((csv_file, f"missing:{missing}"))
-        continue
-
-    # normalize boolean flags
-    df["Metadata_Blur_Flag"] = df["Metadata_Blur_Flag"].astype(bool)
-    df["Metadata_Saturation_Flag"] = df["Metadata_Saturation_Flag"].astype(bool)
+    # Ensure flags are boolean
+    for flag in ["Metadata_Blur_Flag", "Metadata_Saturation_Flag"]:
+        if flag in df.columns:
+            df[flag] = df[flag].astype(bool)
 
     loaded.append(df)
 
@@ -703,44 +682,175 @@ if not loaded:
     raise RuntimeError("No valid Image.csv files were loaded.")
 
 combined_all = pd.concat(loaded, ignore_index=True)
+
+# --- Create per-channel Saturation flags ---
+percent_max_cols = [
+    c for c in combined_all.columns if c.startswith("ImageQuality_PercentMaximal")
+]
+sat_mask = combined_all["Metadata_Saturation_Flag"].astype(bool)
+for col in percent_max_cols:
+    channel = col.replace("ImageQuality_PercentMaximal_", "")
+    combined_all[f"{channel}_Saturated"] = sat_mask & (
+        combined_all[col] > 0.10
+    )  # We set 0.1 as threshold in CellProfiler
+
+blur_mask = combined_all["Metadata_Blur_Flag"].astype(bool)
+for col in combined_all.columns:
+    if col.startswith("ImageQuality_PowerLogLogSlope_"):
+        channel = col.replace("ImageQuality_PowerLogLogSlope_", "")
+        if channel in blur_thresholds:
+            combined_all[f"{channel}_Blur"] = blur_mask & (
+                combined_all[col] < blur_thresholds[channel]
+            )
+
+
+# --- Aggregate per well per channel ---
+def pivot_channel_flags(df, suffix):
+    cols = [c for c in df.columns if c.endswith(suffix)]
+    df_melt = df.melt(
+        id_vars=["Metadata_Plate", "Platemap", "Metadata_Well"],
+        value_vars=cols,
+        var_name="Channel",
+        value_name="Failed_FOVs",
+    )
+    df_melt["Channel"] = df_melt["Channel"].str.replace(suffix, "")
+    agg = (
+        df_melt.groupby(["Metadata_Plate", "Platemap", "Metadata_Well", "Channel"])
+        .agg(Failed_FOVs=("Failed_FOVs", "sum"))
+        .reset_index()
+    )
+    return (
+        agg.pivot_table(
+            index=["Metadata_Plate", "Platemap", "Metadata_Well"],
+            columns="Channel",
+            values="Failed_FOVs",
+        )
+        .add_prefix(f"Failed_{suffix.replace('_','')}_")
+        .reset_index()
+    )
+
+
+sat_wide = pivot_channel_flags(combined_all, "_Saturated")
+blur_wide = pivot_channel_flags(combined_all, "_Blur")
+
+# --- Merge Saturation + Blur ---
+well_level_df = pd.merge(
+    sat_wide, blur_wide, on=["Metadata_Plate", "Platemap", "Metadata_Well"], how="outer"
+).fillna(0)
+
+# --- Total image sets per well ---
+total_per_well = (
+    combined_all.groupby(["Metadata_Plate", "Platemap", "Metadata_Well"])
+    .size()
+    .rename("Total_image_sets")
+    .reset_index()
+)
+well_level_df = pd.merge(
+    well_level_df,
+    total_per_well,
+    on=["Metadata_Plate", "Platemap", "Metadata_Well"],
+    how="left",
+)
+
+# --- Overall failure per well ---
 combined_all["Failed_Any"] = combined_all[
     ["Metadata_Blur_Flag", "Metadata_Saturation_Flag"]
 ].any(axis=1)
-
-# Aggregate failed FOVs grouped by plate / well / site
-failed_by_plate_well_site = (
-    combined_all.groupby(
-        ["Metadata_Plate", "Platemap", "Metadata_Well", "Metadata_Site"]
+agg_total = (
+    combined_all.groupby(["Metadata_Plate", "Platemap", "Metadata_Well"])
+    .agg(
+        Failed_Any=("Failed_Any", "sum"),
+        Failed_Blur=("Metadata_Blur_Flag", "sum"),
+        Failed_Saturation=("Metadata_Saturation_Flag", "sum"),
     )
-    .agg(Total_FOVs=("Failed_Any", "size"), Failed_FOVs=("Failed_Any", "sum"))
     .reset_index()
 )
+well_level_df = pd.merge(
+    well_level_df,
+    agg_total,
+    on=["Metadata_Plate", "Platemap", "Metadata_Well"],
+    how="left",
+)
 
-# Filter for just the control wells
-wells_of_interest = ["B02", "B05", "B08", "B11", "E02", "E05", "E08", "E11"]
-failed_controls = failed_by_plate_well_site[
-    failed_by_plate_well_site["Metadata_Well"].isin(wells_of_interest)
+# --- Compute percentages per channel/condition ---
+for col in well_level_df.columns:
+    if col.startswith("Failed_") and col not in [
+        "Failed_Any",
+        "Failed_Blur",
+        "Failed_Saturation",
+    ]:
+        well_level_df[col.replace("Failed_", "Percent_Failed_")] = (
+            well_level_df[col] / well_level_df["Total_image_sets"] * 100
+        )
+
+well_level_df["Percent_Failed_Any"] = (
+    well_level_df["Failed_Any"] / well_level_df["Total_image_sets"] * 100
+)
+well_level_df["Percent_Failed_Blur"] = (
+    well_level_df["Failed_Blur"] / well_level_df["Total_image_sets"] * 100
+)
+well_level_df["Percent_Failed_Saturation"] = (
+    well_level_df["Failed_Saturation"] / well_level_df["Total_image_sets"] * 100
+)
+
+# --- Filter only DMSO control wells ---
+control_wells = ["B02", "B05", "B08", "B11", "E02", "E05", "E08", "E11"]
+well_level_df_controls = well_level_df[
+    well_level_df["Metadata_Well"].isin(control_wells)
+].copy()
+
+# --- Keep only percentages and total image sets ---
+percent_cols = [
+    c for c in well_level_df_controls.columns if c.startswith("Percent_Failed_")
+]
+final_cols = [
+    "Metadata_Plate",
+    "Platemap",
+    "Metadata_Well",
+    "Total_image_sets",
+] + percent_cols
+well_level_df_controls_pct = well_level_df_controls[final_cols].copy()
+
+# --- Result ---
+print(well_level_df_controls_pct.to_string(index=False))
+
+# --- Save to CSV ---
+output_path = pathlib.Path("well_level_image_qc_controls_summary.csv")
+well_level_df_controls_pct.to_csv(output_path, index=False)
+print(f"Saved well-level percentage summary to {output_path}")
+
+
+# In[20]:
+
+
+# --- Aggregate well-level controls to plate + platemap level ---
+agg_cols = [c for c in well_level_df_controls_pct.columns if c.startswith("Failed_")]
+percent_cols = [
+    c for c in well_level_df_controls_pct.columns if c.startswith("Percent_Failed_")
 ]
 
-# Aggregate per plate including platemap
-failed_controls_per_plate = (
-    failed_controls.groupby(["Metadata_Plate", "Platemap"])
-    .agg(Total_FOVs=("Total_FOVs", "sum"), Failed_FOVs=("Failed_FOVs", "sum"))
+# Build a mapping of column -> aggregation function and pass it as a single dict to .agg
+agg_map = {col: "sum" if col in agg_cols else "mean" for col in agg_cols + percent_cols}
+
+plate_agg = (
+    well_level_df_controls_pct.groupby(["Metadata_Plate", "Platemap"])
+    .agg(agg_map)
     .reset_index()
 )
-failed_controls_per_plate["Percent_Failed"] = (
-    failed_controls_per_plate["Failed_FOVs"] / failed_controls_per_plate["Total_FOVs"]
-) * 100
 
-# Show results
-print(
-    "Failed FOVs for control wells (25 sites per well) per plate with platemap layout:"
+# Optionally compute total FOVs for the plate
+plate_agg["Total_image_sets"] = (
+    well_level_df_controls_pct.groupby(["Metadata_Plate", "Platemap"])[
+        "Total_image_sets"
+    ]
+    .sum()
+    .values
 )
-print(failed_controls_per_plate.to_string(index=False))
 
+# Show aggregated plate-level table
+print(plate_agg.to_string(index=False))
 
-# In[ ]:
-
-
-
+# Save to CSV
+plate_agg.to_csv("plate_level_image_qc_controls_summary.csv", index=False)
+print("Saved plate-level control data to 'plate_level_image_qc_controls_summary.csv'")
 
