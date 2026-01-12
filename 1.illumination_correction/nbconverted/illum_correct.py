@@ -10,6 +10,7 @@
 # In[1]:
 
 
+import argparse
 import pathlib
 import pprint
 
@@ -23,14 +24,28 @@ import cp_parallel
 
 # ### Set the constants
 
-# In[2]:
+# In[ ]:
 
 
 # set the run type for the parallelization
 run_name = "illum_correction"
 
-# batch to process
-batch = "batch_1"
+# --- Argument parsing with notebook fallback ---
+parser = argparse.ArgumentParser()
+parser.add_argument("batch", nargs="?", default=None, help="Batch name (e.g., batch_1)")
+args, unknown = parser.parse_known_args()
+
+# If running interactively (like in Jupyter), set a default
+if args.batch is None and any("ipykernel" in arg for arg in sys.argv):
+    batch = "batch_1"  # <--- set your default batch here
+    print(f"🧪 Running inside notebook — using default batch: {batch}")
+elif args.batch is not None:
+    batch = args.batch
+    print(f"📦 Running via script — using batch: {batch}")
+else:
+    raise ValueError(
+        "❌ Batch not provided. Please specify one (e.g. 'python illum_correct.py batch_1')."
+    )
 
 
 # ### Set up paths
