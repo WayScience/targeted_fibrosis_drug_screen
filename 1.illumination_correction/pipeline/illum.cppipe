@@ -107,7 +107,7 @@ MeasureImageQuality:[module_num:5|svn_version:'Unknown'|variable_revision_number
     Minimize the weighted variance or the entropy?:Weighted variance
     Assign pixels in the middle intensity class to the foreground or the background?:Foreground
 
-FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Measurements were manually updated or calculated (e.g., max value set as 0.10 or 0.10% can be at max value for better identification of highly overlaping cells).', 'Blur thresholds per channel calculated with IQR method.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Saturation metric (range from 0 - 100%) is set at 1% of pixels at the highest intensity. This was optimized to avoid removal of images with minimal debris. ', '', 'Blur metric (most negative = blurry) were optimized to avoid over-correction. ']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Hidden:2
     Hidden:5
     Name the flag's category:Metadata
@@ -120,7 +120,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Flag images based on low values?:No
     Minimum value:0.0
     Flag images based on high values?:Yes
-    Maximum value:0.10
+    Maximum value:1
     Rules file location:Elsewhere...|
     Rules file name:rules.txt
     Class number:
@@ -131,7 +131,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Flag images based on low values?:No
     Minimum value:0.0
     Flag images based on high values?:Yes
-    Maximum value:0.10
+    Maximum value:1
     Rules file location:Elsewhere...|
     Rules file name:rules.txt
     Class number:
@@ -142,7 +142,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Flag images based on low values?:No
     Minimum value:0.26
     Flag images based on high values?:Yes
-    Maximum value:0.10
+    Maximum value:1
     Rules file location:Elsewhere...|
     Rules file name:rules.txt
     Class number:
@@ -153,7 +153,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Flag images based on low values?:No
     Minimum value:0.0
     Flag images based on high values?:Yes
-    Maximum value:0.10
+    Maximum value:1
     Rules file location:Elsewhere...|
     Rules file name:rules.txt
     Class number:
@@ -164,7 +164,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Flag images based on low values?:No
     Minimum value:0.0
     Flag images based on high values?:Yes
-    Maximum value:0.10
+    Maximum value:1
     Rules file location:Elsewhere...|
     Rules file name:rules.txt
     Class number:
@@ -178,7 +178,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Select the object to be used for flagging:None
     Which measurement?:ImageQuality_PowerLogLogSlope_OrigDNA
     Flag images based on low values?:Yes
-    Minimum value:-2.2456075474546515
+    Minimum value:-2.35
     Flag images based on high values?:No
     Maximum value:-1.28
     Rules file location:Elsewhere...|
@@ -189,7 +189,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Select the object to be used for flagging:None
     Which measurement?:ImageQuality_PowerLogLogSlope_OrigPM
     Flag images based on low values?:Yes
-    Minimum value:-2.4309820530015642
+    Minimum value:-2.5
     Flag images based on high values?:No
     Maximum value:-1.28
     Rules file location:Elsewhere...|
@@ -200,7 +200,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Select the object to be used for flagging:None
     Which measurement?:ImageQuality_PowerLogLogSlope_OrigER
     Flag images based on low values?:Yes
-    Minimum value:-2.2825812279725524
+    Minimum value:-2.4
     Flag images based on high values?:No
     Maximum value:1.0
     Rules file location:Elsewhere...|
@@ -211,7 +211,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Select the object to be used for flagging:None
     Which measurement?:ImageQuality_PowerLogLogSlope_OrigMito
     Flag images based on low values?:Yes
-    Minimum value:-2.012531942517173
+    Minimum value:-1.98
     Flag images based on high values?:No
     Maximum value:1.0
     Rules file location:Elsewhere...|
@@ -222,7 +222,7 @@ FlagImage:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Select the object to be used for flagging:None
     Which measurement?:ImageQuality_PowerLogLogSlope_OrigActin
     Flag images based on low values?:Yes
-    Minimum value:-1.8891791699802942
+    Minimum value:-1.8
     Flag images based on high values?:No
     Maximum value:1.0
     Rules file location:Elsewhere...|

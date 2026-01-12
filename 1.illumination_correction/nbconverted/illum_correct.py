@@ -10,6 +10,7 @@
 # In[1]:
 
 
+import argparse
 import pathlib
 import pprint
 
@@ -23,14 +24,28 @@ import cp_parallel
 
 # ### Set the constants
 
-# In[2]:
+# In[ ]:
 
 
 # set the run type for the parallelization
 run_name = "illum_correction"
 
-# batch to process
-batch = "batch_1"
+# --- Argument parsing with notebook fallback ---
+parser = argparse.ArgumentParser()
+parser.add_argument("batch", nargs="?", default=None, help="Batch name (e.g., batch_1)")
+args, unknown = parser.parse_known_args()
+
+# If running interactively (like in Jupyter), set a default
+if args.batch is None and any("ipykernel" in arg for arg in sys.argv):
+    batch = "batch_1"  # <--- set your default batch here
+    print(f"🧪 Running inside notebook — using default batch: {batch}")
+elif args.batch is not None:
+    batch = args.batch
+    print(f"📦 Running via script — using batch: {batch}")
+else:
+    raise ValueError(
+        "❌ Batch not provided. Please specify one (e.g. 'python illum_correct.py batch_1')."
+    )
 
 
 # ### Set up paths
@@ -63,7 +78,9 @@ for plate in plate_names:
 path_to_pipeline = pathlib.Path("./pipeline/illum.cppipe").resolve(strict=True)
 
 # set main output dir for all plates
-output_dir = pathlib.Path("./Corrected_Images").resolve(strict=False)
+output_base_dir = pathlib.Path("./Corrected_Images").resolve(strict=False)
+output_base_dir.mkdir(exist_ok=True)
+output_dir = pathlib.Path(f"{output_base_dir}/{batch}").resolve(strict=False)
 output_dir.mkdir(exist_ok=True)
 
 # create plate info dictionary
@@ -109,7 +126,9 @@ pprint.pprint(plate_info_dictionary, indent=4)
 # if dictionary is not empty, run CellProfiler in parallel
 if plate_info_dictionary:
     cp_parallel.run_cellprofiler_parallel(
-        plate_info_dictionary=plate_info_dictionary, run_name=run_name, group_level="plate"
+        plate_info_dictionary=plate_info_dictionary,
+        run_name=run_name,
+        group_level="plate",
     )
 else:
     print("No new plates to process. Exiting script.")
