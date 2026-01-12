@@ -10,8 +10,7 @@
 # More negative represents blur, so we only need one threshold to catch these conditions.
 # More positive/close to 0 looks to represent empty images but we don't need to catch that condition.
 # 
-# As well, the QC for saturation has already been updated to have a universal threshold of 0.10 or 10% of pixels can be at the maximum value. 
-# This is a stricter threshold that better accounts for the FOVs where cells are growing on top of each other.
+# The goal is to minimize over-correction. We plot each metric per channel and manually define the best cut-off.
 
 # In[1]:
 
@@ -19,6 +18,9 @@
 import pandas as pd
 import pathlib
 import json
+
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 # In[2]:
@@ -34,28 +36,53 @@ qc_df = pd.read_csv(github_url)
 # In[3]:
 
 
-# Calculate thresholds for each channel
+# Plot the distribution of PowerLogLogSlope for each channel to visualize where to cut off blurry images
 channels = ["OrigActin", "OrigDNA", "OrigER", "OrigMito", "OrigPM"]
 blur_thresholds = {}
 
-for channel in channels:
+fig, axes = plt.subplots(1, len(channels), figsize=(15, 4), sharey=True)
+
+for ax, channel in zip(axes, channels):
     col = f"ImageQuality_PowerLogLogSlope_{channel}"
-    # Check if the column exists in the DataFrame
-    if col in qc_df.columns:
-        # Calculate the 25th and 75th percentiles and the IQR
-        Q1 = qc_df[col].quantile(0.25)
-        Q3 = qc_df[col].quantile(0.75)
-        IQR = Q3 - Q1
-        # Calculate the blur threshold using IQR method (any value very negative)
-        blur_thresholds[channel] = Q1 - 1.5 * IQR
+    sns.histplot(qc_df[col], bins=50, kde=True, ax=ax, color="steelblue")
+    ax.set_title(channel)
+    ax.set_xlabel("PowerLogLogSlope")
 
-# Display the calculated thresholds
-print("Calculated blur thresholds:")
-for channel, threshold in blur_thresholds.items():
-    print(f"{channel}: {threshold}")
+plt.tight_layout()
+plt.show()
 
+
+# Based on the distributions, we can manually determine optimal cutoffs where we can see the tail of the normal distribution occur.
+#   
+# We visualize these thresholds below on the plot to validate.
 
 # In[4]:
+
+
+# Plot the distribution of PowerLogLogSlope for each channel to visualize where to cut off blurry images
+channels = ["OrigActin", "OrigDNA", "OrigER", "OrigMito", "OrigPM"]
+blur_thresholds = {
+    "OrigActin": -1.8,
+    "OrigDNA": -2.35,
+    "OrigER": -2.4,
+    "OrigMito": -1.98,
+    "OrigPM": -2.5,
+}
+
+fig, axes = plt.subplots(1, len(channels), figsize=(15, 4), sharey=True)
+
+for ax, channel in zip(axes, channels):
+    col = f"ImageQuality_PowerLogLogSlope_{channel}"
+    sns.histplot(qc_df[col], bins=50, kde=True, ax=ax, color="steelblue")
+    ax.axvline(blur_thresholds[channel], color="red", linestyle="--", linewidth=1.5)
+    ax.set_title(channel)
+    ax.set_xlabel("PowerLogLogSlope")
+
+plt.tight_layout()
+plt.show()
+
+
+# In[5]:
 
 
 # Save thresholds as JSON

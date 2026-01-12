@@ -63,7 +63,9 @@ for plate in plate_names:
 path_to_pipeline = pathlib.Path("./pipeline/illum.cppipe").resolve(strict=True)
 
 # set main output dir for all plates
-output_dir = pathlib.Path("./Corrected_Images").resolve(strict=False)
+output_base_dir = pathlib.Path("./Corrected_Images").resolve(strict=False)
+output_base_dir.mkdir(exist_ok=True)
+output_dir = pathlib.Path(f"{output_base_dir}/{batch}").resolve(strict=False)
 output_dir.mkdir(exist_ok=True)
 
 # create plate info dictionary
@@ -109,7 +111,9 @@ pprint.pprint(plate_info_dictionary, indent=4)
 # if dictionary is not empty, run CellProfiler in parallel
 if plate_info_dictionary:
     cp_parallel.run_cellprofiler_parallel(
-        plate_info_dictionary=plate_info_dictionary, run_name=run_name, group_level="plate"
+        plate_info_dictionary=plate_info_dictionary,
+        run_name=run_name,
+        group_level="plate",
     )
 else:
     print("No new plates to process. Exiting script.")
