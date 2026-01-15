@@ -30,7 +30,7 @@ import cp_parallel
 run_name = "image_qc"
 
 # batch to process
-batch = "batch_1"
+batch = "batch_2"
 
 
 # ### Set up paths

@@ -4,7 +4,7 @@ channels:
 - conda-forge
 
 dependencies:
-# this is restricted to Python 3.9 at this time due to other conflicts
+# this is restricted to Python 3.8 for HPC but 3.9 for local (local)
 - conda-forge::python=3.9
 - conda-forge::ipykernel
 - conda-forge::jupyterlab
@@ -12,7 +12,7 @@ dependencies:
 - conda-forge::pip
 - conda-forge::pyyaml
 - conda-forge::pandas
-- conda-forge::mysqlclient
+- conda-forge::mysqlclient=1.4.6
 - conda-forge::openjdk
 - conda-forge::scikit-image
 - conda-forge::scikit-learn

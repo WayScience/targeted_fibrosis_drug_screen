@@ -19,7 +19,7 @@ conda activate fibrosis_cp_env
 image_dir=$1
 
 # run your python analysis script with the input image directory
-python nbconverted/1.cp_analysis_hpc.py --image_dir "$image_dir"
+python nbconverted/cp_analysis_hpc.py --image_dir "$image_dir"
 
 # deactivate conda environment
 conda deactivate

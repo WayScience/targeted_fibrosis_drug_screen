@@ -480,6 +480,83 @@ plt.show()
 # In[15]:
 
 
+# Define QC columns
+qc_columns = [
+    "OrigActin_Saturated",
+    "OrigDNA_Saturated",
+    "OrigER_Saturated",
+    "OrigMito_Saturated",
+    "OrigPM_Saturated",
+    "OrigActin_Blur",
+    "OrigDNA_Blur",
+    "OrigER_Blur",
+    "OrigMito_Blur",
+    "OrigPM_Blur",
+]
+
+# Keep Plate column and QC columns
+qc_data = combined_df[["Metadata_Plate_Alias"] + qc_columns].copy()
+qc_data[qc_columns] = qc_data[qc_columns].astype(bool)
+
+# Get unique plates
+plates = sorted(
+    qc_data["Metadata_Plate_Alias"].unique(), key=lambda x: int(x.split("_")[-1])
+)
+n_plates = len(plates)
+
+# Force 2x2 layout
+rows, cols = 2, 2
+fig, axes = plt.subplots(rows, cols, figsize=(5 * cols, 5 * rows), squeeze=False)
+
+for i, plate in enumerate(plates):
+    plate_df = qc_data[qc_data["Metadata_Plate_Alias"] == plate]
+
+    # Separate saturation and blur
+    sat_df = plate_df[[c for c in qc_columns if c.endswith("_Saturated")]].copy()
+    blur_df = plate_df[[c for c in qc_columns if c.endswith("_Blur")]].copy()
+
+    # Remove suffixes
+    sat_df.columns = [c.replace("_Saturated", "") for c in sat_df.columns]
+    blur_df.columns = [c.replace("_Blur", "") for c in blur_df.columns]
+
+    # Compute failure rates per channel
+    sat_fail_rate = sat_df.mean() * 100
+    blur_fail_rate = blur_df.mean() * 100
+
+    heatmap_data = pd.DataFrame({"Saturation": sat_fail_rate, "Blur": blur_fail_rate})
+
+    r, c = divmod(i, cols)
+    sns.heatmap(
+        heatmap_data.T,
+        annot=True,
+        fmt=".1f",
+        cmap="Reds",
+        cbar=i == n_plates - 1,  # show colorbar only on last subplot
+        ax=axes[r, c],
+    )
+    axes[r, c].set_title(f"{plate}")
+    axes[r, c].set_xlabel("Channel")
+    axes[r, c].set_ylabel("QC Condition")
+
+# Hide any empty subplots
+for j in range(i + 1, rows * cols):
+    r, c = divmod(j, cols)
+    axes[r, c].axis("off")
+
+plt.tight_layout()
+plt.savefig(output_directory / "qc_failure_rates_heatmap_by_plate.png", dpi=500)
+plt.show()
+
+
+# In[16]:
+
+
+# Wells to include
+selected_wells = ["B02", "B05", "B08", "B11", "E02", "E05", "E08", "E11"]
+
+# Filter dataframe
+filtered_df = combined_df[combined_df["Metadata_Well"].isin(selected_wells)]
+
 # Plot distributions of PowerLogLogSlope per channel with blur thresholds
 channels = ["OrigActin", "OrigDNA", "OrigER", "OrigMito", "OrigPM"]
 
@@ -487,7 +564,7 @@ plt.figure(figsize=(18, 4))
 for i, channel in enumerate(channels, 1):
     plt.subplot(1, len(channels), i)
     sns.histplot(
-        combined_df[f"ImageQuality_PowerLogLogSlope_{channel}"],
+        filtered_df[f"ImageQuality_PowerLogLogSlope_{channel}"],
         bins=30,
         kde=True,
         color="mediumslateblue",
@@ -503,12 +580,12 @@ for i, channel in enumerate(channels, 1):
         plt.ylabel("")
     plt.legend([], [], frameon=False)  # Remove legend
 
-plt.suptitle("Distribution of PowerLogLogSlope for each channel")
+plt.suptitle("Distribution of PowerLogLogSlope for each channel (selected wells)")
 plt.tight_layout(rect=[0, 0, 1, 0.95])
 plt.show()
 
 
-# In[16]:
+# In[17]:
 
 
 # Find all FOVs that failed DNA blur QC
@@ -534,10 +611,10 @@ middle_examples = sorted_failed.iloc[indices][
 middle_examples
 
 
-# In[17]:
+# In[18]:
 
 
-# Find rows that are saturated for OrigMito and have no other saturation or blur failures
+# Columns for saturation and blur flags
 saturation_cols = [
     "OrigActin_Saturated",
     "OrigDNA_Saturated",
@@ -553,36 +630,36 @@ blur_cols = [
     "OrigPM_Blur",
 ]
 
-# mito saturated and no other saturation/blur flags
-mito_only_mask = (
-    combined_df["OrigMito_Saturated"]
-    & ~combined_df[[c for c in saturation_cols if c != "OrigMito_Saturated"]].any(
-        axis=1
-    )
-    & ~combined_df[blur_cols].any(axis=1)
+# Find rows that have OrigMito blur only (no other blur or saturation flags)
+mito_blur_only_mask = (
+    combined_df["OrigMito_Blur"]
+    & ~combined_df[[c for c in blur_cols if c != "OrigMito_Blur"]].any(axis=1)
+    & ~combined_df[saturation_cols].any(axis=1)
 )
 
-mito_only = combined_df[mito_only_mask].copy()
+mito_blur_only = combined_df[mito_blur_only_mask].copy()
 
-if mito_only.empty:
-    print(
-        "No rows that are saturated for OrigMito only (no other saturation or blur failures)."
-    )
+if mito_blur_only.empty:
+    print("No rows with OrigMito blur only (no other blur or saturation flags).")
 else:
-    print(f"Found {len(mito_only)} rows failing OrigMito saturation only.")
-    # sample up to 3 reproducibly
-    sample_n = mito_only.sample(n=min(3, len(mito_only)))
+    print(f"Found {len(mito_blur_only)} rows with OrigMito blur only.")
+    # Sample up to 3 reproducibly
+    sample_n = mito_blur_only.sample(n=min(3, len(mito_blur_only)))
     cols = [
         "Metadata_Plate",
         "Metadata_Well",
         "Metadata_Site",
-        "ImageQuality_PercentMaximal_OrigMito",
+        "ImageQuality_PowerLogLogSlope_OrigMito",
     ]
     display(sample_n[cols].reset_index(drop=True))
 
 
-# In[18]:
+# In[19]:
 
+
+import pathlib
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Base directory and platemap
 images_base_dir = pathlib.Path(
@@ -602,7 +679,6 @@ elif len(matches) > 1:
 search_base = matches[0]
 print(f"Search base set to: {search_base}")
 
-
 exts = [".tif", ".tiff", ".png", ".jpg", ".jpeg", ".ome"]
 keywords = ["d1", "mito", "origmito"]
 
@@ -619,7 +695,7 @@ for idx in range(min(3, len(rows))):
     image_paths.append(img)
     plates_found.append(plate_found)
 
-# Display found images
+# Display found images (brightened with gamma correction)
 found = [p for p in image_paths if p is not None]
 if not found:
     print("No matching Mito (d1) images found for the sampled rows.")
@@ -630,8 +706,16 @@ else:
         axes = [axes]
     for ax, p in zip(axes, found):
         try:
-            img = plt.imread(p)
-            ax.imshow(img, cmap="gray")
+            img = plt.imread(p).astype(float)
+
+            # Normalize 0-1 first
+            img_norm = (img - img.min()) / max(img.max() - img.min(), 1e-8)
+
+            # Apply gamma correction for brightening
+            gamma = 0.5  # <1 brightens image, >1 darkens
+            img_bright = np.power(img_norm, gamma)
+
+            ax.imshow(img_bright, cmap="gray")
         except Exception:
             ax.text(0.5, 0.5, f"Failed to read\n{p.name}", ha="center")
         ax.set_title(p.name, fontsize=9)
@@ -644,7 +728,7 @@ for i, (p, pl) in enumerate(zip(image_paths, plates_found), 1):
     print(f"{i}: {p if p is not None else 'NOT FOUND'} (Plate folder: {pl})")
 
 
-# In[19]:
+# In[20]:
 
 
 # --- Load all Image.csv ---
@@ -820,7 +904,7 @@ well_level_df_controls_pct.to_csv(output_path, index=False)
 print(f"Saved well-level percentage summary to {output_path}")
 
 
-# In[20]:
+# In[21]:
 
 
 # --- Aggregate well-level controls to plate + platemap level ---
