@@ -7,13 +7,14 @@
 
 # ## Import libraries
 
-# In[1]:
+# In[ ]:
 
 
 import pandas as pd
 import pathlib
 import re
 import json
+import numpy as np
 
 import seaborn as sns
 from upsetplot import from_indicators, plot
@@ -654,12 +655,8 @@ else:
     display(sample_n[cols].reset_index(drop=True))
 
 
-# In[19]:
+# In[ ]:
 
-
-import pathlib
-import numpy as np
-import matplotlib.pyplot as plt
 
 # Base directory and platemap
 images_base_dir = pathlib.Path(
