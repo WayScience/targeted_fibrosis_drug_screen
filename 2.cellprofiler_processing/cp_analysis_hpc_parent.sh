@@ -19,7 +19,7 @@ jupyter nbconvert --to=script --FilesWriter.build_directory=nbconverted/ *.ipynb
 batch_name="batch_1"
 
 # base directory for the corrected images
-data_dir="./Corrected_Images/${batch_name}"
+data_dir="../1.illumination_correction/Corrected_Images/${batch_name}"
 
 # count platemap folders (one level below batch folder)
 mapfile -t platemap_dirs < <(find "$data_dir" -mindepth 1 -maxdepth 1 -type d)
@@ -43,7 +43,7 @@ for plate_dir in "${plate_dirs[@]}"; do
         number_of_jobs=$(squeue -u "$USER" | wc -l)
     done
     # submit the child script with the full plate path
-    sbatch cp_analysis_hpc_child.sh --image_dir "$plate_dir"
+    sbatch cp_analysis_hpc_child.sh "$plate_dir"
 done
 
 conda deactivate
