@@ -1,4 +1,5 @@
 #!/bin/bash
+shopt -s globstar # enable ** globbing
 
 # initialize shell for conda
 conda init bash
@@ -13,13 +14,23 @@ valid_batches=("batch_1" "batch_2" "batch_3")
 # base path where batches live
 base_path="/media/18tbdrive/CFReT_screening_data/compound_screen"
 
+# output path for corrected images
+output_path="./Corrected_Images"
+
 # loop over the valid batches
 for batch_name in "${valid_batches[@]}"; do
     batch_dir="$base_path/$batch_name"
+    batch_output_dir="$output_path/$batch_name"
 
     # skip if the batch folder doesn't exist
     if [ ! -d "$batch_dir" ]; then
         echo "⚠️  Batch folder $batch_name does not exist, skipping."
+        continue
+    fi
+
+    # skip if the output folder already exists and has any TIFF/TIF files
+    if [ -d "$batch_output_dir" ] && find "$batch_output_dir" -type f -iregex '.*\.tif(f)?$' -print -quit | grep -q .; then
+        echo "🟡  Output folder for $batch_name already contains TIFF files, skipping."
         continue
     fi
 
@@ -33,3 +44,4 @@ done
 
 # deactivate conda environment
 conda deactivate
+echo "All done with illumination correction!"

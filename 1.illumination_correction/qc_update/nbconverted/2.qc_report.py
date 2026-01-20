@@ -7,7 +7,7 @@
 
 # ## Import libraries
 
-# In[ ]:
+# In[1]:
 
 
 import pandas as pd
@@ -73,7 +73,7 @@ def find_image_for_row_correct_plate(row, search_base, exts, keywords):
 
 
 # Platemap name for processing (e.g., platemap_#)
-platemap_name = "platemap_5"
+platemap_name = "platemap_11"
 
 # Set constants for prefixes we want to keep for the dataframes
 prefixes = ("Metadata_", "ImageQuality_PercentMaximal", "ImageQuality_PowerLogLogSlope")
@@ -655,7 +655,7 @@ else:
     display(sample_n[cols].reset_index(drop=True))
 
 
-# In[ ]:
+# In[19]:
 
 
 # Base directory and platemap

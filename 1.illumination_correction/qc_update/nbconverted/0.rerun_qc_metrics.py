@@ -33,7 +33,7 @@ github_url = "https://raw.githubusercontent.com/WayScience/cellpainting_predicts
 qc_df = pd.read_csv(github_url)
 
 
-# In[ ]:
+# In[3]:
 
 
 # Plot the distribution of PowerLogLogSlope for each channel to visualize where to cut off blurry images
@@ -55,7 +55,7 @@ plt.show()
 #   
 # We visualize these thresholds below on the plot to validate.
 
-# In[ ]:
+# In[4]:
 
 
 # Plot the distribution of PowerLogLogSlope for each channel to visualize where to cut off blurry images

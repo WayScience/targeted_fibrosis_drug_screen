@@ -1,54 +1,80 @@
 #!/bin/bash
 
-# initialize the correct shell for your machine to allow conda to work (see README for note on shell names)
+# --- SET THE BATCH TO PROCESS HERE ---
+BATCH="batch_3"
+export BATCH
+# -----------------------------------
+
+# initialize the correct shell for your machine to allow conda to work
 conda init bash
-# activate the preprocessing environment
 conda activate fibrosis_preprocessing_env
 
-# convert Jupyter notebook(s) to script
+# convert Jupyter notebook(s) to script (optional)
 jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
 
-# --- Harmonize CellProfiler outputs to parquet files ---
-for i in {1..4}; do
-    export PLATEMAP_LAYOUT="platemap_${i}"
-    CONVERTED_DIR="./data/${PLATEMAP_LAYOUT}/converted_profiles"
+# --- Harmonize with CytoTable for all layouts per batch ---
 
-    # Check if folder exists AND has any files/subfolders
-    if [ -d "$CONVERTED_DIR" ] && [ "$(find "$CONVERTED_DIR" -mindepth 1 -print -quit)" ]; then
-        echo "⚠️ Skipping ${PLATEMAP_LAYOUT}: ${CONVERTED_DIR} already exists and contains files."
-        echo "   CytoTable will not be rerun for this platemap."
-        continue  # Skip to the next platemap
+# Set base directory for converted data
+CONVERTED_DIR="./data/${BATCH}/"
+
+# Flag to determine if we need to run conversion
+RUN_CONVERT=false
+
+# Loop over each layout in the batch
+for layout_dir in "$CONVERTED_DIR"/*/; do
+    # Check if converted_profiles exists
+    converted_profiles_dir="${layout_dir}converted_profiles"
+    
+    # Count parquet files
+    parquet_count=0
+    if [ -d "$converted_profiles_dir" ]; then
+        parquet_count=$(find "$converted_profiles_dir" -maxdepth 1 -name "*.parquet" | wc -l)
     fi
 
-    echo ">>> Running analysis for ${PLATEMAP_LAYOUT}"
+    # If not 4 parquet files, mark to run conversion
+    if [ "$parquet_count" -ne 4 ]; then
+        RUN_CONVERT=true
+        echo "⚠️ Layout $(basename "$layout_dir") is missing parquet files ($parquet_count found)."
+    fi
+done
+
+# Run conversion if needed
+if [ "$RUN_CONVERT" = true ]; then
+    echo ">>> Running harmonization for ${BATCH}"
     python nbconverted/0.convert_cytotable.py
+else
+    echo "✅ All layouts have 4 parquet files. Skipping CytoTable conversion for ${BATCH}."
+fi
+
+# --- Single-cell quality control per layout/plate ---
+LAYOUT_PLATE_DIR="../2.cellprofiler_processing/cp_output/${BATCH}"
+
+# Make sure the papermill output folder exists
+mkdir -p ./papermill_outputs
+
+# Find all layout/plate combos (two levels down)
+LAYOUT_PLATE_LIST=$(find "$LAYOUT_PLATE_DIR" -mindepth 2 -maxdepth 2 -type d)
+
+for layout_plate_dir in $LAYOUT_PLATE_LIST; do
+    # Extract layout and plate names from the path
+    platemap_layout=$(basename $(dirname "$layout_plate_dir"))
+    plate_id=$(basename "$layout_plate_dir")
+    
+    echo ">>> Running single-cell QC for layout ${platemap_layout}, plate ${plate_id}"
+
+    # Run papermill for QC
+    papermill 1.sc_quality_control.ipynb \
+              ./papermill_outputs/1.sc_quality_control_${platemap_layout}_${plate_id}.ipynb \
+              -p platemap_layout "${platemap_layout}" \
+              -p plate_id "${plate_id}"
 done
 
-echo ">>> Harmonization of CellProfiler outputs complete for platemap_1 to platemap_4."
+# # --- Single-cell processing ---
+# echo ">>> Running single-cell processing for batch ${BATCH}"
+# python nbconverted/2.single_cell_processing.py
 
-# --- Single-cell quality control ---
-# loop through platemap_1 to platemap_4
-for i in {1..4}; do
-    export PLATEMAP_LAYOUT="platemap_${i}"
-    echo ">>> Running single-cell quality control for ${PLATEMAP_LAYOUT}"
-    python nbconverted/1.sc_quality_control.py
-done
-echo ">>> Single-cell quality control complete for platemap_1 to platemap_4."
+# # --- Aggregate single-cell profiles ---
+# echo ">>> Aggregating single-cell profiles for batch ${BATCH}"
+# python nbconverted/3.aggregate_single_cells.py
 
-# --- Single-cell processing ---
-# loop through platemap_1 to platemap_4
-for i in {1..4}; do
-    export PLATEMAP_LAYOUT="platemap_${i}"
-    echo ">>> Running single-cell processing for ${PLATEMAP_LAYOUT}"
-    python nbconverted/2.single_cell_processing.py
-done
-echo ">>> Single-cell processing complete for platemap_1 to platemap_4."
-
-# --- Aggregate single-cell profiles ---
-# loop through platemap_1 to platemap_4
-for i in {1..4}; do
-    export PLATEMAP_LAYOUT="platemap_${i}"
-    echo ">>> Aggregating single-cell profiles for ${PLATEMAP_LAYOUT}"
-    python nbconverted/3.aggregate_single_cells.py
-done
-echo ">>> Aggregation of single-cell profiles complete for platemap_1 to platemap_4."
+echo ">>> Processing complete for ${BATCH}"
