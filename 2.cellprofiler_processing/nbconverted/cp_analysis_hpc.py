@@ -28,7 +28,7 @@ except NameError:
 
 # ## Set paths and variables
 
-# In[3]:
+# In[ ]:
 
 
 # Batch name to process (always contains batch_ prefix then #)
@@ -93,7 +93,7 @@ output_dir.mkdir(exist_ok=True)
 
 # ## Create dictionary with all plate data to run CellProfiler in parallel
 
-# In[4]:
+# In[ ]:
 
 
 # set path to the analysis pipeline

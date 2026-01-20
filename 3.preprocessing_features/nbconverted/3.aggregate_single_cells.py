@@ -23,25 +23,26 @@ from pycytominer import aggregate, annotate
 
 # ## Set paths and variables
 
-# In[ ]:
+# In[2]:
 
 
-# Optional: set `PLATEMAP_LAYOUT` env var to process only a single platemap (e.g. 'platemap_1')
-platemap_to_process = os.environ.get("PLATEMAP_LAYOUT")
-# platemap_to_process = "platemap_1"  # for testing only
+# get the batch to process from environment variable
+batch_to_process = os.environ.get("BATCH", "batch_1")
+if batch_to_process is None:
+    raise ValueError(
+        "Please set the BATCH environment variable before running this script."
+    )
 
-# set base directory for where the SQLite files are located (should be local to repo)
-base_dir = pathlib.Path("../2.cellprofiler_processing/cp_output/").resolve(strict=True)
+# base directory where batches are located
+base_dir = pathlib.Path("./data/").resolve(strict=True)
 
 # Decide what to process
-if platemap_to_process:
-    print(f"Processing only {platemap_to_process}")
-    layouts = [platemap_to_process]
+if batch_to_process:
+    print(f"Processing {batch_to_process}")
+    batch_dirs = [base_dir / batch_to_process]
 else:
-    print("No specific layout set, processing all available platemaps")
-    layouts = [p.name for p in base_dir.glob("platemap_*") if p.is_dir()]
-
-pprint.pprint(layouts)
+    print("No specific batch set, processing all available batches")
+    batch_dirs = [p for p in base_dir.glob("batch_*") if p.is_dir()]
 
 
 # In[3]:
@@ -51,54 +52,91 @@ pprint.pprint(layouts)
 sc_fs_tag = "sc_feature_selected"
 agg_tag = "aggregated_post_fs"
 
-# setting up paths
-data_dir = pathlib.Path("./data").resolve(strict=True)
-sc_data_dir = pathlib.Path(
-    f"../3.preprocessing_features/data/{platemap_to_process}/single_cell_profiles"
-).resolve(strict=True)
+# batch to process
+batch_dir = pathlib.Path(f"./data/{batch_to_process}").resolve(strict=True)
 
-# setting metadata paths
-metadata_dir = pathlib.Path("../metadata/updated_platemaps").resolve(strict=True)
-updated_barcode_path = (metadata_dir / "updated_barcode_platemap.csv").resolve(
-    strict=True
-)
-all_profiles_paths = list(sc_data_dir.glob("*sc_feature_selected.parquet"))
+# find all layouts in this batch
+layout_dirs = [p for p in batch_dir.glob("platemap_*") if p.is_dir()]
 
-# output files paths
-aggregated_dir_path = (
-    data_dir / f"{platemap_to_process}/aggregated_profiles"
-).resolve()
-aggregated_dir_path.mkdir(exist_ok=True)
+all_profiles_paths = []
+unique_plate_names = set()
 
-# Extract the plate names from the file name
-plate_names = [
-    "_".join(parts[:2]) if len(parts) >= 2 else parts[0]
-    for parts in (file.stem.split("_") for file in all_profiles_paths)
-]
-print(plate_names)
+print(f"Batch: {batch_to_process} → {len(layout_dirs)} layouts found")
+
+for layout_dir in layout_dirs:
+    print(f"  Layout: {layout_dir.name}")
+
+    # the folder containing parquet files
+    sc_data_dir = layout_dir / "single_cell_profiles"
+    if not sc_data_dir.is_dir():
+        print(f"    ⚠️ No 'single_cell_profiles' folder found in {layout_dir.name}")
+        continue
+
+    parquet_files = list(sc_data_dir.glob(f"*{sc_fs_tag}.parquet"))
+    if not parquet_files:
+        print(f"    ⚠️ No feature-selected parquet files found in {layout_dir.name}")
+        continue
+
+    # extract plate names from file stems (assumes plate name is first part before _ or CARD prefix)
+    plate_names = []
+    for f in parquet_files:
+        parts = f.stem.split("_")
+        plate_name = "_".join(parts[:2])
+        plate_names.append(plate_name)
+        unique_plate_names.add(plate_name)
+
+    print(
+        f"    Found {len(parquet_files)} parquet files → unique plates: {set(plate_names)}"
+    )
+
+    # store all parquet files
+    all_profiles_paths.extend(parquet_files)
 
 
 # In[4]:
 
 
 # Load the barcode_platemap file
-barcode_platemap_df = pd.read_csv(updated_barcode_path)
+barcode_platemap_path = pathlib.Path(
+    "../metadata/updated_platemaps/updated_barcode_platemap.csv"
+)
+barcode_platemap_df = pd.read_csv(barcode_platemap_path)
 
-# Create plate info dictionary
-plate_info_dictionary = {
-    name: {
-        "profile_path": (sc_data_dir / f"{name}_sc_feature_selected.parquet").resolve(
-            strict=True
-        ),
-        "platemap_path": (
-            metadata_dir
-            / f"{barcode_platemap_df.loc[barcode_platemap_df['plate_barcode'] == name, 'platemap_file'].values[0]}.csv"
-        ).resolve(strict=True),
-    }
-    for name in plate_names
-}
+plate_info_dictionary = {}
 
-# View the dictionary to assess that all info is added correctly
+# Loop over each layout (platemap_#) in the batch
+for layout_dir in batch_dir.glob("platemap_*"):
+    sc_data_dir = layout_dir / "single_cell_profiles"
+
+    # Find all feature-selected parquet files for this layout
+    parquet_files = list(sc_data_dir.glob("*_sc_feature_selected.parquet"))
+
+    for f in parquet_files:
+        plate_name = "_".join(f.stem.split("_")[:2])  # extract unique plate id
+
+        # Find corresponding platemap CSV
+        platemap_row = barcode_platemap_df.loc[
+            barcode_platemap_df["plate_barcode"] == plate_name
+        ]
+        if platemap_row.empty:
+            raise ValueError(f"No platemap found for plate {plate_name}")
+
+        platemap_path = (
+            pathlib.Path("../metadata/updated_platemaps")
+            / f"{platemap_row['platemap_file'].values[0]}.csv"
+        ).resolve(strict=True)
+
+        # Add to dictionary
+        plate_info_dictionary[plate_name] = {
+            "profile_path": f.resolve(strict=True),
+            "platemap_path": platemap_path,
+            "output_dir": batch_dir
+            / layout_dir.name
+            / "aggregated_profiles",  # keeps each plate in the correct layout folder
+        }
+
+# Confirm we have all plates
+print(f"Number of plates to process: {len(plate_info_dictionary)}")
 pprint.pprint(plate_info_dictionary, indent=4)
 
 
@@ -129,6 +167,10 @@ for plate, info in plate_info_dictionary.items():
 
     # Load the platemap data
     platemap_df = pd.read_csv(info["platemap_path"])
+
+    # Set up output directory
+    aggregated_dir_path = info["output_dir"]
+    aggregated_dir_path.mkdir(parents=True, exist_ok=True)
 
     # Perform annotation to make sure that all metadata is added back
     annotate(

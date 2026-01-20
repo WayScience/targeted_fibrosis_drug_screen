@@ -17,6 +17,8 @@ dependencies:
   - conda-forge::umap-learn
   - conda-forge::matplotlib
   - conda-forge::upsetplot
+  - conda-forge::papermill
+  - conda-forge::tabulate
   - conda-forge::pre-commit=4.0
   - pip:
     - pycytominer

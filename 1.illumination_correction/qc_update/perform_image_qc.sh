@@ -14,18 +14,18 @@ jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
 # run Python script for IC processing
 python nbconverted/1.run_image_qc.py
 
-# deactivate the conda environment
-conda deactivate
-# activate preprocessing environment
-conda activate fibrosis_preprocessing_env
+# # deactivate the conda environment
+# conda deactivate
+# # activate preprocessing environment
+# conda activate fibrosis_preprocessing_env
 
-# run Python script for generating summary plots
-python nbconverted/2.qc_report.py
+# # run Python script for generating summary plots
+# python nbconverted/2.qc_report.py
 
-# deactivate the conda environment
-conda deactivate
-# activate the R environment
-conda activate fibrosis_r_env
+# # deactivate the conda environment
+# conda deactivate
+# # activate the R environment
+# conda activate fibrosis_r_env
 
-# run R script for generating platemaps with QC report
-Rscript nbconverted/3.qc_platemaps.r
+# # run R script for generating platemaps with QC report
+# Rscript nbconverted/3.qc_platemaps.r
