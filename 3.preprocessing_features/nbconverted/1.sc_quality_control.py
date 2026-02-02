@@ -174,29 +174,31 @@ print(plate_df["Image_FileName_DNA"].dropna().iloc[0])
 # In[8]:
 
 
-# Set current compartment as Nuclei
-compartment = "Nuclei"
+# Define available compartments
+compartments = ["Nuclei", "Cells"]
 
-# create an outline and orig mapping dictionary to map original images to outlines
-# note: we turn off formatting here to avoid the key-value pairing definition
-# from being reformatted by black, which is normally preferred.
-# fmt: off
-outline_to_orig_mapping = {
-    rf"{compartment}Outlines_{record['Image_Metadata_Plate']}_{record['Image_Metadata_Well']}_{record['Image_Metadata_Site']}.tiff": 
-    rf"{record['Image_Metadata_Plate']}_{record['Image_Metadata_Well']}{record['Image_Metadata_Site']}.*\.tiff"
-    for record in plate_df[
-        ["Image_Metadata_Plate", "Image_Metadata_Well", "Image_Metadata_Site"]
-    ].to_dict(orient="records")
+# Create a dictionary of mappings for each compartment
+mapping_dict = {
+    comp: {
+        rf"{comp}Outlines_{record['Image_Metadata_Plate']}_{record['Image_Metadata_Well']}_{record['Image_Metadata_Site']}.tiff": rf"{record['Image_Metadata_Plate']}_{record['Image_Metadata_Well']}{record['Image_Metadata_Site']}.*\.tiff"
+        for record in plate_df[
+            ["Image_Metadata_Plate", "Image_Metadata_Well", "Image_Metadata_Site"]
+        ].to_dict(orient="records")
+    }
+    for comp in compartments
 }
-
-# fmt: on
-
-next(iter(outline_to_orig_mapping.items()))
 
 
 # ## Detect over-segmented nuclei using shape and intensity
 
 # In[9]:
+
+
+# Set mapping for Nuclei compartment
+outline_to_orig_mapping = mapping_dict["Nuclei"]
+
+
+# In[10]:
 
 
 feature_thresholds_large_nuclei_high_int = {
@@ -241,7 +243,7 @@ else:
 
 # ## Detect mis-segmented background as nuclei
 
-# In[10]:
+# In[11]:
 
 
 # Set feature thresholds for low total intensity
@@ -275,10 +277,14 @@ low_intensity_outliers_cdf = CytoDataFrame(
 
 if not low_intensity_outliers_cdf.empty:
     print(low_intensity_outliers_cdf.shape)
-    # low_intensity_outliers_cdf.sort_values(
-    #     by="Nuclei_Intensity_IntegratedIntensity_DNA", ascending=False
-    # ).head(5).T
-    display(low_intensity_outliers_cdf.sample(n=5, random_state=0).T)
+    display(
+        low_intensity_outliers_cdf.sort_values(
+            by="Nuclei_Intensity_IntegratedIntensity_DNA", ascending=False
+        )
+        .head(5)
+        .T
+    )
+    # display(low_intensity_outliers_cdf.sample(n=5, random_state=0).T)
 else:
     print("No low intensity nuclei outliers detected.")
 
@@ -287,30 +293,14 @@ else:
 
 # ### Set up outlines for cells
 
-# In[11]:
-
-
-# Set current compartment as Cells
-compartment = "Cells"
-
-# create an outline and orig mapping dictionary to map original images to outlines
-# note: we turn off formatting here to avoid the key-value pairing definition
-# from being reformatted by black, which is normally preferred.
-# fmt: off
-outline_to_orig_mapping = {
-    rf"{compartment}Outlines_{record['Image_Metadata_Plate']}_{record['Image_Metadata_Well']}_{record['Image_Metadata_Site']}.tiff": 
-    rf"{record['Image_Metadata_Plate']}_{record['Image_Metadata_Well']}{record['Image_Metadata_Site']}.*\.tiff"
-    for record in plate_df[
-        ["Image_Metadata_Plate", "Image_Metadata_Well", "Image_Metadata_Site"]
-    ].to_dict(orient="records")
-}
-
-# fmt: on
-
-next(iter(outline_to_orig_mapping.items()))
-
-
 # In[12]:
+
+
+# Set mapping for Cells compartment
+outline_to_orig_mapping = mapping_dict["Cells"]
+
+
+# In[13]:
 
 
 # Set feature thresholds for small cells
@@ -352,7 +342,7 @@ else:
 
 # ## Filter outliers and save cleaned data for the plate
 
-# In[13]:
+# In[14]:
 
 
 # Find the outliers indices to determine failed single-cells
@@ -378,7 +368,7 @@ print(
 )
 
 
-# In[14]:
+# In[15]:
 
 
 # Set the default value to 'Single-cell passed QC'
@@ -436,7 +426,7 @@ plt.savefig(qc_fig_dir / f"{plate_id}_nuclei_outliers.png", dpi=500)
 plt.close()
 
 
-# In[15]:
+# In[16]:
 
 
 # Create KDE plot of all cells

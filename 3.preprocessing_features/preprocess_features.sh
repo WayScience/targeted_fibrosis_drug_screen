@@ -69,12 +69,22 @@ for layout_plate_dir in $LAYOUT_PLATE_LIST; do
               -p plate_id "${plate_id}"
 done
 
-# # --- Single-cell processing ---
-# echo ">>> Running single-cell processing for batch ${BATCH}"
-# python nbconverted/2.single_cell_processing.py
+# --- Single-cell processing per batch ---
+echo ">>> Running single-cell processing for batch ${BATCH}"
 
-# # --- Aggregate single-cell profiles ---
-# echo ">>> Aggregating single-cell profiles for batch ${BATCH}"
-# python nbconverted/3.aggregate_single_cells.py
+for layout_dir in "$CONVERTED_DIR"/*/; do
+    platemap_layout=$(basename "$layout_dir")
+    echo ">>> Processing single-cell data for layout ${platemap_layout}"
+    python nbconverted/2.single_cell_processing.py --batch "${BATCH}" --layout "${platemap_layout}"
+done
+
+# --- Aggregate single-cell profiles per batch ---
+echo ">>> Aggregating single-cell profiles for batch ${BATCH}"
+
+for layout_dir in "$CONVERTED_DIR"/*/; do
+    platemap_layout=$(basename "$layout_dir")
+    echo ">>> Aggregating single-cell profiles for layout ${platemap_layout}"
+    python nbconverted/3.aggregate_single_cells.py --batch "${BATCH}" --layout "${platemap_layout}"
+done
 
 echo ">>> Processing complete for ${BATCH}"

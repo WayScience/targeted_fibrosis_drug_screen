@@ -24,13 +24,15 @@ logging.getLogger().setLevel(logging.ERROR)
 
 # ## Set paths and variables
 
-# In[ ]:
+# In[2]:
 
 
 # get the batch to process from environment variable
 batch_to_process = os.environ.get("BATCH", "batch_1")
 if batch_to_process is None:
-    raise ValueError("Please set the BATCH environment variable before running this script.")
+    raise ValueError(
+        "Please set the BATCH environment variable before running this script."
+    )
 
 # base directory where batches are located
 base_dir = pathlib.Path("../2.cellprofiler_processing/cp_output/").resolve(strict=True)
@@ -52,7 +54,7 @@ for batch_dir in batch_dirs:
 pprint.pprint(batch_layouts)
 
 
-# In[ ]:
+# In[3]:
 
 
 # preset configurations based on typical CellProfiler outputs
