@@ -21,48 +21,34 @@ from pycytominer import annotate, normalize, feature_select
 
 # ## Set paths and variables
 
-# In[ ]:
+# In[2]:
 
 
-# Optional: set `PLATEMAP_LAYOUT` env var to process only a single platemap (e.g. 'platemap_1')
-platemap_to_process = os.environ.get("PLATEMAP_LAYOUT")
-# platemap_to_process = "platemap_1"  # for testing only
+# get the batch to process from environment variable
+batch_to_process = os.environ.get("BATCH", "batch_1")
+if batch_to_process is None:
+    raise ValueError(
+        "Please set the BATCH environment variable before running this script."
+    )
 
-# set base directory for where the SQLite files are located (should be local to repo)
-base_dir = pathlib.Path("../2.cellprofiler_processing/cp_output/").resolve(strict=True)
+# base directory where batches are located
+base_dir = pathlib.Path("./data/").resolve(strict=True)
 
 # Decide what to process
-if platemap_to_process:
-    print(f"Processing only {platemap_to_process}")
-    layouts = [platemap_to_process]
+if batch_to_process:
+    print(f"Processing {batch_to_process}")
+    batch_dirs = [base_dir / batch_to_process]
 else:
-    print("No specific layout set, processing all available platemaps")
-    layouts = [p.name for p in base_dir.glob("platemap_*") if p.is_dir()]
-
-pprint.pprint(layouts)
-
-
-# In[ ]:
-
-
-# Path to dir with cleaned data from single-cell QC
-converted_dir = pathlib.Path(f"./data/{platemap_to_process}/cleaned_profiles/").resolve(
-    strict=True
-)
-
-# output path for single-cell profiles
-output_dir = pathlib.Path(f"./data/{platemap_to_process}/single_cell_profiles")
-output_dir.mkdir(parents=True, exist_ok=True)
-
-# Extract the plate names from the file name
-plate_names = [
-    "_".join(parts[:2]) if len(parts) >= 2 else parts[0]
-    for parts in (file.stem.split("_") for file in converted_dir.glob("*.parquet"))
-]
-
+    print("No specific batch set, processing all available batches")
+    batch_dirs = [p for p in base_dir.glob("batch_*") if p.is_dir()]
 
 # path for platemap directory
 platemap_dir = pathlib.Path("../metadata/updated_platemaps/")
+
+# Load the barcode_platemap file
+barcode_platemap_df = pd.read_csv(
+    (platemap_dir / "updated_barcode_platemap.csv").resolve()
+)
 
 # operations to perform for feature selection
 feature_select_ops = [
@@ -75,47 +61,72 @@ feature_select_ops = [
 
 # ## Set dictionary with plates to process
 
-# In[4]:
+# In[3]:
 
 
-# Load the barcode_platemap file
-barcode_platemap_df = pd.read_csv(
-    pathlib.Path(f"{platemap_dir}/updated_barcode_platemap.csv").resolve()
-)
+plate_info_dictionary = {}
 
-# Create plate info dictionary
-plate_info_dictionary = {
-    name: {
-        "profile_path": (converted_dir / f"{name}_cleaned.parquet").resolve(
-            strict=True
-        ),
-        "platemap_path": (
-            platemap_dir
-            / f"{barcode_platemap_df.loc[barcode_platemap_df['plate_barcode'] == name, 'platemap_file'].values[0]}.csv"
-        ).resolve(strict=True),
-    }
-    for name in plate_names
-}
+# Loop over batches and layouts
+for batch_dir in batch_dirs:
+    layouts = [p for p in batch_dir.iterdir() if p.is_dir()]  # all layouts
+    for layout_dir in layouts:
+        cleaned_dir = layout_dir / "cleaned_profiles"
+        output_dir = layout_dir / "single_cell_profiles"
+        output_dir.mkdir(parents=True, exist_ok=True)
 
-# View the dictionary to assess that all info is added correctly
+        # Extract plate names from parquet files
+        parquet_files = list(cleaned_dir.glob("*.parquet"))
+        plate_names = [
+            "_".join(f.stem.split("_")[:2]) if len(f.stem.split("_")) >= 2 else f.stem
+            for f in parquet_files
+        ]
+
+        for name in plate_names:
+            # Find the corresponding parquet file
+            matching_files = [f for f in parquet_files if name in f.stem]
+            if not matching_files:
+                continue
+            profile_path = matching_files[0].resolve(strict=True)
+
+            # Find corresponding platemap CSV
+            platemap_row = barcode_platemap_df.loc[
+                barcode_platemap_df["plate_barcode"] == name
+            ]
+            if platemap_row.empty:
+                raise ValueError(f"No platemap found for plate {name}")
+            platemap_path = (
+                platemap_dir / f"{platemap_row['platemap_file'].values[0]}.csv"
+            ).resolve(strict=True)
+
+            # Add to dictionary
+            plate_info_dictionary[name] = {
+                "profile_path": profile_path,
+                "platemap_path": platemap_path,
+                "output_dir": output_dir,
+            }
+
+# View dictionary
+print("Number of plates to process:", len(plate_info_dictionary))
 pprint.pprint(plate_info_dictionary, indent=4)
 
 
 # ## Process data with pycytominer
 
-# In[5]:
+# In[4]:
 
 
 for plate, info in plate_info_dictionary.items():
-    print(f"Performing pycytominer pipeline for {plate}")
-    output_annotated_file = str(
-        pathlib.Path(f"{output_dir}/{plate}_sc_annotated.parquet")
-    )
-    output_normalized_file = str(
-        pathlib.Path(f"{output_dir}/{plate}_sc_normalized.parquet")
-    )
+    output_dir = info["output_dir"]
+    print("Performing preprocessing on", plate, output_dir)
+
+    # Use the output_dir from the dictionary for this specific plate
+    output_dir = info["output_dir"]
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    output_annotated_file = str(output_dir / f"{plate}_sc_annotated.parquet")
+    output_normalized_file = str(output_dir / f"{plate}_sc_normalized.parquet")
     output_feature_select_file = str(
-        pathlib.Path(f"{output_dir}/{plate}_sc_feature_selected.parquet")
+        output_dir / f"{plate}_sc_feature_selected.parquet"
     )
 
     profile_df = pd.read_parquet(info["profile_path"])
@@ -134,14 +145,10 @@ for plate, info in plate_info_dictionary.items():
     # Load the annotated parquet file to fix metadata columns names
     annotated_df = pd.read_parquet(output_annotated_file)
 
-    # Rename columns using the rename() function
-    column_name_mapping = {
-        "Image_Metadata_Site": "Metadata_Site",
-    }
+    # Rename columns
+    annotated_df.rename(columns={"Image_Metadata_Site": "Metadata_Site"}, inplace=True)
 
-    annotated_df.rename(columns=column_name_mapping, inplace=True)
-
-    # Save the modified DataFrame back to the same location
+    # Save back
     annotated_df.to_parquet(output_annotated_file, index=False)
 
     # Step 2: Normalization
@@ -150,23 +157,24 @@ for plate, info in plate_info_dictionary.items():
         method="standardize",
         output_file=output_normalized_file,
         output_type="parquet",
+        samples="Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'",
     )
 
-    print("Performing feature selection for", plate, "...")
     # Step 3: Feature selection
+    print("Performing feature selection for", plate, "...")
     feature_select(
-        output_normalized_file,
+        normalized_df,
         operation=feature_select_ops,
         na_cutoff=0,
         output_file=output_feature_select_file,
         output_type="parquet",
-    )
-    print(
-        f"Annotation, normalization, and feature selection have been performed for {plate}"
+        blocklist_file="./blocklist_features.txt",
     )
 
+    print(f"Annotation, normalization, and feature selection complete for {plate}")
 
-# In[6]:
+
+# In[5]:
 
 
 # Check output file
@@ -180,7 +188,7 @@ print(
 test_df.head(2)
 
 
-# In[7]:
+# In[6]:
 
 
 # Check output file

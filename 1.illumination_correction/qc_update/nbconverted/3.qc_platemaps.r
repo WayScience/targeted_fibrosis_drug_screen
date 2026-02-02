@@ -5,7 +5,7 @@ suppressPackageStartupMessages(library(platetools))
 suppressPackageStartupMessages(library(patchwork))
 
 # Set the name of batch being processed
-batch_name <- "platemap_8"
+batch_name <- "platemap_11"
 
 # Output directory for the plots
 output_directory <- file.path("./qc_plots", batch_name)

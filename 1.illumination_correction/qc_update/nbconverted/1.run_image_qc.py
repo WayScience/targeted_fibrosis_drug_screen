@@ -23,14 +23,14 @@ import cp_parallel
 
 # ### Set the constants
 
-# In[2]:
+# In[ ]:
 
 
 # set the run type for the parallelization
 run_name = "image_qc"
 
 # batch to process
-batch = "batch_2"
+batch = "batch_3"
 
 
 # ### Set up paths
