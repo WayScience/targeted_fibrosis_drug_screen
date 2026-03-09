@@ -61,7 +61,7 @@ feature_select_ops = [
 
 # ## Set dictionary with plates to process
 
-# In[3]:
+# In[ ]:
 
 
 plate_info_dictionary = {}
@@ -70,12 +70,12 @@ plate_info_dictionary = {}
 for batch_dir in batch_dirs:
     layouts = [p for p in batch_dir.iterdir() if p.is_dir()]  # all layouts
     for layout_dir in layouts:
-        cleaned_dir = layout_dir / "cleaned_profiles"
+        qc_labeled_dir = layout_dir / "qc_labeled_profiles"
         output_dir = layout_dir / "single_cell_profiles"
         output_dir.mkdir(parents=True, exist_ok=True)
 
         # Extract plate names from parquet files
-        parquet_files = list(cleaned_dir.glob("*.parquet"))
+        parquet_files = list(qc_labeled_dir.glob("*.parquet"))
         plate_names = [
             "_".join(f.stem.split("_")[:2]) if len(f.stem.split("_")) >= 2 else f.stem
             for f in parquet_files
@@ -112,7 +112,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 # ## Process data with pycytominer
 
-# In[4]:
+# In[ ]:
 
 
 for plate, info in plate_info_dictionary.items():
@@ -131,6 +131,11 @@ for plate, info in plate_info_dictionary.items():
 
     profile_df = pd.read_parquet(info["profile_path"])
     platemap_df = pd.read_csv(info["platemap_path"])
+
+    # Drop all rows in the profiles that failed any Metadata_cqc columns
+    cqc_columns = [col for col in profile_df.columns if col.startswith("Metadata_cqc")]
+    if cqc_columns:
+        profile_df = profile_df[~profile_df[cqc_columns].any(axis=1)]
 
     print("Performing annotation for", plate, "...")
     # Step 1: Annotation
@@ -157,13 +162,13 @@ for plate, info in plate_info_dictionary.items():
         method="standardize",
         output_file=output_normalized_file,
         output_type="parquet",
-        samples="Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'",
+        samples="all",
     )
 
     # Step 3: Feature selection
     print("Performing feature selection for", plate, "...")
     feature_select(
-        normalized_df,
+        profiles=normalized_df,
         operation=feature_select_ops,
         na_cutoff=0,
         output_file=output_feature_select_file,

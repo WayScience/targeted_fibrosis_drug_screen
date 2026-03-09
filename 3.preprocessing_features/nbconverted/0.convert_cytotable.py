@@ -159,7 +159,7 @@ print("All plates have been converted with cytotable!")
 # 
 # We will rename some of the columns (e.g., location centroids and cell count per FOV) to include Metadata prefix.
 
-# In[5]:
+# In[ ]:
 
 
 # List of columns to update with the "Metadata_" prefix
@@ -183,6 +183,10 @@ for platemap_name, plate_names in batch_info.items():
 
         # Load the DataFrame from the Parquet file
         df = pd.read_parquet(file_path)
+
+        # Ensure Metadata_Plate contains only one unique value (occurs due to failure acquiring plate during run)
+        if "Metadata_Plate" in df.columns and df["Metadata_Plate"].nunique() != 1:
+            df["Metadata_Plate"] = plate_name
 
         # Drop rows where "Metadata_ImageNumber" is NaN
         df = df.dropna(subset=["Metadata_ImageNumber"])
