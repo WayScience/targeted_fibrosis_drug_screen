@@ -210,11 +210,8 @@ plt.savefig(output_directory / "qc_failure_by_plate.png", dpi=600)
 plt.show()
 
 
-# In[11]:
+# In[7]:
 
-
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 channels = ["OrigActin", "OrigDNA", "OrigER", "OrigMito", "OrigPM"]
 channel_names = {
@@ -280,7 +277,7 @@ g = sns.catplot(
     palette=["steelblue", "indianred"],
     col_wrap=3,
     height=5,
-    aspect=1.5,
+    aspect=2.2,
     legend=False,
 )
 
@@ -302,10 +299,4 @@ for ax in g.axes.flatten():
 plt.tight_layout()
 plt.savefig(output_directory / "qc_failure_by_channel.png", dpi=600)
 plt.show()
-
-
-# In[ ]:
-
-
-
 

@@ -5,7 +5,7 @@
 # 
 # In this notebook, we perform single-cell quality control using coSMicQC. We filter the single cells by identifying outliers with z-scores, and use either combinations of features or one feature for each condition. 
 
-# In[ ]:
+# In[1]:
 
 
 import os
