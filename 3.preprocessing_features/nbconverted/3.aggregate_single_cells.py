@@ -1,24 +1,22 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# ## Aggregating feature-selected single cells
+# # Generate well-level bulk profiles profiles
 # 
-# In this notebook, we process single-cell feature-selected profiles to generate compound-level aggregated profiles for each plate using the pycytominer. 
-# The single-cell profiles are grouped by treatment (Metadata_treatment) and are saved as Parquet files in the aggregated_profiles directory. 
-# These aggregated profiles provide concise and interpretable data for downstream analysis at the compound level.
+# NOTE: We are normalizing the bulk-profile plates to the negative controls as the "standard".
 
 # ## Import libraries
 
 # In[1]:
 
 
+import os
 import pathlib
 import pprint
-import random
-import pandas as pd
-import os
 
-from pycytominer import aggregate, annotate
+import pandas as pd
+
+from pycytominer import aggregate, annotate, normalize, feature_select
 
 
 # ## Set paths and variables
@@ -44,163 +42,176 @@ else:
     print("No specific batch set, processing all available batches")
     batch_dirs = [p for p in base_dir.glob("batch_*") if p.is_dir()]
 
+# path for platemap directory
+platemap_dir = pathlib.Path("../metadata/updated_platemaps/")
+
+# Load the barcode_platemap file
+barcode_platemap_df = pd.read_csv(
+    (platemap_dir / "updated_barcode_platemap.csv").resolve()
+)
+
+# operations to perform for feature selection
+feature_select_ops = [
+    "variance_threshold",
+    "correlation_threshold",
+    "blocklist",
+    "drop_na_columns",
+]
+
+
+# ## Set dictionary with plates to process
 
 # In[3]:
 
 
-# parameters
-sc_fs_tag = "sc_feature_selected"
-agg_tag = "aggregated_post_fs"
+plate_info_dictionary = {}
 
-# batch to process
-batch_dir = pathlib.Path(f"./data/{batch_to_process}").resolve(strict=True)
+# Loop over batches and layouts
+for batch_dir in batch_dirs:
+    layouts = [p for p in batch_dir.iterdir() if p.is_dir()]  # all layouts
+    for layout_dir in layouts:
+        qc_labeled_dir = layout_dir / "qc_labeled_profiles"
+        output_dir = layout_dir / "bulk_profiles"
+        output_dir.mkdir(parents=True, exist_ok=True)
 
-# find all layouts in this batch
-layout_dirs = [p for p in batch_dir.glob("platemap_*") if p.is_dir()]
+        # Extract plate names from parquet files
+        parquet_files = list(qc_labeled_dir.glob("*.parquet"))
+        plate_names = [
+            "_".join(f.stem.split("_")[:2]) if len(f.stem.split("_")) >= 2 else f.stem
+            for f in parquet_files
+        ]
 
-all_profiles_paths = []
-unique_plate_names = set()
+        for name in plate_names:
+            # Find the corresponding parquet file
+            matching_files = [f for f in parquet_files if name in f.stem]
+            if not matching_files:
+                continue
+            profile_path = matching_files[0].resolve(strict=True)
 
-print(f"Batch: {batch_to_process} → {len(layout_dirs)} layouts found")
+            # Find corresponding platemap CSV
+            platemap_row = barcode_platemap_df.loc[
+                barcode_platemap_df["plate_barcode"] == name
+            ]
+            if platemap_row.empty:
+                raise ValueError(f"No platemap found for plate {name}")
+            platemap_path = (
+                platemap_dir / f"{platemap_row['platemap_file'].values[0]}.csv"
+            ).resolve(strict=True)
 
-for layout_dir in layout_dirs:
-    print(f"  Layout: {layout_dir.name}")
+            # Add to dictionary
+            plate_info_dictionary[name] = {
+                "profile_path": profile_path,
+                "platemap_path": platemap_path,
+                "output_dir": output_dir,
+            }
 
-    # the folder containing parquet files
-    sc_data_dir = layout_dir / "single_cell_profiles"
-    if not sc_data_dir.is_dir():
-        print(f"    ⚠️ No 'single_cell_profiles' folder found in {layout_dir.name}")
-        continue
+# View dictionary
+print("Number of plates to process:", len(plate_info_dictionary))
+pprint.pprint(plate_info_dictionary, indent=4)
 
-    parquet_files = list(sc_data_dir.glob(f"*{sc_fs_tag}.parquet"))
-    if not parquet_files:
-        print(f"    ⚠️ No feature-selected parquet files found in {layout_dir.name}")
-        continue
 
-    # extract plate names from file stems (assumes plate name is first part before _ or CARD prefix)
-    plate_names = []
-    for f in parquet_files:
-        parts = f.stem.split("_")
-        plate_name = "_".join(parts[:2])
-        plate_names.append(plate_name)
-        unique_plate_names.add(plate_name)
-
-    print(
-        f"    Found {len(parquet_files)} parquet files → unique plates: {set(plate_names)}"
-    )
-
-    # store all parquet files
-    all_profiles_paths.extend(parquet_files)
-
+# ## Process data with pycytominer
 
 # In[4]:
 
 
-# Load the barcode_platemap file
-barcode_platemap_path = pathlib.Path(
-    "../metadata/updated_platemaps/updated_barcode_platemap.csv"
-)
-barcode_platemap_df = pd.read_csv(barcode_platemap_path)
+for plate, info in plate_info_dictionary.items():
+    output_dir = info["output_dir"]
+    print("Performing preprocessing on", plate, output_dir)
 
-plate_info_dictionary = {}
+    # Use the output_dir from the dictionary for this specific plate
+    output_dir = info["output_dir"]
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-# Loop over each layout (platemap_#) in the batch
-for layout_dir in batch_dir.glob("platemap_*"):
-    sc_data_dir = layout_dir / "single_cell_profiles"
+    output_annotated_file = str(output_dir / f"{plate}_bulk_annotated.parquet")
+    output_normalized_file = str(output_dir / f"{plate}_bulk_normalized.parquet")
+    output_feature_select_file = str(
+        output_dir / f"{plate}_bulk_feature_selected.parquet"
+    )
 
-    # Find all feature-selected parquet files for this layout
-    parquet_files = list(sc_data_dir.glob("*_sc_feature_selected.parquet"))
+    profile_df = pd.read_parquet(info["profile_path"])
+    platemap_df = pd.read_csv(info["platemap_path"])
 
-    for f in parquet_files:
-        plate_name = "_".join(f.stem.split("_")[:2])  # extract unique plate id
+    # Drop all rows in the profiles that failed any Metadata_cqc columns
+    cqc_columns = [col for col in profile_df.columns if col.startswith("Metadata_cqc")]
+    if cqc_columns:
+        profile_df = profile_df[~profile_df[cqc_columns].any(axis=1)]
 
-        # Find corresponding platemap CSV
-        platemap_row = barcode_platemap_df.loc[
-            barcode_platemap_df["plate_barcode"] == plate_name
-        ]
-        if platemap_row.empty:
-            raise ValueError(f"No platemap found for plate {plate_name}")
+    # Step 1: Aggregate single-cell data to the well-level using the median
+    print("Performing aggregation for", plate, "...")
+    aggregated_df = aggregate(
+        population_df=profile_df,
+        operation="median",
+        strata=["Image_Metadata_Plate", "Image_Metadata_Well"],
+    )
 
-        platemap_path = (
-            pathlib.Path("../metadata/updated_platemaps")
-            / f"{platemap_row['platemap_file'].values[0]}.csv"
-        ).resolve(strict=True)
+    print("Performing annotation for", plate, "...")
+    # Step 2: Annotation
+    annotate(
+        profiles=aggregated_df,
+        platemap=platemap_df,
+        join_on=["Metadata_well_position", "Image_Metadata_Well"],
+        output_file=output_annotated_file,
+        output_type="parquet",
+    )
 
-        # Add to dictionary
-        plate_info_dictionary[plate_name] = {
-            "profile_path": f.resolve(strict=True),
-            "platemap_path": platemap_path,
-            "output_dir": batch_dir
-            / layout_dir.name
-            / "aggregated_profiles",  # keeps each plate in the correct layout folder
-        }
+    # Load the annotated parquet file to fix metadata columns names
+    annotated_df = pd.read_parquet(output_annotated_file)
 
-# Confirm we have all plates
-print(f"Number of plates to process: {len(plate_info_dictionary)}")
-pprint.pprint(plate_info_dictionary, indent=4)
+    # Rename columns
+    annotated_df.rename(columns={"Image_Metadata_Site": "Metadata_Site"}, inplace=True)
 
+    # Save back
+    annotated_df.to_parquet(output_annotated_file, index=False)
 
-# Next, we use the aggregation functionality provided by pycytominer to consolidate single-cell profiles into well-level summaries for each plate. This step groups the data by a specified metadata column and computes aggregate statistics by using the median.
+    # Step 2: Normalization
+    print("Performing feature selection for", plate, "...")
+    normalized_df = normalize(
+        profiles=output_annotated_file,
+        method="standardize",
+        output_file=output_normalized_file,
+        output_type="parquet",
+        samples="Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'",
+    )
+
+    # Step 3: Feature selection
+    print("Performing feature selection for", plate, "...")
+    feature_select(
+        profiles=normalized_df,
+        operation=feature_select_ops,
+        na_cutoff=0,
+        output_file=output_feature_select_file,
+        output_type="parquet",
+        blocklist_file="./blocklist_features.txt",
+    )
+
+    print(
+        f"Aggregation, annotation, normalization, and feature selection complete for {plate}"
+    )
+
 
 # In[5]:
 
 
-# Iterate over all profile file paths to process and aggregate data
-for plate, info in plate_info_dictionary.items():
-    # Load the current plate's feature selected profile data
-    plate_path = info["profile_path"]
+# Check output file
+test_df = pd.read_parquet(output_feature_select_file)
 
-    # Load the single-cell profile data from the current Parquet file into a DataFrame
-    profile_df = pd.read_parquet(plate_path)
-
-    # Move the Well column to the first position
-    profile_df = profile_df[
-        ["Metadata_Well"]
-        + [col for col in profile_df.columns if col != "Metadata_Well"]
-    ]
-
-    # Apply the aggregation function using pycytominer to aggregate at the well level
-    agg_df = aggregate(
-        profile_df,
-        strata=["Metadata_Well"],
-    )
-
-    # Load the platemap data
-    platemap_df = pd.read_csv(info["platemap_path"])
-
-    # Set up output directory
-    aggregated_dir_path = info["output_dir"]
-    aggregated_dir_path.mkdir(parents=True, exist_ok=True)
-
-    # Perform annotation to make sure that all metadata is added back
-    annotate(
-        profiles=agg_df,
-        platemap=platemap_df,
-        join_on=["Metadata_well_position", "Metadata_Well"],
-        output_type="parquet",
-        output_file=(aggregated_dir_path / f"{plate}_{agg_tag}.parquet").resolve(),
-    )
+print(test_df.shape)
+print("Plate:", test_df.Metadata_Plate.unique())
+print(
+    "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
+)
+test_df.head(2)
 
 
 # In[6]:
 
 
-# Get a list of Parquet files in the directory
-parquet_files = list(aggregated_dir_path.glob("*.parquet"))
+# Check output file
+test_df = pd.read_parquet(output_annotated_file)
 
-# Check if there are any files in the directory
-if parquet_files:
-    # Randomly select a file
-    random_file = random.choice(parquet_files)
-
-    # Load the randomly selected file
-    test_df = pd.read_parquet(random_file)
-else:
-    print(f"No Parquet files found in directory: {aggregated_dir_path}")
-
-# Display information
-print(f"Randomly selected file: {random_file.relative_to(pathlib.Path.cwd())}")
 print(test_df.shape)
+print("Plate:", test_df.Metadata_Plate.unique())
 print(
     "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
 )

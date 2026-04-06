@@ -9,6 +9,12 @@ conda activate fibrosis_preprocessing_env
 jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
 
 #############################
+# RUN  SINGLE CELL QC ANALYSIS
+#############################
+# run Python scripts for single cell QC analysis
+python nbconverted/4.sc_QC_results.py
+
+#############################
 # RUN UMAP ANALYSIS
 #############################
 # run Python scripts for UMAP analysis
