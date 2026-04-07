@@ -1,0 +1,684 @@
+{
+    "platemap_1": {
+        "CARD-CelIns-CX7_251023210001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.3
+            }
+        },
+        "CARD-CelIns-CX7_251124150001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.1
+            }
+        },
+        "CARD-CelIns-CX7_251125110001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.8
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.3
+            }
+        },
+        "CARD-CelIns-CX7_251126130001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        }
+    },
+    "platemap_2": {
+        "CARD-CelIns-CX7_251130110002": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.3
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.0
+            }
+        },
+        "CARD-CelIns-CX7_251201110001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.5
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.5
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_251201190001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.4
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.6
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.1
+            }
+        },
+        "CARD-CelIns-CX7_251202100001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.6
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.6
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.2
+            }
+        }
+    },
+    "platemap_3": {
+        "CARD-CelIns-CX7_251203170001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.4
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.0
+            }
+        },
+        "CARD-CelIns-CX7_251205100001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.25
+            }
+        },
+        "CARD-CelIns-CX7_251208160001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.6
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.15
+            }
+        },
+        "CARD-CelIns-CX7_251210180001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        }
+    },
+    "platemap_4": {
+        "CARD-CelIns-CX7_251211180001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_251212100001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.4
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.8
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.5
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1
+            }
+        },
+        "CARD-CelIns-CX7_251212180001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.55
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.0
+            }
+        },
+        "CARD-CelIns-CX7_251213150001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.6
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -0.9
+            }
+        }
+    },
+    "platemap_5": {
+        "CARD-CelIns-CX7_251215140002": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.4
+            }
+        },
+        "CARD-CelIns-CX7_251216110001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.4,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.5
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.65
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.2
+            }
+        },
+        "CARD-CelIns-CX7_251216180001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.3
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.5
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.25
+            }
+        },
+        "CARD-CelIns-CX7_251217120001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.7
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.15
+            }
+        }
+    },
+    "platemap_6": {
+        "CARD-CelIns-CX7_251217190001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.55
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.15
+            }
+        },
+        "CARD-CelIns-CX7_251219170001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.55
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.15
+            }
+        },
+        "CARD-CelIns-CX7_251220120001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -2
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_251229110001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -2
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        }
+    },
+    "platemap_7": {
+        "CARD-CelIns-CX7_251230110001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -2
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.5
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_251230180001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_251231100001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.4
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_260102130001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.8
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.25
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.1
+            }
+        }
+    },
+    "platemap_8": {
+        "CARD-CelIns-CX7_260103110001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.3
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.2
+            }
+        },
+        "CARD-CelIns-CX7_260103180001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.36
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.15
+            }
+        },
+        "CARD-CelIns-CX7_260104140001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.9
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.55
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.15
+            }
+        },
+        "CARD-CelIns-CX7_260105100001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.3
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.25
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.1
+            }
+        }
+    },
+    "platemap_9": {
+        "CARD-CelIns-CX7_260106160001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.55
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_260107160001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.55
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_260108130001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_260109070001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.1
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.5
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        }
+    },
+    "platemap_10": {
+        "CARD-CelIns-CX7_260110170001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.5
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.2
+            }
+        },
+        "CARD-CelIns-CX7_260111110001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_260112100001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.0
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_260113090001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 0.5
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.3
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        }
+    },
+    "platemap_11": {
+        "CARD-CelIns-CX7_260113180001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.5
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_260114100001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.8
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.7
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_260114180001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.6
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.8
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        },
+        "CARD-CelIns-CX7_260115110001": {
+            "oversegmented_nuclei": {
+                "Nuclei_AreaShape_Solidity": -0.5,
+                "Nuclei_Intensity_MassDisplacement_DNA": 1.0
+            },
+            "low_intensity_nuclei": {
+                "Nuclei_Intensity_MeanIntensity_DNA": -1.7
+            },
+            "undersegmented_cells": {
+                "Cells_AreaShape_Area": -1.45
+            },
+            "blurry_cells": {
+                "Cells_Granularity_1_Actin": -1.05
+            }
+        }
+    }
+}

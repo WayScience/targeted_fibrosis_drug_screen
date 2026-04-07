@@ -388,7 +388,7 @@ MeasureObjectSizeShape:[module_num:17|svn_version:'Unknown'|variable_revision_nu
     Calculate the advanced features?:No
 
 MeasureTexture:[module_num:18|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select images to measure:DNA, ER, Mito, PM
+    Select images to measure:Actin, DNA, ER, Mito, PM
     Select objects to measure:Cells, Cytoplasm, Nuclei
     Enter how many gray levels to measure the texture at:256
     Hidden:1
