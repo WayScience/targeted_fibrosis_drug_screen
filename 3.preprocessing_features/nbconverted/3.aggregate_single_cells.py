@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 # # Generate well-level bulk profiles profiles
 # 
@@ -6,7 +7,7 @@
 
 # ## Import libraries
 
-# In[ ]:
+# In[1]:
 
 
 import os
@@ -20,7 +21,7 @@ from pycytominer import aggregate, annotate, normalize, feature_select
 
 # ## Set paths and variables
 
-# In[ ]:
+# In[2]:
 
 
 # get the batch to process from environment variable
@@ -60,7 +61,7 @@ feature_select_ops = [
 
 # ## Set dictionary with plates to process
 
-# In[ ]:
+# In[3]:
 
 
 plate_info_dictionary = {}
@@ -72,6 +73,10 @@ for batch_dir in batch_dirs:
         qc_labeled_dir = layout_dir / "qc_labeled_profiles"
         output_dir = layout_dir / "bulk_profiles"
         output_dir.mkdir(parents=True, exist_ok=True)
+
+        # add spherize dir to dictionary
+        spherize_dir = layout_dir / "spherized_bulk_profiles"
+        spherize_dir.mkdir(parents=True, exist_ok=True)
 
         # Extract plate names from parquet files
         parquet_files = list(qc_labeled_dir.glob("*.parquet"))
@@ -102,6 +107,7 @@ for batch_dir in batch_dirs:
                 "profile_path": profile_path,
                 "platemap_path": platemap_path,
                 "output_dir": output_dir,
+                "spherize_output_dir": spherize_dir,
             }
 
 # View dictionary
@@ -111,7 +117,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 # ## Process data with pycytominer
 
-# In[ ]:
+# In[4]:
 
 
 for plate, info in plate_info_dictionary.items():
@@ -122,10 +128,18 @@ for plate, info in plate_info_dictionary.items():
     output_dir = info["output_dir"]
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # spherized output dir
+    spherized_output_dir = info["spherize_output_dir"]
+    spherized_output_dir.mkdir(parents=True, exist_ok=True)
+
+    # generating all output file paths using the output_dir from the dictionary
     output_annotated_file = str(output_dir / f"{plate}_bulk_annotated.parquet")
     output_normalized_file = str(output_dir / f"{plate}_bulk_normalized.parquet")
     output_feature_select_file = str(
         output_dir / f"{plate}_bulk_feature_selected.parquet"
+    )
+    output_spherized_file = str(
+        spherized_output_dir / f"{plate}_bulk_spherized.parquet"
     )
 
     profile_df = pd.read_parquet(info["profile_path"])
@@ -164,13 +178,14 @@ for plate, info in plate_info_dictionary.items():
     annotated_df.to_parquet(output_annotated_file, index=False)
 
     # Step 2: Normalization
-    print("Performing feature selection for", plate, "...")
+    print("Performing normalization for", plate, "...")
+    neg_control_query = "Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'"
     normalized_df = normalize(
         profiles=output_annotated_file,
         method="standardize",
         output_file=output_normalized_file,
         output_type="parquet",
-        samples="Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'",
+        samples=neg_control_query,
     )
 
     # Step 3: Feature selection
@@ -188,8 +203,43 @@ for plate, info in plate_info_dictionary.items():
         f"Aggregation, annotation, normalization, and feature selection complete for {plate}"
     )
 
+    # step 4: spherize profiles
+    print("Performing spherization for", plate, "...")
 
-# In[ ]:
+    # Load the feature-selected data to filter out zero-variance features from reference
+    fs_df = pd.read_parquet(output_feature_select_file)
+
+    # select metadata and feature columns for spherization
+    feature_cols = [col for col in fs_df.columns if not col.startswith("Metadata_")]
+    metadata_cols = [col for col in fs_df.columns if col.startswith("Metadata_")]
+
+    # remove zero-variance features from the reference population
+    # this will cause the spherization to fail if there are any features that have zero variance (or low)
+    reference_df = fs_df.query(neg_control_query)[feature_cols]
+    zero_var = reference_df.columns[reference_df.var() == 0].tolist()
+
+    if zero_var:
+        print(
+            f"Removed {len(zero_var)} zero-variance features from reference population: {zero_var}"
+        )
+        # Only keep features that are NOT in zero_var
+        cleaned_feature_cols = [f for f in feature_cols if f not in zero_var]
+        # Subset the dataframe to only include metadata and cleaned feature columns for spherization
+        fs_df = fs_df[metadata_cols + cleaned_feature_cols]
+
+    spherize_bulk_df = normalize(
+        profiles=fs_df,
+        method="spherize",
+        output_file=output_spherized_file,
+        output_type="parquet",
+        samples=neg_control_query,
+        spherize_center=True,
+        spherize_method="ZCA-cor",
+        spherize_epsilon=1e-6,
+    )
+
+
+# In[5]:
 
 
 # Check output file
@@ -215,3 +265,18 @@ print(
     "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
 )
 test_df.head(2)
+
+
+# In[7]:
+
+
+# check spherized output file
+test_df = pd.read_parquet(output_spherized_file)
+
+print(test_df.shape)
+print("Plate:", test_df.Metadata_Plate.unique())
+print(
+    "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
+)
+test_df.head(2)
+
