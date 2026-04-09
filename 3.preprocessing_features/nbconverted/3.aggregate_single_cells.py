@@ -73,11 +73,11 @@ for batch_dir in batch_dirs:
     for layout_dir in layouts:
         qc_labeled_dir = layout_dir / "qc_labeled_profiles"
         output_dir = layout_dir / "bulk_profiles"
-        output_dir.mkdir(parents=True, exist_ok=True)
+        output_spherize_dir = layout_dir / "spherized_bulk_profiles"
 
-        # add spherize dir to dictionary
-        spherize_dir = layout_dir / "spherized_bulk_profiles"
-        spherize_dir.mkdir(parents=True, exist_ok=True)
+        # Create directories once per layout
+        for d in [output_dir, output_spherize_dir]:
+            d.mkdir(parents=True, exist_ok=True)
 
         # Extract plate names from parquet files
         parquet_files = list(qc_labeled_dir.glob("*.parquet"))
@@ -108,7 +108,7 @@ for batch_dir in batch_dirs:
                 "profile_path": profile_path,
                 "platemap_path": platemap_path,
                 "output_dir": output_dir,
-                "spherize_output_dir": spherize_dir,
+                "spherize_output_dir": output_spherize_dir,
             }
 
 # View dictionary
@@ -119,7 +119,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 # ## Process data with pycytominer
 # 
 
-# In[ ]:
+# In[4]:
 
 
 for plate, info in plate_info_dictionary.items():
