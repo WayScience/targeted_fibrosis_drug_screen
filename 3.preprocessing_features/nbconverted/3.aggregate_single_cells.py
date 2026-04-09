@@ -17,6 +17,7 @@ import pprint
 import pandas as pd
 
 from pycytominer import aggregate, annotate, normalize, feature_select
+from pycytominer.cyto_utils import infer_cp_features
 
 
 # ## Set paths and variables
@@ -117,7 +118,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 # ## Process data with pycytominer
 
-# In[4]:
+# In[ ]:
 
 
 for plate, info in plate_info_dictionary.items():
@@ -126,11 +127,7 @@ for plate, info in plate_info_dictionary.items():
 
     # Use the output_dir from the dictionary for this specific plate
     output_dir = info["output_dir"]
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    # spherized output dir
     spherized_output_dir = info["spherize_output_dir"]
-    spherized_output_dir.mkdir(parents=True, exist_ok=True)
 
     # generating all output file paths using the output_dir from the dictionary
     output_annotated_file = str(output_dir / f"{plate}_bulk_annotated.parquet")
@@ -190,13 +187,14 @@ for plate, info in plate_info_dictionary.items():
 
     # Step 3: Feature selection
     print("Performing feature selection for", plate, "...")
-    feature_select(
+    global_fs_df = feature_select(
         profiles=normalized_df,
         operation=feature_select_ops,
         na_cutoff=0,
-        output_file=output_feature_select_file,
         output_type="parquet",
         blocklist_file="./blocklist_features.txt",
+        corr_threshold=0.95,
+        freq_cut=0.05,
     )
 
     print(
@@ -205,30 +203,29 @@ for plate, info in plate_info_dictionary.items():
 
     # step 4: spherize profiles
     print("Performing spherization for", plate, "...")
+    
+    # Apply feature selection to the negative control samples only to remove 
+    # low-to-zero variance features
+    neg_control_fs_df = feature_select(
+        profiles=global_fs_df,
+        operation=["variance_threshold", "blocklist"],
+        freq_cut=0.05,
+        unique_cut=0.01,
+        samples=neg_control_query,
+        blocklist_file="./blocklist_features.txt",
+    )
 
-    # Load the feature-selected data to filter out zero-variance features from reference
-    fs_df = pd.read_parquet(output_feature_select_file)
+    # Update the global feature-selected dataframe to only include the features 
+    # retained after filtering the negative controls for low-to-zero variance.
+    retained_cols = [col for col in global_fs_df.columns if col in neg_control_fs_df.columns]
+    global_fs_df = global_fs_df[retained_cols]
 
-    # select metadata and feature columns for spherization
-    feature_cols = [col for col in fs_df.columns if not col.startswith("Metadata_")]
-    metadata_cols = [col for col in fs_df.columns if col.startswith("Metadata_")]
+    # Save the final feature-selected profiles
+    global_fs_df.to_parquet(output_feature_select_file, index=False)
 
-    # remove zero-variance features from the reference population
-    # this will cause the spherization to fail if there are any features that have zero variance (or low)
-    reference_df = fs_df.query(neg_control_query)[feature_cols]
-    zero_var = reference_df.columns[reference_df.var() == 0].tolist()
-
-    if zero_var:
-        print(
-            f"Removed {len(zero_var)} zero-variance features from reference population: {zero_var}"
-        )
-        # Only keep features that are NOT in zero_var
-        cleaned_feature_cols = [f for f in feature_cols if f not in zero_var]
-        # Subset the dataframe to only include metadata and cleaned feature columns for spherization
-        fs_df = fs_df[metadata_cols + cleaned_feature_cols]
-
+    # Spherize using the negative controls as the reference population
     spherize_bulk_df = normalize(
-        profiles=fs_df,
+        profiles=global_fs_df,
         method="spherize",
         output_file=output_spherized_file,
         output_type="parquet",
@@ -236,7 +233,7 @@ for plate, info in plate_info_dictionary.items():
         spherize_center=True,
         spherize_method="ZCA-cor",
         spherize_epsilon=1e-6,
-    )
+    ) 
 
 
 # In[5]:
