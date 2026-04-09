@@ -224,7 +224,7 @@ for plate, info in plate_info_dictionary.items():
     global_fs_df.to_parquet(output_feature_select_file, index=False)
 
     # Spherize using the negative controls as the reference population
-    spherize_bulk_df = normalize(
+    normalize(
         profiles=global_fs_df,
         method="spherize",
         output_file=output_spherized_file,
