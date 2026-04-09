@@ -117,6 +117,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 
 # ## Process data with pycytominer
+# 
 
 # In[ ]:
 
@@ -204,28 +205,25 @@ for plate, info in plate_info_dictionary.items():
     # step 4: spherize profiles
     print("Performing spherization for", plate, "...")
     
-    # Apply feature selection to the negative control samples only to remove 
-    # low-to-zero variance features
-    neg_control_fs_df = feature_select(
+    # We perform a second feature selection focused specifically on the negative controls.
+    # This is required because spherization (whitening) uses the variation observed in 
+    # the control group to define the "baseline" for the whole experiment. 
+    # If a feature is "static" in the controls (identical feature value across all wells), 
+    # there is no baseline variance to measure against, which causes the spherization 
+    # calculation to fail.
+    feature_select(
         profiles=global_fs_df,
-        operation=["variance_threshold", "blocklist"],
+        operation="variance_threshold",
         freq_cut=0.05,
         unique_cut=0.01,
         samples=neg_control_query,
-        blocklist_file="./blocklist_features.txt",
+        output_file=output_feature_select_file,
+        output_type="parquet",
     )
-
-    # Update the global feature-selected dataframe to only include the features 
-    # retained after filtering the negative controls for low-to-zero variance.
-    retained_cols = [col for col in global_fs_df.columns if col in neg_control_fs_df.columns]
-    global_fs_df = global_fs_df[retained_cols]
-
-    # Save the final feature-selected profiles
-    global_fs_df.to_parquet(output_feature_select_file, index=False)
 
     # Spherize using the negative controls as the reference population
     normalize(
-        profiles=global_fs_df,
+        profiles=output_feature_select_file,
         method="spherize",
         output_file=output_spherized_file,
         output_type="parquet",
@@ -233,7 +231,7 @@ for plate, info in plate_info_dictionary.items():
         spherize_center=True,
         spherize_method="ZCA-cor",
         spherize_epsilon=1e-6,
-    ) 
+    )
 
 
 # In[5]:
@@ -255,20 +253,6 @@ test_df.head(2)
 
 # Check output file
 test_df = pd.read_parquet(output_annotated_file)
-
-print(test_df.shape)
-print("Plate:", test_df.Metadata_Plate.unique())
-print(
-    "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
-)
-test_df.head(2)
-
-
-# In[7]:
-
-
-# check spherized output file
-test_df = pd.read_parquet(output_spherized_file)
 
 print(test_df.shape)
 print("Plate:", test_df.Metadata_Plate.unique())
