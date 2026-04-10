@@ -119,7 +119,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 # ## Process data with pycytominer
 # 
 
-# In[4]:
+# In[ ]:
 
 
 for plate, info in plate_info_dictionary.items():
@@ -202,8 +202,6 @@ for plate, info in plate_info_dictionary.items():
         f"Aggregation, annotation, normalization, and feature selection complete for {plate}"
     )
 
-    # step 4: spherize profiles
-    print("Performing spherization for", plate, "...")
     
     # We perform a second feature selection focused specifically on the negative controls.
     # This is required because spherization (whitening) uses the variation observed in 
@@ -221,7 +219,9 @@ for plate, info in plate_info_dictionary.items():
         output_type="parquet",
     )
 
+    # step 4: spherize profiles
     # Spherize using the negative controls as the reference population
+    print("Performing spherization for", plate, "...")
     normalize(
         profiles=output_feature_select_file,
         method="spherize",
