@@ -17,6 +17,7 @@ import pprint
 import pandas as pd
 
 from pycytominer import aggregate, annotate, normalize, feature_select
+from pycytominer.cyto_utils import infer_cp_features
 
 
 # ## Set paths and variables
@@ -72,7 +73,11 @@ for batch_dir in batch_dirs:
     for layout_dir in layouts:
         qc_labeled_dir = layout_dir / "qc_labeled_profiles"
         output_dir = layout_dir / "bulk_profiles"
-        output_dir.mkdir(parents=True, exist_ok=True)
+        output_spherize_dir = layout_dir / "spherized_bulk_profiles"
+
+        # Create directories once per layout
+        for d in [output_dir, output_spherize_dir]:
+            d.mkdir(parents=True, exist_ok=True)
 
         # Extract plate names from parquet files
         parquet_files = list(qc_labeled_dir.glob("*.parquet"))
@@ -103,6 +108,7 @@ for batch_dir in batch_dirs:
                 "profile_path": profile_path,
                 "platemap_path": platemap_path,
                 "output_dir": output_dir,
+                "spherize_output_dir": output_spherize_dir,
             }
 
 # View dictionary
@@ -111,8 +117,9 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 
 # ## Process data with pycytominer
+# 
 
-# In[4]:
+# In[ ]:
 
 
 for plate, info in plate_info_dictionary.items():
@@ -121,12 +128,16 @@ for plate, info in plate_info_dictionary.items():
 
     # Use the output_dir from the dictionary for this specific plate
     output_dir = info["output_dir"]
-    output_dir.mkdir(parents=True, exist_ok=True)
+    spherized_output_dir = info["spherize_output_dir"]
 
+    # generating all output file paths using the output_dir from the dictionary
     output_annotated_file = str(output_dir / f"{plate}_bulk_annotated.parquet")
     output_normalized_file = str(output_dir / f"{plate}_bulk_normalized.parquet")
     output_feature_select_file = str(
         output_dir / f"{plate}_bulk_feature_selected.parquet"
+    )
+    output_spherized_file = str(
+        spherized_output_dir / f"{plate}_bulk_spherized.parquet"
     )
 
     profile_df = pd.read_parquet(info["profile_path"])
@@ -165,28 +176,61 @@ for plate, info in plate_info_dictionary.items():
     annotated_df.to_parquet(output_annotated_file, index=False)
 
     # Step 2: Normalization
-    print("Performing feature selection for", plate, "...")
+    print("Performing normalization for", plate, "...")
+    neg_control_query = "Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'"
     normalized_df = normalize(
         profiles=output_annotated_file,
         method="standardize",
         output_file=output_normalized_file,
         output_type="parquet",
-        samples="Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'",
+        samples=neg_control_query,
     )
 
     # Step 3: Feature selection
     print("Performing feature selection for", plate, "...")
-    feature_select(
+    global_fs_df = feature_select(
         profiles=normalized_df,
         operation=feature_select_ops,
         na_cutoff=0,
-        output_file=output_feature_select_file,
         output_type="parquet",
         blocklist_file="./blocklist_features.txt",
+        corr_threshold=0.95,
+        freq_cut=0.05,
     )
 
     print(
         f"Aggregation, annotation, normalization, and feature selection complete for {plate}"
+    )
+
+    
+    # We perform a second feature selection focused specifically on the negative controls.
+    # This is required because spherization (whitening) uses the variation observed in 
+    # the control group to define the "baseline" for the whole experiment. 
+    # If a feature is "static" in the controls (identical feature value across all wells), 
+    # there is no baseline variance to measure against, which causes the spherization 
+    # calculation to fail.
+    feature_select(
+        profiles=global_fs_df,
+        operation="variance_threshold",
+        freq_cut=0.05,
+        unique_cut=0.01,
+        samples=neg_control_query,
+        output_file=output_feature_select_file,
+        output_type="parquet",
+    )
+
+    # step 4: spherize profiles
+    # Spherize using the negative controls as the reference population
+    print("Performing spherization for", plate, "...")
+    normalize(
+        profiles=output_feature_select_file,
+        method="spherize",
+        output_file=output_spherized_file,
+        output_type="parquet",
+        samples=neg_control_query,
+        spherize_center=True,
+        spherize_method="ZCA-cor",
+        spherize_epsilon=1e-6,
     )
 
 
