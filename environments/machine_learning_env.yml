@@ -21,3 +21,4 @@ dependencies:
 - conda-forge::pre-commit=4.0
 - pip:
   - pycytominer
+  - polars
