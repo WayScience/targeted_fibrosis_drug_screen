@@ -40,6 +40,12 @@ models*
 # Ignore bash scripts to run full modules
 run_training_data.sh
 
+# Ignore datasplit folders which is a lot of files
+**/datasplits/*
+
+# Ignore model eval JSON files under plot dir which are just high level logs of single model eval runs
+**/eval_plots/**/*.json
+
 # PYTHON SPECIFIC IGNORED FILES
 #######################################
 # Byte-compiled / optimized / DLL files
