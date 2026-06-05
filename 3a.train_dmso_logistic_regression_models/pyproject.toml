@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cfret-ml"
+version = "0.0.0"
+description = "CFRET machine learning utilities"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+	"jupyter",
+	"jupyterlab",
+	"ipykernel",
+	"pandas",
+    "statsmodels",
+	"scipy",
+	"numpy",
+	"scikit-learn",
+	"seaborn",
+	"umap-learn",
+	"matplotlib",
+	"pyarrow",
+	"pre-commit",
+	"opencv-python",
+	"tifffile",
+	"polars",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
