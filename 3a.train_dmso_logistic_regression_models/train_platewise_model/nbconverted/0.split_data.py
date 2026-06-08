@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Split the DMSO single cells per each plate into training and testing for plate specific modeling of type label
+# # Split the DMSO single cells per each plate into training and testing splits
 
 # In[1]:
 
@@ -21,16 +21,15 @@ from cfret_ml.data_split_utils import (
 )
 
 
-# ## Set paths, variables and Helpers
+# ## Set paths and data split config variables
 
-# In[2]:
+# In[ ]:
 
 
 # Set random state for the whole notebook to ensure reproducibility
 random_state = 0
 random.seed(random_state)
 np.random.seed(random_state)
-k_fold_k = 5
 
 # Path to directory with feature selected profiles
 path_to_feature_selected_data = pathlib.Path().home() / "mnt" / "bandicoot" /\
@@ -56,10 +55,14 @@ datasplit_dir.mkdir(exist_ok=True, parents=True)
 
 # ## Iterate over plate feature selected data, write fold datasplit indices along with DMSO subset
 
-# In[3]:
+# In[ ]:
 
 
+# collect cell type classes from all plates to create a uniform encoding scheme across all plates in the end
+# this ensures all models predictions carry the same meaning.  
 cell_type_classes = []
+
+
 for batch_folder in batch_folders:
 
     print(f"Processing batch: {batch_folder.name}")
@@ -99,6 +102,9 @@ for batch_folder in batch_folders:
 
         cell_type_classes.extend(DMSO_df["Metadata_cell_type"].unique())
 
+        # Perform datasplit and document the split for reproducibility and transparency.
+        # This function performs stratified leave-group-out splitting
+        # The Kfold number here is automatically determined based on the number of groups in the minority class. 
         split = stratified_fold_split(
             DMSO_df, 
             group_col="Metadata_Well", 
@@ -113,6 +119,8 @@ for batch_folder in batch_folders:
                 "test_index": test_index.tolist(),
                 "seed": salted_seed
             }
+            # human-readable split summary for debugging and documentation
+            # processes, counts number of class and group assignments
             fold_record.update(split_summary(
                     DMSO_df, 
                     train_index, 
