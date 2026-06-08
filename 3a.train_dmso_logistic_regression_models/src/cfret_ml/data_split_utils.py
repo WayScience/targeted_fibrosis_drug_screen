@@ -74,7 +74,9 @@ def stratified_fold_split(
     and at least one group per class, keeping groups intact (not spanning
     across splits) while still ensuring representation.
 
-    :param df: the full dataframe to be split
+    :param df: the full dataframe of metadata, with or without profiles features, 
+        to be split, if training on specific condition is desired, then the input
+        should be pre-filtered to only contain that condition. 
     :param group_col: the column name in df that identifies groups (e.g. wells)
     :param class_col: the column name in df that identifies class labels (e.g. cell types)
     :param random_state: optional integer seed for reproducibility of the splits
