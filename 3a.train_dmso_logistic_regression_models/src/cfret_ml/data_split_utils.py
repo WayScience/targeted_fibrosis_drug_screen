@@ -87,6 +87,9 @@ def stratified_fold_split(
 
     rng = np.random.default_rng(random_state)
 
+    # count unique grouping labels and ensure class labels are unmixed within groups
+    # in context of this project, we expect replicate wells from the same plate
+    # to either contain all healthy or failing cells, never a mix of both. 
     group_label_counts = df.groupby(group_col)[class_col].nunique()
     mixed_groups = group_label_counts[group_label_counts > 1]
     if not mixed_groups.empty:
@@ -95,10 +98,13 @@ def stratified_fold_split(
             f"{mixed_groups.index.tolist()}"
         )
 
+    # expect at least 2 classes and at least one group per class to be able to split
     classes = df[class_col].dropna().unique().tolist()
     if len(classes) < 2:
         raise ValueError(f"Expected at least 2 classes in {class_col}, got {len(classes)}")
 
+    # for each class, get the unique groups that belong to that class and obtain
+    # random ordering for fold assignment
     class_groups: dict[str, np.ndarray] = {}
     for label in classes:
         groups = df.loc[df[class_col] == label, group_col].unique()
@@ -108,10 +114,22 @@ def stratified_fold_split(
         rng.shuffle(groups)
         class_groups[label] = groups
 
+    # Automatically determine the number of k fold splits based on the 
+    # group replicate number from minority class. 
+    # e.g. if class A has 3 groups and class B has 5 groups, this splitting
+    # function will produce 3-fold split with 1 heldout group from class A and 
+    # 1 heldout group from class B in each fold.
+    # In our dataset, we expect 4 replicates per class from the control wells
+    # so this usually results in 4-fold split. However, there can always be
+    # missing wells due to viability/segmentation problems upstream so
+    # we avoid hard-coding number 4 here.
     n_splits = min(len(groups) for groups in class_groups.values())
+    # if group number is less than class label number, then it is highly
+    # likely there is an error in metadata annotation so throw an
+    # error.  
     if n_splits < 1:
         raise ValueError("Not enough groups per class to create splits.")
-
+    
     splits: list[tuple[np.ndarray, np.ndarray]] = []
     for fold_idx in range(n_splits):
         test_groups: list[object] = []
