@@ -139,7 +139,13 @@ def stratified_fold_split(
 
         for label, groups in class_groups.items():
             test_group = groups[fold_idx]
+            # because this splitting is a leave one out style, testing group
+            # will always be a single scalar so collection of test groups is 
+            # done with append
             test_groups.append(test_group)
+            # training groups will be all other groups from the same class which
+            # can be one or more so the collection of training groups is done
+            # with list comprehension and extend
             train_groups.extend([g for g in groups if g != test_group])
 
         train_idx = df[df[group_col].isin(train_groups)].index.to_numpy()
