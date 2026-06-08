@@ -3,6 +3,8 @@
 
 # ## Train plate specific logistic regression models to predict failing or healthy cell status
 # 
+# NOTE: Healthy refers to healthy patient heart and failing refers to patient with dilated cardiomyopathy (heart disease).
+# 
 # Each training unit consumes a fold split of a plate and does the following:
 # 1. Perform complete quasi-separation check and remove features perfectly predictive of label.
 # 2. Perform iterative Recursive Feature Elimination (RFE) to cut down the number of features until the 1 in 10 or 20 rule is satisified per split and plate based on the minority class size.
