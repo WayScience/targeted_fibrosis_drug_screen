@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# ## Produce summary figure for all fold split training 
+# Assesses:
+# - Performance variation across plate level holdouts
+# - Performance across models trained on real and shuffled labels
+
 # In[1]:
 
 
@@ -11,20 +16,17 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
+# ## Pathing
+
 # In[2]:
 
 
 eval_plot_dir = pathlib.Path(".") / "eval_plots"
 if not eval_plot_dir.exists():
-    raise FileNotFoundError(f"Expected evaluation plot directory {eval_plot_dir} does not exist. Please run the notebook cells in order to generate model fitting results and save to this directory before attempting to visualize.")
-
-enriched_df = pd.read_csv(eval_plot_dir / "model_fit_summary.csv")
-if enriched_df.empty:
-    raise ValueError(f"Loaded model fit summary from {eval_plot_dir / 'model_fit_summary.csv'} is empty. Please check that the model fitting notebook ran successfully and saved results to this file before attempting to visualize.")
-
-
-# In[3]:
-
+    raise FileNotFoundError(
+        f"Expected evaluation plot directory {eval_plot_dir} does not exist. "
+        "Please run training notebook/script in order to generate model fitting "
+        "results and save to this directory before attempting to visualize.")
 
 # Path to directory with feature selected profiles
 path_to_feature_selected_data = pathlib.Path().home() / "mnt" / "bandicoot" /\
@@ -43,6 +45,19 @@ if not batch_folders:
         f"No batch folders found in {path_to_feature_selected_data}."
     )
 
+
+# ## Train results reading and data wrangling
+
+# In[3]:
+
+
+enriched_df = pd.read_csv(eval_plot_dir / "model_fit_summary.csv")
+if enriched_df.empty:
+    raise ValueError(
+        f"Loaded model fit summary from {eval_plot_dir / 'model_fit_summary.csv'} "
+        "is empty. Please check that the model fitting notebook ran successfully " 
+        "and saved results to this file before attempting to visualize.")
+
 batch2plate = []
 for batch_folder in batch_folders:
     feature_selected_files = list(
@@ -60,11 +75,6 @@ for batch_folder in batch_folders:
         })
 
 batch2plate_df = pd.DataFrame(batch2plate)
-display(batch2plate_df)
-
-
-# In[4]:
-
 
 enriched_df_batch = pd.merge(
     enriched_df,
@@ -76,7 +86,9 @@ enriched_df_batch['batch'] = enriched_df_batch['batch'].apply(lambda x: int(x.re
 display(enriched_df_batch)
 
 
-# In[5]:
+# ## Visualize train performance
+
+# In[4]:
 
 
 # Use enriched_df_batch to have the batch information available for everything
@@ -122,7 +134,7 @@ plt.tight_layout()
 plt.show()
 
 fig.savefig(
-    pathlib.Path("eval_plots") / "plate_metric_convergence_summary.png",
+    eval_plot_dir / "plate_metric_convergence_summary.png",
     dpi=300,
     bbox_inches="tight"
 )

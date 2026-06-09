@@ -52,7 +52,7 @@ eval_plot_dir.mkdir(exist_ok=True)
 
 # ## Parallelized model fitting due to RFE being really slow
 
-# In[3]:
+# In[ ]:
 
 
 encoding_path = datasplit_dir / "cell_type_encoding.json"
@@ -71,6 +71,8 @@ if not plate_level_splits:
 tasks = []
 split_rows = []
 for plate_dir in plate_level_splits:
+
+    # Load split files
     split_json_files = list(plate_dir.glob("*.json"))
     if not split_json_files:
         continue
@@ -83,14 +85,18 @@ for plate_dir in plate_level_splits:
     plate_repr = plate_dir.name
     print(f"Queueing tasks for plate {plate_repr} with {len(split_json_files)} splits")
 
+    # Make directories for fitted models and eval plots for this platemap
     plate_fitted_model_dir = fitted_model_dir / plate_repr
     plate_fitted_model_dir.mkdir(exist_ok=True)
 
     plate_eval_plot_dir = eval_plot_dir / plate_repr
     plate_eval_plot_dir.mkdir(exist_ok=True)
 
+    # Initialize train/test splits with None to ensure correct ordering by fold index
     train_splits = [None] * len(split_json_files)
     test_splits = [None] * len(split_json_files)
+
+    # Process each split JSON file to extract train/test indices and summary statistics
     for split_json in split_json_files:
         with open(split_json, "r") as f:
             split_info = json.load(f)
@@ -111,12 +117,13 @@ for plate_dir in plate_level_splits:
         }
         split_rows.append(split_row)
 
+    # Iterate through the splits in order of fold index to create model fitting tasks    
     for fold_idx, (train_idx, test_idx) in enumerate(zip(train_splits, test_splits)):
 
         if train_idx is None or test_idx is None:
             continue
 
-        # basic data prep
+        # Helper function to create the train/test profiles, labels and shuffled labels for a given split
         (
             train_profiles,
             test_profiles,
@@ -132,6 +139,7 @@ for plate_dir in plate_level_splits:
             label_col=label_col
         )        
 
+        # ensure both train and test sets have at least some representation of both classes 
         n_pos = train_labels.sum()
         n_neg = len(train_labels) - n_pos
         min_class = min(n_pos, n_neg)
@@ -145,6 +153,7 @@ for plate_dir in plate_level_splits:
             print(f"\tTest set missing a class in plate {plate_repr} fold {fold_idx}")
             continue
 
+        # Create two tasks for this split - one with original labels and one with shuffled labels
         for shuffle_status, labels in zip(
             ["original", "shuffled"],
             [train_labels, train_labels_shuffled]
@@ -162,6 +171,7 @@ for plate_dir in plate_level_splits:
                 "random_state": random_state
             })
 
+# Run all the model fitting tasks in parallel and collect results into a dataframe, then merge with the split summary statistics and save to CSV
 print(f"Executing {len(tasks)} model fitting tasks in parallel (n_jobs=8)...")
 results = Parallel(n_jobs=8)(delayed(process_model_fitting)(**kwargs) for kwargs in tasks)
 
