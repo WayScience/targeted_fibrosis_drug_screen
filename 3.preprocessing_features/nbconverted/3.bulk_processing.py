@@ -21,7 +21,7 @@ from pycytominer import aggregate, annotate, normalize, feature_select
 
 # ## Set paths and variables
 
-# In[ ]:
+# In[2]:
 
 
 # get the batch to process from environment variable
@@ -118,7 +118,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 # ## Process data with pycytominer
 # 
 
-# In[ ]:
+# In[4]:
 
 
 for plate, info in plate_info_dictionary.items():
@@ -218,13 +218,8 @@ for plate, info in plate_info_dictionary.items():
 # In[5]:
 
 
-# parameters
+# setting negative control query 
 neg_control_query = "Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'"
-negcon_fs = True
-
-
-# In[ ]:
-
 
 # Group annotated replicate profiles by plate map for pooled normalization and 
 # sphering outputs. 
@@ -256,7 +251,7 @@ for plate_barcode, info in plate_info_dictionary.items():
 normalized_replicate_plates = dict(sorted(normalized_replicate_plates.items()))
 
 
-# In[ ]:
+# In[6]:
 
 
 # Sphering step:
@@ -297,23 +292,22 @@ for plate_key, plate_info in normalized_replicate_plates.items():
     )
 
     # step 2b: Remove features with too little variation inside the exact control
-    # population used to sphere.
-    print(f"Feature selecting {plate_key} with variance threshold...")
-    feature_select(
-        profiles=feature_select_df,
+    # population used to fit spherization.
+    print(f"Feature selecting {plate_key} with variance threshold "
+          "within negative controls only...")
+    zero_negcon_var_fs_df = feature_select(
+        profiles=output_feature_select_file,
         operation="variance_threshold",
         freq_cut=0.05,
         unique_cut=0.01,
         samples=neg_control_query,
-        output_file=output_feature_select_file,
-        output_type="parquet",
     )
 
-    # step 3: Sphere/whiten all profiles using the pooled negative controls as the
+    # step 3: Spherize/whiten all profiles using the pooled negative controls as the
     # reference population.
     print(f"Sphering {plate_key} using pooled negative controls...")
     normalize(
-        profiles=output_feature_select_file,
+        profiles=zero_negcon_var_fs_df,
         method="spherize",
         samples=neg_control_query,
         spherize_center=True,
@@ -327,7 +321,7 @@ for plate_key, plate_info in normalized_replicate_plates.items():
     print(f"Saved spherized profiles to {output_spherized_file}")
 
 
-# In[ ]:
+# In[7]:
 
 
 # Check an example output file
