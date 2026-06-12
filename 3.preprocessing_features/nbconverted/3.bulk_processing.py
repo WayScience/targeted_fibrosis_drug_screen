@@ -217,7 +217,7 @@ neg_control_query = "Metadata_treatment == 'DMSO' and Metadata_cell_type == 'fai
 negcon_fs = True
 
 
-# In[6]:
+# In[ ]:
 
 
 # Group annotated replicate profiles by plate map for pooled normalization and 
@@ -230,7 +230,7 @@ for plate_barcode, info in plate_info_dictionary.items():
     plate_key = info["output_dir"].parent.name
 
     # Path to the well-level normalized profile generated in the previous step.
-    annotated_plate_path = (
+    normalized_plate_path = (
         info["output_dir"] / f"{plate_barcode}_bulk_normalized.parquet"
     )
 
@@ -243,7 +243,7 @@ for plate_barcode, info in plate_info_dictionary.items():
 
     # Add this physical replicate plate to its plate-map group.
     normalized_replicate_plates[plate_key]["replicate_paths"].append(
-        annotated_plate_path
+        normalized_plate_path
     )
 
 # sort based on plate key
