@@ -17,7 +17,6 @@ import pprint
 import pandas as pd
 
 from pycytominer import aggregate, annotate, normalize, feature_select
-from pycytominer.cyto_utils import infer_cp_features
 
 
 # ## Set paths and variables
@@ -119,7 +118,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 # ## Process data with pycytominer
 # 
 
-# In[ ]:
+# In[4]:
 
 
 for plate, info in plate_info_dictionary.items():
@@ -128,7 +127,6 @@ for plate, info in plate_info_dictionary.items():
 
     # Use the output_dir from the dictionary for this specific plate
     output_dir = info["output_dir"]
-    spherized_output_dir = info["spherize_output_dir"]
 
     # generating all output file paths using the output_dir from the dictionary
     output_annotated_file = str(output_dir / f"{plate}_bulk_annotated.parquet")
@@ -136,10 +134,8 @@ for plate, info in plate_info_dictionary.items():
     output_feature_select_file = str(
         output_dir / f"{plate}_bulk_feature_selected.parquet"
     )
-    output_spherized_file = str(
-        spherized_output_dir / f"{plate}_bulk_spherized.parquet"
-    )
 
+    # loading profiles
     profile_df = pd.read_parquet(info["profile_path"])
     platemap_df = pd.read_csv(info["platemap_path"])
 
@@ -156,14 +152,14 @@ for plate, info in plate_info_dictionary.items():
         strata=["Image_Metadata_Plate", "Image_Metadata_Well"],
     )
 
-    print("Performing annotation for", plate, "...")
     # Step 2: Annotation
+    print("Performing annotation for", plate, "...")
     annotate(
         profiles=aggregated_df,
         platemap=platemap_df,
         join_on=["Metadata_well_position", "Image_Metadata_Well"],
-        output_file=output_annotated_file,
         output_type="parquet",
+        output_file=output_annotated_file,
     )
 
     # Load the annotated parquet file to fix metadata columns names
@@ -172,87 +168,164 @@ for plate, info in plate_info_dictionary.items():
     # Rename columns
     annotated_df.rename(columns={"Image_Metadata_Site": "Metadata_Site"}, inplace=True)
 
-    # Save back
+    # Save annotated profiles back to parquet
     annotated_df.to_parquet(output_annotated_file, index=False)
 
-    # Step 2: Normalization
+    # Step 3: Normalization (mad robustize)
+    # Per plate normalization using the negative controls as the reference population
     print("Performing normalization for", plate, "...")
     neg_control_query = "Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'"
-    normalized_df = normalize(
-        profiles=output_annotated_file,
-        method="standardize",
-        output_file=output_normalized_file,
-        output_type="parquet",
+    normalize(
+        profiles=annotated_df,
+        method="mad_robustize",
         samples=neg_control_query,
+        output_type="parquet",
+        output_file=output_normalized_file,
     )
 
-    # Step 3: Feature selection
+    # Step 4: Per plate feature selection
     print("Performing feature selection for", plate, "...")
-    global_fs_df = feature_select(
-        profiles=normalized_df,
+    feature_select(
+        profiles=output_normalized_file,
         operation=feature_select_ops,
         na_cutoff=0,
-        output_type="parquet",
         blocklist_file="./blocklist_features.txt",
         corr_threshold=0.95,
         freq_cut=0.05,
+        output_type="parquet",
+        output_file=output_feature_select_file,
     )
 
     print(
         f"Aggregation, annotation, normalization, and feature selection complete for {plate}"
     )
 
-    
-    # We perform a second feature selection focused specifically on the negative controls.
-    # This is required because spherization (whitening) uses the variation observed in 
-    # the control group to define the "baseline" for the whole experiment. 
-    # If a feature is "static" in the controls (identical feature value across all wells), 
-    # there is no baseline variance to measure against, which causes the spherization 
-    # calculation to fail.
-    feature_select(
-        profiles=global_fs_df,
-        operation="variance_threshold",
-        freq_cut=0.05,
-        unique_cut=0.01,
-        samples=neg_control_query,
-        output_file=output_feature_select_file,
-        output_type="parquet",
-    )
 
-    # step 4: spherize profiles
-    # Spherize using the negative controls as the reference population
-    print("Performing spherization for", plate, "...")
-    normalize(
-        profiles=output_feature_select_file,
-        method="spherize",
-        output_file=output_spherized_file,
-        output_type="parquet",
-        samples=neg_control_query,
-        spherize_center=True,
-        spherize_method="ZCA-cor",
-        spherize_epsilon=1e-6,
-    )
-
+# ## Sphering profiles
+# 
+# We concatenate all normalized replicate plates of the same platemap and perform a two-layer feature selection procedure.
+# 
+# In the first layer, we apply feature selection to the concatenated normalized profiles.
+# In the second layer, we remove low variance features in the concatenated normalized profiles _for the DMSO control wells only_.
+# 
+# We then apply a sphering transform using this concatenated feature selected data.
+# We use the negative-control wells as the reference population to decorrelate the features to place profiles on a shared control-based covariance scale.
+# 
+# ### Parameters:
+# 
+# - `neg_control_query`: pandas query string that selects the control wells used to fit both standardization and sphering. Here, the reference population is failing-cell DMSO wells.
 
 # In[5]:
 
 
-# Check output file
-test_df = pd.read_parquet(output_feature_select_file)
+# setting negative control query 
+neg_control_query = "Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'"
 
-print(test_df.shape)
-print("Plate:", test_df.Metadata_Plate.unique())
-print(
-    "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
-)
-test_df.head(2)
+# Group annotated replicate profiles by plate map for pooled normalization and 
+# sphering outputs. 
+# {"platemap_1": {"replicate_paths": [path1, path2], "spherized_output_dir": path}, ...}
+normalized_replicate_plates = {}
+
+for plate_barcode, info in plate_info_dictionary.items():
+    # Example key: platemap_1, platemap_2, etc.
+    plate_key = info["output_dir"].parent.name
+
+    # Path to the well-level normalized profile generated in the previous step.
+    normalized_plate_path = (
+        info["output_dir"] / f"{plate_barcode}_bulk_normalized.parquet"
+    )
+
+    # Start a new group the first time we see this plate map.
+    if plate_key not in normalized_replicate_plates:
+        normalized_replicate_plates[plate_key] = {
+            "replicate_paths": [],
+            "spherized_output_dir": info["spherize_output_dir"],
+        }
+
+    # Add this physical replicate plate to its plate-map group.
+    normalized_replicate_plates[plate_key]["replicate_paths"].append(
+        normalized_plate_path
+    )
+
+# sort based on plate key
+normalized_replicate_plates = dict(sorted(normalized_replicate_plates.items()))
 
 
 # In[6]:
 
 
-# Check output file
-test_df = pd.read_parquet(output_annotated_file)
+# Sphering step:
+# Process each plate map after pooling its replicate plates.
+for plate_key, plate_info in normalized_replicate_plates.items():
+    replicate_paths = sorted(plate_info["replicate_paths"])
+    spherized_output_dir = plate_info["spherized_output_dir"]
+
+    # All replicate paths in this group share the same bulk output directory.
+    output_dir = replicate_paths[0].parent
+    spherized_output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Platemap-level outputs created from pooled replicate plates.
+    output_feature_select_file = (
+        output_dir / f"{plate_key}_replicate_bulk_feature_selected.parquet"
+    )
+    output_spherized_file = (
+        spherized_output_dir / f"{plate_key}_replicate_bulk_spherized.parquet"
+    )
+
+    # step 1: concat mad-normalized replicate plates before feature selection
+    print(f"Concatenating replicate plates for {plate_key}...")
+    concat_replicate_df = pd.concat(
+        [pd.read_parquet(path) for path in replicate_paths],
+        ignore_index=True,
+    ).reset_index(drop=True)
+
+    # step 2a: Apply feature selection on the pooled replicate plates to get a common 
+    # set of features for sphering.
+    print(f"Feature selecting {plate_key}...")
+    feature_select_df = feature_select(
+        profiles=concat_replicate_df,
+        operation=feature_select_ops,
+        na_cutoff=0,
+        blocklist_file="./blocklist_features.txt",
+        corr_threshold=0.95,
+        freq_cut=0.05
+    )
+
+    # step 2b: Remove features with too little variation inside the exact control
+    # population used to fit spherization.
+    print(f"Feature selecting {plate_key} with variance threshold "
+          "within negative controls only...")
+    zero_negcon_var_fs_df = feature_select(
+        profiles=output_feature_select_file,
+        operation="variance_threshold",
+        freq_cut=0.05,
+        unique_cut=0.01,
+        samples=neg_control_query,
+    )
+
+    # step 3: Spherize/whiten all profiles using the pooled negative controls as the
+    # reference population.
+    print(f"Sphering {plate_key} using pooled negative controls...")
+    normalize(
+        profiles=zero_negcon_var_fs_df,
+        method="spherize",
+        samples=neg_control_query,
+        spherize_center=True,
+        spherize_method="ZCA-cor",
+        spherize_epsilon=1e-6,
+        output_file=output_spherized_file,
+        output_type="parquet",
+    )
+
+    print(f"Saved feature-selected profiles to {output_feature_select_file}")
+    print(f"Saved spherized profiles to {output_spherized_file}")
+
+
+# In[7]:
+
+
+# Check an example output file
+test_df = pd.read_parquet(output_spherized_file)
 
 print(test_df.shape)
 print("Plate:", test_df.Metadata_Plate.unique())
