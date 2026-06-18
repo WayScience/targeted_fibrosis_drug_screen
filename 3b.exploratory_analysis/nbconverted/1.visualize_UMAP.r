@@ -130,7 +130,7 @@ for (plate in names(umap_cp_df)) {
 
     )
     
-    ggsave(output_file, umap_dose_gg, dpi = 500, height = 6, width = 4)
+    ggsave(output_file, umap_dose_gg, dpi = 500, height = 6, width = 3)
 }
 
 for (plate in names(umap_cp_df)) {
@@ -180,6 +180,12 @@ for (plate in names(umap_cp_df)) {
         df$Metadata_Pathway
     )
 
+    # determine which highlighted compounds are actually present
+    present_highlights <- intersect(
+        highlight_ids,
+        unique(df$Metadata_treatment)
+    )
+
     # Reorder Metadata_Pathway to put DMSO controls first
     df$Metadata_Pathway <- factor(
         df$Metadata_Pathway,
@@ -190,8 +196,21 @@ for (plate in names(umap_cp_df)) {
         )
     )
 
-    # dynamic point sizing (bigger for sparse UMAPs)
-    point_size <- if (is_bulk) 2.2 else 0.8
+    # dynamic point sizing
+    point_size <- if (is_bulk) 2.8 else 0.3
+
+    # Dynamic figure sizing based on number of facets
+    n_facets <- length(unique(df$Metadata_Pathway))
+
+    plot_height <- if (n_facets <= 13) {
+        10
+    } else if (n_facets <= 18) {
+        12
+    } else {
+        14
+    }
+
+    plot_width <- 10
 
     umap_dose_gg <- (
         ggplot(df, aes(x = UMAP0, y = UMAP1))
@@ -203,32 +222,52 @@ for (plate in names(umap_cp_df)) {
         )
 
         + facet_wrap(~Metadata_Pathway, ncol = 4)
+
         + theme_bw()
 
-        + scale_color_manual(values = c(
-            "healthy + DMSO" = "#004400",
-            "failing + DMSO" = "#a0004b",
-            "UCD-0001921" = "#1b9e77",
-            "UCD-0001812" = "#d95f02",
-            "UCD-0159268" = "#7570b3",
-            "UCD-0159406" = "#e7298a",
-            "UCD-0000841" = "#66a61e",
-            "UCD-0159442" = "#e6ab02",
-            "UCD-0001419" = "#a6761d",
-            "UCD-0159486" = "#984ea3",
-            "UCD-0159487" = "#e41a1c",
-            "Other" = "grey75"
-        ))
+        + scale_color_manual(
+            values = c(
+                "healthy + DMSO" = "#004400",
+                "failing + DMSO" = "#a0004b",
+                "UCD-0001921" = "#1b9e77",
+                "UCD-0001812" = "#d95f02",
+                "UCD-0159268" = "#7570b3",
+                "UCD-0159406" = "#e7298a",
+                "UCD-0000841" = "#66a61e",
+                "UCD-0159442" = "#e6ab02",
+                "UCD-0001419" = "#a6761d",
+                "UCD-0159486" = "#984ea3",
+                "UCD-0159487" = "#e41a1c",
+                "Other" = "grey75"
+            ),
+            breaks = present_highlights,
+            name = "Hit compound(s)"
+        )
+
+        + guides(
+            color = guide_legend(
+                override.aes = list(
+                    size = 4,
+                    alpha = 1
+                )
+            )
+        )
 
         + theme(
-            legend.position = "none",
+            legend.position = "right",
+            legend.title = element_text(size = 10),
+            legend.text = element_text(size = 8),
             strip.text = element_text(size = 10),
             strip.background = element_rect(fill = "grey90", color = NA),
             panel.spacing = unit(0.6, "lines")
         )
     )
 
-    ggsave(output_file, umap_dose_gg, dpi = 500, height = 10, width = 14)
+    ggsave(
+        output_file,
+        umap_dose_gg,
+        dpi = 600,
+        height = plot_height,
+        width = plot_width
+    )
 }
-
-
