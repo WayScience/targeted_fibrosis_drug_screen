@@ -4,40 +4,49 @@ suppressPackageStartupMessages(library(arrow))
 suppressPackageStartupMessages(library(ggExtra))
 
 # Set up output directory for UMAP figures
-dir.create("./figures", showWarnings = FALSE)
+output_fig_dir <- file.path("figures", "UMAPs")
+dir.create(output_fig_dir, recursive = TRUE, showWarnings = FALSE)
 
 # Set directory and file structure
 umap_dir <- "results"
-umap_files <- list.files(umap_dir, full.names = TRUE)
+umap_files <- list.files(umap_dir, pattern = "\\.parquet$", recursive = TRUE, full.names = TRUE)
 
-output_fig_dir <- "figures"
-plate_suffix <- ".parquet"
-
-# Define output figure paths
-output_umap_files <- setNames(
-  file.path(
-    output_fig_dir, 
-    stringr::str_remove(basename(umap_files), plate_suffix) # Remove only .parquet
-  ),
-  basename(umap_files) # Use full original filenames as names
+# Build a small table of UMAP files with their platemap directories
+umap_info <- data.frame(
+  umap_file = umap_files,
+  umap_basename = basename(umap_files),
+  platemap = basename(dirname(umap_files)),
+  stringsAsFactors = FALSE
 )
+
+# Make sure each platemap output directory exists
+for (platemap_name in unique(umap_info$platemap)) {
+  dir.create(file.path(output_fig_dir, platemap_name), recursive = TRUE, showWarnings = FALSE)
+}
+
+# Define output figure roots for each UMAP parquet file
+umap_info$output_root <- file.path(
+  output_fig_dir,
+  umap_info$platemap,
+  gsub("\\.parquet$", "", umap_info$umap_basename)
+)
+output_umap_files <- setNames(umap_info$output_root, umap_info$umap_file)
 
 # Print the mapping in a cleaner format
 cat("Mapping of input files to output paths:\n")
 formatted_output <- data.frame(
-  Original_File = basename(umap_files),
-  Output_Path = file.path(output_fig_dir, stringr::str_remove(basename(umap_files), plate_suffix))
+  UMAP_File = umap_info$umap_file,
+  Platemap = umap_info$platemap,
+  Output_Path = umap_info$output_root,
+  stringsAsFactors = FALSE
 )
 print(formatted_output, row.names = FALSE)
 
 # Load data
 umap_cp_df <- list()
 
-for (plate in names(output_umap_files)) {
-    # Find the umap file associated with the plate
-    umap_file <- umap_files[stringr::str_detect(umap_files, plate)]
-    
-    if (length(umap_file) > 0) {
+for (umap_file in umap_info$umap_file) {
+    if (file.exists(umap_file)) {
         # Load the umap data directly from Parquet file
         df <- arrow::read_parquet(umap_file)
          
@@ -48,28 +57,61 @@ for (plate in names(output_umap_files)) {
             dplyr::rename(Metadata_Cell_Count = n)
         
         # Merge the cell count data with the original dataframe
-        umap_cp_df[[plate]] <- df %>%
+        key <- umap_file
+        umap_cp_df[[key]] <- df %>%
             dplyr::left_join(cell_count_df, by = "Metadata_Well")
         
         # Update 'Endocrinology & Hormones' in Metadata_Pathway
-        umap_cp_df[[plate]] <- umap_cp_df[[plate]] %>%
+        umap_cp_df[[key]] <- umap_cp_df[[key]] %>%
             dplyr::mutate(Metadata_Pathway = dplyr::recode(Metadata_Pathway,
                                                            "Endocrinology & Hormones" = "Endocrinology &\nHormones"))
             
     } else {
-        message(paste("No file found for plate:", plate))
+        message(paste("No file found:", umap_file))
     }
 }
 
 # Inspect the first processed plate's data and print its dimensions
 if (length(umap_cp_df) > 0) {
-    plate_to_inspect <- names(umap_cp_df)[1]
-    df_to_inspect <- umap_cp_df[[plate_to_inspect]]
-    print(paste("Inspecting plate:", plate_to_inspect))
+    file_to_inspect <- names(umap_cp_df)[1]
+    df_to_inspect <- umap_cp_df[[file_to_inspect]]
+    print(paste("Inspecting file:", file_to_inspect))
     print(paste("Dimensions:", dim(df_to_inspect)[1], "rows x", dim(df_to_inspect)[2], "columns"))
     head(df_to_inspect)
 }
 
+
+umap_combined_bulk_files <- grep(
+    "UMAP_combined_bulk",
+    names(umap_cp_df),
+    value = TRUE,
+    ignore.case = TRUE
+)
+
+selected_key <- if (length(umap_combined_bulk_files) > 0) {
+    umap_combined_bulk_files[1]
+} else {
+    message("No UMAP_combined_bulk profile found; inspecting the first available UMAP profile instead.")
+    names(umap_cp_df)[1]
+}
+
+selected_df <- umap_cp_df[[selected_key]]
+
+cat("Inspecting UMAP profile:", selected_key, "\n")
+cat("Dimensions:", nrow(selected_df), "rows x", ncol(selected_df), "columns\n\n")
+
+cat("Column names:\n")
+print(names(selected_df))
+cat("\nFirst 6 rows:\n")
+print(head(selected_df))
+
+cat("\nCounts by Metadata_treatment_type:\n")
+print(selected_df %>%
+    dplyr::count(Metadata_treatment_type) %>%
+    dplyr::arrange(desc(n)))
+
+cat("\nUnique Metadata_Pathway values (up to 10):\n")
+print(unique(selected_df$Metadata_Pathway)[1:min(10, length(unique(selected_df$Metadata_Pathway)))])
 
 for (plate in names(umap_cp_df)) {
     # cell type UMAP
@@ -116,44 +158,77 @@ for (plate in names(umap_cp_df)) {
     ggsave(output_file, umap_gg, dpi = 500, height = 4, width = 6)
 }
 
-custom_palette <- c(
-  "Angiogenesis" = "#1b9e77",
-  "Apoptosis" = "#d95f02",
-  "DNA Damage" = "#7570b3",
-  "Endocrinology &\nHormones" = "#e7298a",
-  "Epigenetics" = "#66a61e",
-  "MAPK" = "#e6ab02",
-  "Metabolism" = "#a6761d",
-  "Neuronal Signaling" = "#667665",
-  "Others" = "#b3b3b3",
-  "PI3K/Akt/mTOR" = "#8dd3c7",
-  "Stem Cells & Wnt" = "#fb8072",
-  "GPCR & G Protein" = "#984ea3",
-  "healthy + DMSO" = "#004400",
-  "failing + DMSO" = "#a0004b"
+highlight_ids <- c(
+  "UCD-0001921","UCD-0001812","UCD-0159268","UCD-0159406",
+  "UCD-0000841","UCD-0159442","UCD-0001419","UCD-0159486","UCD-0159487"
 )
 
 for (plate in names(umap_cp_df)) {
-    # pathway UMAP
+
     output_file <- output_umap_files[[plate]]
     output_file <- paste0(output_file, "_pathway.png")
 
-    # Move control facets to the front
-    umap_cp_df[[plate]]$Metadata_Pathway <- factor(
-        umap_cp_df[[plate]]$Metadata_Pathway,
-        levels = c("healthy + DMSO", "failing + DMSO", setdiff(unique(umap_cp_df[[plate]]$Metadata_Pathway), c("healthy + DMSO", "failing + DMSO")))
+    df <- umap_cp_df[[plate]]
+
+    # detect bulk UMAP (for dot size scaling)
+    is_bulk <- any(grepl("UMAP_combined_bulk", colnames(df)))
+
+    # create combined color logic (highlights override everything else)
+    df$color_group <- ifelse(
+        df$Metadata_treatment %in% highlight_ids,
+        df$Metadata_treatment,
+        df$Metadata_Pathway
+    )
+
+    # Reorder Metadata_Pathway to put DMSO controls first
+    df$Metadata_Pathway <- factor(
+        df$Metadata_Pathway,
+        levels = c(
+            "healthy + DMSO",
+            "failing + DMSO",
+            setdiff(unique(df$Metadata_Pathway), c("healthy + DMSO", "failing + DMSO"))
         )
+    )
+
+    # dynamic point sizing (bigger for sparse UMAPs)
+    point_size <- if (is_bulk) 2.2 else 0.8
 
     umap_dose_gg <- (
-        ggplot(umap_cp_df[[plate]], aes(x = UMAP0, y = UMAP1))
+        ggplot(df, aes(x = UMAP0, y = UMAP1))
+
         + geom_point(
-            aes(color = Metadata_Pathway), size = 0.4, alpha = 0.4
+            aes(color = color_group),
+            size = point_size,
+            alpha = 0.7
         )
+
+        + facet_wrap(~Metadata_Pathway, ncol = 4)
         + theme_bw()
-        + facet_wrap(~ Metadata_Pathway, nrow=2)
-        + scale_color_manual(values = custom_palette) # Use the custom color palette
-        + theme(legend.position = "none")
+
+        + scale_color_manual(values = c(
+            "healthy + DMSO" = "#004400",
+            "failing + DMSO" = "#a0004b",
+            "UCD-0001921" = "#1b9e77",
+            "UCD-0001812" = "#d95f02",
+            "UCD-0159268" = "#7570b3",
+            "UCD-0159406" = "#e7298a",
+            "UCD-0000841" = "#66a61e",
+            "UCD-0159442" = "#e6ab02",
+            "UCD-0001419" = "#a6761d",
+            "UCD-0159486" = "#984ea3",
+            "UCD-0159487" = "#e41a1c",
+            "Other" = "grey75"
+        ))
+
+        + theme(
+            legend.position = "none",
+            strip.text = element_text(size = 10),
+            strip.background = element_rect(fill = "grey90", color = NA),
+            panel.spacing = unit(0.6, "lines")
+        )
     )
-    
-    ggsave(output_file, umap_dose_gg, dpi = 500, height = 4, width = 10)
+
+    ggsave(output_file, umap_dose_gg, dpi = 500, height = 10, width = 14)
 }
+
+

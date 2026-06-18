@@ -251,7 +251,7 @@ for plate_barcode, info in plate_info_dictionary.items():
 normalized_replicate_plates = dict(sorted(normalized_replicate_plates.items()))
 
 
-# In[6]:
+# In[8]:
 
 
 # Sphering step:
@@ -288,7 +288,9 @@ for plate_key, plate_info in normalized_replicate_plates.items():
         na_cutoff=0,
         blocklist_file="./blocklist_features.txt",
         corr_threshold=0.95,
-        freq_cut=0.05
+        freq_cut=0.05,
+        output_file=output_feature_select_file,
+        output_type="parquet",
     )
 
     # step 2b: Remove features with too little variation inside the exact control
@@ -296,7 +298,7 @@ for plate_key, plate_info in normalized_replicate_plates.items():
     print(f"Feature selecting {plate_key} with variance threshold "
           "within negative controls only...")
     zero_negcon_var_fs_df = feature_select(
-        profiles=output_feature_select_file,
+        profiles=feature_select_df,
         operation="variance_threshold",
         freq_cut=0.05,
         unique_cut=0.01,
@@ -321,7 +323,7 @@ for plate_key, plate_info in normalized_replicate_plates.items():
     print(f"Saved spherized profiles to {output_spherized_file}")
 
 
-# In[7]:
+# In[9]:
 
 
 # Check an example output file

@@ -121,6 +121,7 @@ plt.xticks(
     x, plate_summary["Metadata_plate_alias"], rotation=45, ha="right", fontsize=14
 )
 plt.yticks(fontsize=14)
+plt.ylim(0, plate_summary["total_cells"].max() * 1.2)  # add some space for text
 plt.xlabel("Plate Alias", fontsize=16, fontweight="bold")
 plt.ylabel("Cell Count", fontsize=16, fontweight="bold")
 plt.title("Single-Cell QC Results by Plate", fontsize=18, fontweight="bold")
