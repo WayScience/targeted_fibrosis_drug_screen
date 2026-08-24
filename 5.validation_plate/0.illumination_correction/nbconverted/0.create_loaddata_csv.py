@@ -16,7 +16,7 @@
 # | d4 | OrigDNA |
 # 
 
-# In[5]:
+# In[1]:
 
 
 from pathlib import Path
@@ -32,7 +32,7 @@ import loaddata_csv
 
 # ## Set regular expressions for how to find metadata in file and folder names
 
-# In[6]:
+# In[2]:
 
 
 # Set the expected image file naming pattern for well site and channel
@@ -55,7 +55,7 @@ plate_folder_pattern = re.compile(r"CARD-CelIns-CX7_[A-Za-z0-9_-]+")
 # 
 # Update `IMAGE_INPUTS` to point to the hit validation image directory.
 
-# In[ ]:
+# In[3]:
 
 
 repo_root = Path("..").resolve()
@@ -98,7 +98,7 @@ LOADDATA_COLUMNS = [
 
 # ## Build and save the LoadData CSV
 
-# In[8]:
+# In[4]:
 
 
 image_paths = loaddata_csv.collect_image_paths(

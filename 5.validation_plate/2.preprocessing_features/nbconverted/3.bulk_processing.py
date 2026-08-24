@@ -7,7 +7,7 @@
 
 # ## Import libraries
 
-# In[ ]:
+# In[1]:
 
 
 import pathlib
@@ -19,7 +19,7 @@ from pycytominer import aggregate, annotate, normalize, feature_select
 
 # ## Set paths and variables
 
-# In[ ]:
+# In[2]:
 
 
 # Set the plate to process
@@ -144,4 +144,3 @@ print(
     "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
 )
 test_df.head(2)
-

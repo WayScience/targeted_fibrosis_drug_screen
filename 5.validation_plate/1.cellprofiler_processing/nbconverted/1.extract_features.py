@@ -5,7 +5,7 @@
 
 # ## Import libraries
 
-# In[ ]:
+# In[1]:
 
 
 import pathlib
@@ -48,7 +48,7 @@ for plate in plate_names:
 
 # ## Create dictionary with all of the necessary paths to run CellProfiler analysis
 
-# In[ ]:
+# In[3]:
 
 
 # create plate info dictionary with all parts of the CellProfiler CLI command to run in parallel

@@ -6,7 +6,7 @@ In this module, we apply a modified version of the CellProfiler illumination cor
 
 The pipeline that we will be utilizing performs two tasks:
 
-1. Whole image quality control (QC) -> skip IC processing on an image set if it is too blur or over-saturated.
+1. Whole image quality control (QC) -> skip IC processing on an image set if it is over-saturated.
 2. Correct and save images for illumination errors
 
 ## Perform IC on data
