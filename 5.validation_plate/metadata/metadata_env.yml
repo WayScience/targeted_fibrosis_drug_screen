@@ -1,0 +1,12 @@
+name: fibrosis_metadata_env
+channels:
+  - conda-forge
+dependencies:
+  - conda-forge::python=3.10
+  - conda-forge::jupyter=1.0.0
+  - conda-forge::jupyterlab
+  - conda-forge::pandas
+  - conda-forge::openpyxl
+  - conda-forge::ipykernel
+  - conda-forge::nb_conda_kernels
+  - conda-forge::pre-commit=4.0

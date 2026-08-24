@@ -29,6 +29,7 @@ runinfo*
 
 # Ignore preprocessed parquet files since they are too large for GitHub
 3.preprocessing_features/data*
+5.validation_plate/2.preprocessing_features/data*
 
 # Ignore vscode specific files
 .vscode*

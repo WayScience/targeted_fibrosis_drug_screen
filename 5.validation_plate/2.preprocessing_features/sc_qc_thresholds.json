@@ -1,0 +1,21 @@
+{
+    "CARD-CelIns-CX7_260803130001": {
+        "oversegmented_nuclei": {
+            "Nuclei_AreaShape_Solidity": -0.8,
+            "Nuclei_Intensity_MassDisplacement_DNA": 2.2
+        },
+        "low_intensity_nuclei": {
+            "Nuclei_Intensity_MeanIntensity_DNA": -2
+        },
+        "undersegmented_cells": {
+            "Cells_AreaShape_Area": -1.7
+        },
+        "blurry_cells": {
+            "Cells_Granularity_1_Actin": -2.5
+        },
+        "missegmented_cells": {
+            "Cells_Intensity_MeanIntensity_Actin": -1,
+            "Cells_AreaShape_FormFactor": -1
+        }
+    }
+}
