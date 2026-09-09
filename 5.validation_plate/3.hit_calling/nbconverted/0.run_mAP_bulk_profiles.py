@@ -21,7 +21,7 @@ from copairs.matching import assign_reference_index
 from pycytominer.cyto_utils import infer_cp_features
 
 
-# In[2]:
+# In[ ]:
 
 
 # Set output directory for mAP scores
@@ -31,8 +31,8 @@ output_dir.mkdir(parents=True, exist_ok=True)
 # Set the directory containing the bulk profiles from validation plate
 screen_profiles_dir = pathlib.Path("../2.preprocessing_features/data/bulk_profiles").resolve(strict=True)
 
-# Find the one bulk feature selected profile file in the directory
-profile_files = list(screen_profiles_dir.glob("*bulk_feature_selected.parquet"))
+# Find the one bulk spherized profile file in the directory
+profile_files = list(screen_profiles_dir.glob("*bulk_spherized.parquet"))
 if len(profile_files) != 1:
     raise ValueError("Expected exactly one profile file in the directory")
 profile_file = profile_files[0]
