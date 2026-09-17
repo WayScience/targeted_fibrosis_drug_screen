@@ -10,5 +10,8 @@ jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
 
 # run the notebooks in order
 python nbconverted/0.run_mAP_bulk_profiles.py
+python nbconverted/1.train_logit_model.py
+python nbconverted/2.inference_logit.py
+python nbconverted/3.hit_calling.py
 
 echo "Hit calling complete."
