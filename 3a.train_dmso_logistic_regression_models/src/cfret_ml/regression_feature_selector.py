@@ -4,8 +4,8 @@ Module for feature selection functions for logistic regression models
 
 from typing import Literal
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 from sklearn.feature_selection import RFE
 from sklearn.linear_model import LogisticRegression
 
@@ -36,7 +36,6 @@ def fit_rfe_l1_logit_selector(
         C=C,
         max_iter=max_iter,
         class_weight="balanced",
-        l1_ratio=1.0,
     )
 
     selector = RFE(est, n_features_to_select=n_features, step=rfe_step)
@@ -49,7 +48,7 @@ def _compute_n_features(
     rule: Literal["one_in_ten", "one_in_twenty"],
     labels: np.ndarray,
 ) -> int:
-    
+
     return min(
         np.sum(labels == 1), np.sum(labels == 0)
     ) // (10 if rule == "one_in_ten" else 20)
