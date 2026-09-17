@@ -65,6 +65,7 @@ output_normalized_file = str(output_dir / f"{plate_id}_bulk_normalized.parquet")
 output_feature_select_file = str(
     output_dir / f"{plate_id}_bulk_feature_selected.parquet"
 )
+output_spherized_file = str(output_dir / f"{plate_id}_bulk_spherized.parquet")
 
 # loading profiles
 profile_df = pd.read_parquet(profile_path)
@@ -116,7 +117,7 @@ normalize(
 
 # Step 4: Feature selection
 print("Performing feature selection for", plate_id, "...")
-feature_select(
+feature_select_df = feature_select(
     profiles=output_normalized_file,
     operation=feature_select_ops,
     na_cutoff=0,
@@ -127,12 +128,53 @@ feature_select(
     output_file=output_feature_select_file,
 )
 
+# Step 4b: Remove features with too little variation inside the exact control
+# population used to fit spherization.
 print(
-    f"Aggregation, annotation, normalization, and feature selection complete for {plate_id}"
+    f"Feature selecting {plate_id} with variance threshold "
+    "within negative controls only..."
 )
+zero_negcon_var_fs_df = feature_select(
+    profiles=feature_select_df,
+    operation="variance_threshold",
+    freq_cut=0.05,
+    unique_cut=0.01,
+    samples=neg_control_query,
+)
+
+# Step 5: Spherize/whiten all profiles using the negative controls as the
+# reference population.
+print(f"Sphering {plate_id} using negative controls...")
+normalize(
+    profiles=zero_negcon_var_fs_df,
+    method="spherize",
+    samples=neg_control_query,
+    spherize_center=True,
+    spherize_method="ZCA-cor",
+    spherize_epsilon=1e-6,
+    output_file=output_spherized_file,
+    output_type="parquet",
+)
+
+print(f"Saved feature-selected profiles to {output_feature_select_file}")
+print(f"Saved spherized profiles to {output_spherized_file}")
 
 
 # In[4]:
+
+
+# Check an example output file
+test_df = pd.read_parquet(output_spherized_file)
+
+print(test_df.shape)
+print("Plate:", test_df.Metadata_Plate.unique())
+print(
+    "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
+)
+test_df.head(2)
+
+
+# In[5]:
 
 
 # Check an example output file
@@ -144,3 +186,4 @@ print(
     "Metadata columns:", [col for col in test_df.columns if col.startswith("Metadata_")]
 )
 test_df.head(2)
+
