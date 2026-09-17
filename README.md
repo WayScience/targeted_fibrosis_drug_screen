@@ -32,6 +32,7 @@ We utilize environments defined in the [environments folder](./environments/).
 2. [R environment](./environments/r_fibrosis_env.yml): This environment is specific to R, which we use for generating figures.
 3. [Preprocessing environment](./environments/preprocessing_env.yml): This environment installs preprocessing softwares (pycytominer, CytoTable, coSMicQC) to format the morphological readouts as single-cell profiles.
 4. [Machine learning environment](./environments/machine_learning_env.yml): This environment is used in the module for applying the pre-trained model on the data and evaluating the results for "hits" that could be reversing fibrosis.
+5. [Targeted fibrosis ML environment](./environments/targeted_fibrosis_ml_env.yml): This environment installs the `cfret_ml` helper package (from [3a.train_dmso_logistic_regression_models](./3a.train_dmso_logistic_regression_models/)) in editable mode, along with its pinned dependencies from that package's `pyproject.toml`. Requires Python ==3.11. Used for training and re-training the DMSO logistic regression models and any downstream notebook that imports from `cfret_ml`.
 
 These environments can be installed either via conda or mamba.
 Below is an example of how to install via the terminal.
