@@ -407,7 +407,9 @@ plt.show()
 compound_wells = treated_counts_aug.loc[
     :, ["Metadata_treatment", "Metadata_Well", "row_count"]
 ].copy()
-dmso_wells = control_counts_df.loc[:, ["Metadata_treatment", "Metadata_Well", "row_count"]].copy()
+dmso_wells = control_counts_df.loc[
+    :, ["Metadata_treatment", "Metadata_Well", "Metadata_cell_type", "row_count"]
+].copy()
 well_counts = pd.concat([dmso_wells, compound_wells], ignore_index=True)
 
 dmso_median = control_counts_df["row_count"].median()
@@ -437,11 +439,12 @@ order = ["DMSO"] + count_summary["Metadata_treatment"].tolist()
 x_pos = {name: i for i, name in enumerate(order)}
 
 styles = {
-    "DMSO control": {"color": "0.35", "marker": "s"},
+    "DMSO control (nonfailing)": {"color": "0.35", "marker": "s"},
+    "DMSO control (failing)": {"color": "0.35", "marker": "^"},
     "Passes toxicity filter": {"color": "steelblue", "marker": "o"},
     "Fails toxicity filter": {"color": "chocolate", "marker": "X"},
 }
-group_of = {"DMSO": "DMSO control"}
+group_of = {"DMSO": "DMSO control (nonfailing)"}
 for _, row in count_summary.iterrows():
     group_of[row["Metadata_treatment"]] = (
         "Passes toxicity filter" if row["passes_toxicity_filter"] else "Fails toxicity filter"
@@ -467,11 +470,20 @@ for name in order:
         dmso_wells["row_count"] if name == "DMSO"
         else compound_wells.loc[compound_wells["Metadata_treatment"] == name, "row_count"]
     )
-    xs = x_pos[name] + rng.uniform(-0.15, 0.15, size=len(counts))
-    ax_top.scatter(
-        xs, counts, s=45, marker=style["marker"], facecolor=style["color"],
-        edgecolor="white", linewidths=0.6, alpha=0.9, zorder=3,
-    )
+    if name == "DMSO":
+        point_groups = [
+            (dmso_wells.loc[dmso_wells["Metadata_cell_type"] == cell_type, "row_count"],
+             styles[f"DMSO control ({cell_type})"])
+            for cell_type in ["nonfailing", "failing"]
+        ]
+    else:
+        point_groups = [(counts, style)]
+    for group_counts, group_style in point_groups:
+        xs = x_pos[name] + rng.uniform(-0.15, 0.15, size=len(group_counts))
+        ax_top.scatter(
+            xs, group_counts, s=45, marker=group_style["marker"], facecolor=group_style["color"],
+            edgecolor="white", linewidths=0.6, alpha=0.9, zorder=3,
+        )
     ax_top.hlines(
         counts.mean(), x_pos[name] - 0.3, x_pos[name] + 0.3,
         color="black", linewidth=2, zorder=4,
@@ -513,7 +525,7 @@ handles = [
     for g, s in styles.items()
 ]
 handles += [median_line, cutoff_line]
-labels = [h.get_label() for h in handles[:3]] + [
+labels = list(styles) + [
     f"DMSO median = {dmso_median:.0f}",
     f"toxicity cutoff = {RELATIVE_COUNT_THRESHOLD} x DMSO median = {count_cutoff:.0f}",
 ]
