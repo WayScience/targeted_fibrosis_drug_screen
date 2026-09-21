@@ -278,6 +278,21 @@ for status in ["Other", "Fails toxicity threshold", "Hit"]:
         zorder=2,
     )
 
+label_left = {"J0391", "J0476"}  # labels placed left to avoid the mAP line and neighbouring points
+for _, row in plot_df.dropna(subset=["neg_log10_p_value", "mean_logit_score"]).iterrows():
+    on_left = row["Metadata_treatment"] in label_left
+    ax.annotate(
+        row["Metadata_treatment"],
+        (row["neg_log10_p_value"], row["mean_logit_score"]),
+        xytext=(-6 if on_left else 6, -12 if row["Metadata_treatment"] == "J0391" else 5),
+        textcoords="offset points",
+        ha="right" if on_left else "left",
+        fontsize=8,
+        color="black",
+        fontweight="bold" if row["point_status"] == "Hit" else "normal",
+        zorder=3,
+    )
+
 ax.axvline(map_threshold, color="red", linestyle="--", linewidth=1, zorder=1)
 ax.axhline(logit_threshold, color="blue", linestyle="--", linewidth=1, zorder=1)
 
@@ -319,7 +334,7 @@ ax.text(
     transform=ax.get_xaxis_transform(),
     color="red",
     rotation=90,
-    ha="left",
+    ha="right",
     va="bottom",
     fontsize=10,
 )
@@ -377,5 +392,135 @@ ax.legend(
 
 fig.tight_layout()
 fig.savefig(plot_dir / "hit_calling_2d.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+
+# ## Compare cell counts per compound to the toxicity calculation
+# 
+# Top panel: raw cell count for every well of each compound and the DMSO controls, with the DMSO median and the toxicity cutoff.
+# Bottom panel: the mean relative cell count (mean cell count / DMSO median) that is used for the toxicity filter.
+
+# In[9]:
+
+
+# Per-well cell counts for compounds and DMSO controls
+compound_wells = treated_counts_aug.loc[
+    :, ["Metadata_treatment", "Metadata_Well", "row_count"]
+].copy()
+dmso_wells = control_counts_df.loc[:, ["Metadata_treatment", "Metadata_Well", "row_count"]].copy()
+well_counts = pd.concat([dmso_wells, compound_wells], ignore_index=True)
+
+dmso_median = control_counts_df["row_count"].median()
+dmso_relative = dmso_wells["row_count"] / dmso_median
+count_cutoff = RELATIVE_COUNT_THRESHOLD * dmso_median
+
+# Summary per compound: raw counts vs the toxicity calculation
+count_summary = (
+    compound_wells.groupby("Metadata_treatment")["row_count"]
+    .agg(n_wells="count", mean_cell_count="mean", sd_cell_count="std")
+    .reset_index()
+    .merge(mean_relative_cell_count, on="Metadata_treatment", how="left")
+)
+count_summary["relative_toxicity"] = 1 - count_summary["mean_relative_cell_count"]
+count_summary["passes_toxicity_filter"] = (
+    count_summary["mean_relative_cell_count"] >= RELATIVE_COUNT_THRESHOLD
+)
+count_summary = count_summary.sort_values("mean_relative_cell_count").reset_index(drop=True)
+count_summary.to_csv(output_dir / "cell_count_vs_toxicity.csv", index=False)
+count_summary
+
+
+# In[10]:
+
+
+order = ["DMSO"] + count_summary["Metadata_treatment"].tolist()
+x_pos = {name: i for i, name in enumerate(order)}
+
+styles = {
+    "DMSO control": {"color": "0.35", "marker": "s"},
+    "Passes toxicity filter": {"color": "steelblue", "marker": "o"},
+    "Fails toxicity filter": {"color": "chocolate", "marker": "X"},
+}
+group_of = {"DMSO": "DMSO control"}
+for _, row in count_summary.iterrows():
+    group_of[row["Metadata_treatment"]] = (
+        "Passes toxicity filter" if row["passes_toxicity_filter"] else "Fails toxicity filter"
+    )
+
+rng = np.random.default_rng(0)
+fig, (ax_top, ax_bot) = plt.subplots(
+    2, 1, figsize=(10, 8), sharex=True, gridspec_kw={"height_ratios": [3, 2], "hspace": 0.08}
+)
+
+# Top: raw cell count per well
+for ax in (ax_top, ax_bot):
+    ax.grid(True, axis="y", linestyle="-", linewidth=0.5, color="0.9", zorder=0)
+    ax.set_axisbelow(True)
+
+median_line = ax_top.axhline(dmso_median, color="0.35", linestyle="-", linewidth=1, zorder=1)
+cutoff_line = ax_top.axhline(count_cutoff, color="black", linestyle="--", linewidth=1, zorder=1)
+
+for name in order:
+    group = group_of[name]
+    style = styles[group]
+    counts = (
+        dmso_wells["row_count"] if name == "DMSO"
+        else compound_wells.loc[compound_wells["Metadata_treatment"] == name, "row_count"]
+    )
+    xs = x_pos[name] + rng.uniform(-0.15, 0.15, size=len(counts))
+    ax_top.scatter(
+        xs, counts, s=45, marker=style["marker"], facecolor=style["color"],
+        edgecolor="white", linewidths=0.6, alpha=0.9, zorder=3,
+    )
+    ax_top.hlines(
+        counts.mean(), x_pos[name] - 0.3, x_pos[name] + 0.3,
+        color="black", linewidth=2, zorder=4,
+    )
+
+ax_top.set_ylabel("Cell count per well\n(black bar = mean across wells)")
+ax_top.set_ylim(bottom=0)
+
+# Bottom: the toxicity calculation (mean relative cell count)
+bar_values = [dmso_relative.mean()] + count_summary["mean_relative_cell_count"].tolist()
+for name, value in zip(order, bar_values):
+    style = styles[group_of[name]]
+    ax_bot.bar(
+        x_pos[name], value, width=0.6, color=style["color"], alpha=0.85, zorder=2,
+    )
+    ax_bot.text(
+        x_pos[name], value + 0.02, f"{1 - value:.2f}",
+        ha="center", va="bottom", fontsize=8, color="0.2", zorder=4,
+        bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.6, "alpha": 0.85},
+    )
+
+bot_cutoff = ax_bot.axhline(
+    RELATIVE_COUNT_THRESHOLD, color="black", linestyle="--", linewidth=1, zorder=3
+)
+ax_bot.legend(
+    [bot_cutoff], [f"relative count cutoff = {RELATIVE_COUNT_THRESHOLD}"],
+    loc="upper center", bbox_to_anchor=(0.45, 1.0), frameon=False,
+)
+ax_bot.set_ylabel(
+    "Mean relative cell count\n(mean cell count / DMSO median)\nlabel = relative toxicity"
+)
+ax_bot.set_ylim(0, max(bar_values) * 1.18)
+ax_bot.set_xticks(range(len(order)))
+ax_bot.set_xticklabels(order, rotation=45, ha="right")
+ax_bot.set_xlim(-0.6, len(order) - 0.4)
+
+handles = [
+    plt.Line2D([], [], linestyle="", marker=s["marker"], color=s["color"], markersize=8, label=g)
+    for g, s in styles.items()
+]
+handles += [median_line, cutoff_line]
+labels = [h.get_label() for h in handles[:3]] + [
+    f"DMSO median = {dmso_median:.0f}",
+    f"toxicity cutoff = {RELATIVE_COUNT_THRESHOLD} x DMSO median = {count_cutoff:.0f}",
+]
+ax_top.legend(
+    handles, labels, loc="lower center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 1.0)
+)
+
+fig.savefig(plot_dir / "cell_count_vs_toxicity.png", dpi=300, bbox_inches="tight")
 plt.show()
 
