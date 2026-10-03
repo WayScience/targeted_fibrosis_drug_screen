@@ -37,7 +37,7 @@ flowchart TD
     B --> C["<b>Normalize</b><br/>MAD-robustize across all plates<br/>ref: all samples<br/><code>pycytominer.normalize</code>"]
     C --> D["<b>Feature select</b><br/>variance · correlation · blocklist · drop-NA<br/><code>pycytominer.feature_select</code>"]
     D --> E[single_cell_profiles/]
-    C --> F["<b>Position correction</b><br/>subtract platemap-scaled well-position tilt<br/>fit: <code>position_correction/</code>"]
+    C --> F["<b>Position correction</b><br/>subtract platemap-scaled well-position tilt<br/>fit: <code>3a.position_correction/</code>"]
     F --> G["<b>Feature select</b><br/>same settings"]
     G --> H[single_cell_profiles/<br/>position corrected]
 ```
@@ -63,13 +63,22 @@ Starting from QC-labeled profiles, we use [pycytominer](https://github.com/cytom
 
 Output profiles are written to `single_cell_profiles/`.
 
-### Step 3 — Position correction ([`3.apply_position_correction.ipynb`](3.apply_position_correction.ipynb))
+### Step 3a — Estimate the position correction ([`3a.position_correction/`](3a.position_correction/))
 
 Where a well sits on the plate shifts its profile in a consistent, feature-specific direction (a "tilt") that is unrelated to the well contents.
-This step applies a saved estimate of that tilt to the normalized profiles from Step 2, then performs feature selection on the corrected profiles with the same settings as Step 2.
+We estimate the tilt from the normalized profiles of all plates in two notebooks, each with a script in `nbconverted/`:
 
-For every cell, we subtract `amplitude x tilt(row, column)` from the features.
-The tilt is shared across platemaps and the amplitude is specific to each platemap.
+- [`fit_position_correction.ipynb`](3a.position_correction/fit_position_correction.ipynb) estimates the tilt (shared across platemaps) and one amplitude per platemap, and writes `position_correction_fit.npz` along with diagnostics.
+- [`validate_position_correction.ipynb`](3a.position_correction/validate_position_correction.ipynb) tests the correction on held-out platemaps.
+
+This follows the same pattern as `optimize_thresholds_noteboooks/` for QC thresholds: the analysis notebooks derive a parameter file that is committed, and the numbered step applies it.
+Rerun the fit whenever the normalized profiles change.
+
+### Step 3b — Apply the position correction ([`3b.apply_position_correction.ipynb`](3b.apply_position_correction.ipynb))
+
+This step applies the saved fit to the normalized profiles from Step 2, then performs feature selection on the corrected profiles with the same settings as Step 2.
+
+For every cell, we subtract `amplitude x tilt(row, column)` from the features, where the amplitude is specific to the platemap.
 All cells in a well are shifted by the same amount, and controls are corrected like all other wells.
 
 For each plate, the step reads `<plate>_sc_normalized.parquet` and writes two files to `single_cell_profiles/`:
@@ -79,13 +88,7 @@ For each plate, the step reads `<plate>_sc_normalized.parquet` and writes two fi
 
 The uncorrected `<plate>_sc_feature_selected.parquet` from Step 2 is left unchanged.
 
-The correction is estimated in [`position_correction/`](position_correction/), which follows the same pattern as `optimize_thresholds_noteboooks/` for QC thresholds: the analysis notebooks derive a parameter file that is committed, and the numbered step applies it.
-
-- [`fit_position_correction.ipynb`](position_correction/fit_position_correction.ipynb) estimates the tilt and platemap amplitudes from all plates and writes `position_correction_fit.npz`.
-- [`validate_position_correction.ipynb`](position_correction/validate_position_correction.ipynb) tests the correction on held-out platemaps.
-
-When running the pipeline on new profiles, run Step 2, then `fit_position_correction.ipynb`, then Step 3.
-Rerun the fit whenever the normalized profiles change.
+When running the pipeline on new profiles, run Step 2, then the notebooks in Step 3a, then Step 3b.
 
 ---
 

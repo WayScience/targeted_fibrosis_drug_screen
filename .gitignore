@@ -32,7 +32,7 @@ runinfo*
 5.validation_plate/2.preprocessing_features/data*
 
 # Ignore the cached well-level summary used to fit the position correction
-3.preprocessing_features/position_correction/well_medians.parquet
+3.preprocessing_features/3a.position_correction/well_medians.parquet
 
 # Ignore vscode specific files
 .vscode*
