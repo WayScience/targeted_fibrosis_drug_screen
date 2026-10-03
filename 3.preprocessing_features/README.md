@@ -29,7 +29,7 @@ source preprocess_features.sh
 
 ## Single-cell processing
 
-Single-cell processing spans three steps, each implemented in a separate notebook:
+Single-cell processing spans four steps, each implemented in a separate notebook:
 
 ```mermaid
 flowchart TD
@@ -37,6 +37,9 @@ flowchart TD
     B --> C["<b>Normalize</b><br/>MAD-robustize across all plates<br/>ref: all samples<br/><code>pycytominer.normalize</code>"]
     C --> D["<b>Feature select</b><br/>variance · correlation · blocklist · drop-NA<br/><code>pycytominer.feature_select</code>"]
     D --> E[single_cell_profiles/]
+    C --> F["<b>Position correction</b><br/>subtract platemap-scaled well-position tilt<br/>fit: <code>position_correction/</code>"]
+    F --> G["<b>Feature select</b><br/>same settings"]
+    G --> H[single_cell_profiles/<br/>position corrected]
 ```
 
 ### Step 0 — Convert CellProfiler outputs to parquet ([`0.convert_cytotable.ipynb`](0.convert_cytotable.ipynb))
@@ -59,6 +62,30 @@ Starting from QC-labeled profiles, we use [pycytominer](https://github.com/cytom
 3. **Feature select** — apply variance threshold, correlation threshold, blocklist, and drop-NA-columns filters
 
 Output profiles are written to `single_cell_profiles/`.
+
+### Step 3 — Position correction ([`3.apply_position_correction.ipynb`](3.apply_position_correction.ipynb))
+
+Where a well sits on the plate shifts its profile in a consistent, feature-specific direction (a "tilt") that is unrelated to the well contents.
+This step applies a saved estimate of that tilt to the normalized profiles from Step 2, then performs feature selection on the corrected profiles with the same settings as Step 2.
+
+For every cell, we subtract `amplitude x tilt(row, column)` from the features.
+The tilt is shared across platemaps and the amplitude is specific to each platemap.
+All cells in a well are shifted by the same amount, and controls are corrected like all other wells.
+
+For each plate, the step reads `<plate>_sc_normalized.parquet` and writes two files to `single_cell_profiles/`:
+
+- `<plate>_sc_position_corrected.parquet`: normalized profiles after correction
+- `<plate>_sc_position_corrected_feature_selected.parquet`: corrected profiles after feature selection
+
+The uncorrected `<plate>_sc_feature_selected.parquet` from Step 2 is left unchanged.
+
+The correction is estimated in [`position_correction/`](position_correction/), which follows the same pattern as `optimize_thresholds_noteboooks/` for QC thresholds: the analysis notebooks derive a parameter file that is committed, and the numbered step applies it.
+
+- [`fit_position_correction.ipynb`](position_correction/fit_position_correction.ipynb) estimates the tilt and platemap amplitudes from all plates and writes `position_correction_fit.npz`.
+- [`validate_position_correction.ipynb`](position_correction/validate_position_correction.ipynb) tests the correction on held-out platemaps.
+
+When running the pipeline on new profiles, run Step 2, then `fit_position_correction.ipynb`, then Step 3.
+Rerun the fit whenever the normalized profiles change.
 
 ---
 
