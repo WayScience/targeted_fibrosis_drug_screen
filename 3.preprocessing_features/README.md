@@ -86,7 +86,7 @@ flowchart TD
     end
 ```
 
-### Step 3 — Bulk feature preprocessing ([`3.bulk_processing.ipynb`](3.bulk_processing.ipynb))
+### Step 4 — Bulk feature preprocessing ([`4.bulk_processing.ipynb`](4.bulk_processing.ipynb))
 
 Bulk processing happens in two phases: per-plate preprocessing and pooled-replicate sphering.
 

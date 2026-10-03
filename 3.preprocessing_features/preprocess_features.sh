@@ -81,7 +81,7 @@ for BATCH in "${BATCH_LIST[@]}"; do
     # Bulk aggregation (batch)
     # -----------------------------
     echo ">>> Aggregating batch ${BATCH}"
-    python nbconverted/3.bulk_processing.py
+    python nbconverted/4.bulk_processing.py
 
     echo ">>> Completed batch ${BATCH}"
 done
