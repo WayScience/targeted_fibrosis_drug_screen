@@ -37,6 +37,9 @@ runinfo*
 # Ignore vscode specific files
 .vscode*
 
+# Ignore macOS Finder metadata files
+.DS_Store
+
 # Ignore model files/folders as though are downloaded in the notebook
 label_encoder*
 models*
