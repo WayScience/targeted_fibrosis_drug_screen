@@ -20,7 +20,7 @@ sns.set_theme(style="whitegrid")
 
 
 # Load all qc_labeled_profiles files and add Metadata_layout from grandparent folder
-data_folder = Path("../3.preprocessing_features/data")
+data_folder = Path("../3.image_based_profiling/data")
 qc_files = list(data_folder.rglob("*qc_labeled.parquet"))
 
 df_list = []

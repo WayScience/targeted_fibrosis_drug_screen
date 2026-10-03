@@ -21,7 +21,7 @@ flowchart TD
 To run the full preprocessing pipeline, execute the bash script from this directory:
 
 ```bash
-# Make sure your current working dir is the 3.preprocessing_features folder
+# Make sure your current working dir is the 3.image_based_profiling folder
 source preprocess_features.sh
 ```
 

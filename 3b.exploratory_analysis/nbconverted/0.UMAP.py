@@ -40,7 +40,7 @@ output_dir.mkdir(parents=True, exist_ok=True)
 
 
 # Set input path with single-cell profiles
-base_data_dir = pathlib.Path("../3.preprocessing_features/data")
+base_data_dir = pathlib.Path("../3.image_based_profiling/data")
 
 # Discover all batch_#/platemap_# combinations
 batch_platemap_dirs = sorted(base_data_dir.glob("batch_*/platemap_*/single_cell_profiles"))
