@@ -199,7 +199,45 @@ def compound_table(
 
 
 def design_matrix(rows: np.ndarray, cols: np.ndarray) -> np.ndarray:
-    """Indicator design with six row terms and nine column terms."""
+    """Construct the additive row-plus-column design for the spatial tilt model.
+
+    Each observation receives one indicator for its occupied plate row and, except for
+    the first occupied column, one indicator for its occupied plate column. The first
+    column (``cols == 0``) is used as the reference column and therefore has no explicit
+    column term.
+
+    With six occupied rows and ten occupied columns, the design contains six row terms
+    and nine column terms::
+
+        [row_0, ..., row_5, col_1, ..., col_9]
+
+    Thus a well in row 2 and reference column 0 has only ``row_2 = 1``, whereas a well
+    in row 2 and column 4 has both ``row_2 = 1`` and the corresponding column indicator
+    set to one.
+
+    This parameterization represents the positional effect as an additive model
+
+        position_effect(row, col) = row_effect(row) + column_effect(col),
+
+    with the first occupied column fixed to zero as the reference. It does not model
+    row-by-column interactions or local well-specific spatial effects.
+
+    Parameters
+    ----------
+    rows : np.ndarray
+        Zero-based row indices for the observations. Values must range from
+        ``0`` to ``N_ROW_TERMS - 1``.
+    cols : np.ndarray
+        Zero-based column indices for the observations. ``0`` denotes the reference
+        column; later columns receive explicit indicator terms.
+
+    Returns
+    -------
+    np.ndarray
+        Indicator matrix of shape
+        ``(n_observations, N_ROW_TERMS + N_COL_TERMS)`` for fitting the additive
+        positional model.
+    """
     design = np.zeros((len(rows), N_ROW_TERMS + N_COL_TERMS))
     design[np.arange(len(rows)), rows] = 1
     later_cols = cols > 0
