@@ -10,6 +10,7 @@
 # It does not change any existing profiles.
 # Applying the correction is a separate step: `../3b.apply_position_correction.ipynb` reads the saved fit (`position_correction_fit.npz`).
 # Rerun this notebook whenever the normalized profiles change.
+# Delete `well_medians.parquet` first so that the notebook rebuilds the well medians from the new profiles instead of reading the cache.
 # 
 # **Method (details in `../utils/position_correction_utils.py`):**
 # 
