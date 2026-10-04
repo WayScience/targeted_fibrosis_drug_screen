@@ -112,7 +112,7 @@ train_indices_dir = pathlib.Path("training_indices")
 
 # Directory with the normalized datasets
 normalized_data_path = pathlib.Path(
-    "../3.preprocessing_features/data/single_cell_profiles"
+    "../3.image_based_profiling/data/single_cell_profiles"
 )
 
 # Output directory the performance metrics

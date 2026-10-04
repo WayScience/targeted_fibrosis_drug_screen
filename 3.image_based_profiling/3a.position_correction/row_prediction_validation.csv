@@ -1,0 +1,4 @@
+,macro_auc,row_b_auc,macro_auc_sd,row_b_auc_sd
+1. raw,0.76,0.938,,
+2. corrected,0.521,0.565,,
+3. shuffled labels,0.494,0.491,0.018,0.054
