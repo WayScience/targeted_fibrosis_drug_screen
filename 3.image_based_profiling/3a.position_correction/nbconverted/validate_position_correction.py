@@ -98,6 +98,30 @@ n_rows = len(pcu.ROWS)
 
 
 def predict_rows(train_x, train_y, test_x, seed):
+    """Train a row classifier and predict the row probabilities of new wells.
+
+    The model standardizes the profiles, reduces them to ``n_components`` principal
+    components, and fits a class-balanced multinomial logistic regression of the plate
+    row.
+
+    Parameters
+    ----------
+    train_x : np.ndarray
+        Training wells by features.
+    train_y : np.ndarray
+        Row index (0 to 5, rows B to G) of each training well.
+    test_x : np.ndarray
+        Wells to predict, with the same features as ``train_x``.
+    seed : int
+        Random seed of the PCA.
+
+    Returns
+    -------
+    np.ndarray
+        Probabilities with shape ``(len(test_x), n_rows)``.
+        The columns follow the rows B to G, and a row that is absent from ``train_y``
+        gets probability 0.
+    """
     model = make_pipeline(
         StandardScaler(),
         PCA(n_components=n_components, random_state=seed),
@@ -110,6 +134,24 @@ def predict_rows(train_x, train_y, test_x, seed):
 
 
 def macro_auc(true_rows, probabilities):
+    """Score row predictions with the macro-averaged one-vs-rest AUC.
+
+    The AUC of each row against all other rows is computed first, and the six values
+    are averaged with equal weight.
+    A value of 0.5 is chance level.
+
+    Parameters
+    ----------
+    true_rows : np.ndarray
+        True row index (0 to 5) of each well.
+    probabilities : np.ndarray
+        Predicted probabilities with shape ``(n_wells, n_rows)`` from ``predict_rows``.
+
+    Returns
+    -------
+    float
+        Macro-averaged AUC over the six rows.
+    """
     return roc_auc_score(
         true_rows,
         probabilities,
@@ -120,6 +162,21 @@ def macro_auc(true_rows, probabilities):
 
 
 def row_b_auc(true_rows, probabilities):
+    """Score how well the predicted probability of row B separates row B from the rest.
+
+    Parameters
+    ----------
+    true_rows : np.ndarray
+        True row index (0 to 5) of each well; row B is 0.
+    probabilities : np.ndarray
+        Predicted probabilities with shape ``(n_wells, n_rows)`` from ``predict_rows``.
+
+    Returns
+    -------
+    float
+        AUC of the row B probability for row B wells against all other wells.
+        A value of 0.5 is chance level.
+    """
     return roc_auc_score(true_rows == 0, probabilities[:, 0])
 
 
