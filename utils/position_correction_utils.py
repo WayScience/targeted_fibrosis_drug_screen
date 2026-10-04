@@ -120,7 +120,9 @@ def _plate_well_medians(path: pathlib.Path, plate: str, platemap: int) -> pd.Dat
 def build_well_medians(
     plate_table: pd.DataFrame, n_jobs: int = 1
 ) -> tuple[pd.DataFrame, list[str]]:
-    """Summarize every well as the median profile of its cells.
+    """Summarize every well as the median profile of its cells per plate.
+    Additionally collects plate-level metadata for later stage aggregation by replicates.
+    
 
     Parameters
     ----------
@@ -132,9 +134,14 @@ def build_well_medians(
     Returns
     -------
     tuple[pd.DataFrame, list[str]]
-        Well-level table (one row per plate and well) with columns "plate",
-        "platemap", "well", "treatment", "cell_type", "n" (cells) and the features,
-        and the list of features. Features with a missing value in any well are dropped.
+        A tuple containing:
+
+        - A well-level aggregated profile DataFrame with one row per physical ``plate × well`` and
+          columns ``plate``, ``platemap``, ``well``, ``treatment``, ``cell_type``,
+          ``n`` (number of cells contributing to the summary), followed by the
+          median morphology features.
+        - The list of retained morphology feature column names. Features with a
+          missing value in any well-level profile are excluded.
     """
     jobs = list(plate_table[["path", "plate", "platemap"]].itertuples(index=False))
     if n_jobs == 1:
