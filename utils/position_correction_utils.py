@@ -271,7 +271,7 @@ def fit_tilt_map(
     MAD_TO_SIGMA = 1.4826
     resid = profiles - design @ coef
     resid_center = np.median(resid, axis=0)
-    mad = MAD_TO_SIGMA * np.median(np.abs(resid - resid_center, axis=0) + 1e-9
+    mad = MAD_TO_SIGMA * np.median(np.abs(resid - resid_center), axis=0) + 1e-9
     winsorized = design @ coef + np.clip(resid, resid_center - 3 * mad, resid_center + 3 * mad)
     coef = np.linalg.lstsq(design, winsorized, rcond=None)[0]
     return coef, (design @ coef).mean(axis=0)
