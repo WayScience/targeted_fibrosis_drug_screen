@@ -104,7 +104,7 @@ prob_dir = pathlib.Path("./prob_data")
 prob_dir.mkdir(exist_ok=True)
 
 # Directory with normalized plate datasets
-data_dir = pathlib.Path("../3.preprocessing_features/data/single_cell_profiles")
+data_dir = pathlib.Path("../3.image_based_profiling/data/single_cell_profiles")
 
 # Use rglob to search for files with the suffix *_sc_normalized.parquet
 parquet_files = list(data_dir.rglob("*_sc_normalized.parquet"))

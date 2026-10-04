@@ -27,7 +27,7 @@ models_dir = pathlib.Path("./models")
 
 # directory with normalized datasets
 norm_profiles_dir = pathlib.Path(
-    "../3.preprocessing_features/data/single_cell_profiles"
+    "../3.image_based_profiling/data/single_cell_profiles"
 )
 
 # create a list of the plate names for gathering paths

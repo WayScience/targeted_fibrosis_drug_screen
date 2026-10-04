@@ -22,7 +22,7 @@ random.seed(random_state)
 
 # Path to directory with feature selected profiles
 path_to_feature_selected_data = pathlib.Path(
-    "../3.preprocessing_features/data/single_cell_profiles/"
+    "../3.image_based_profiling/data/single_cell_profiles/"
 ).resolve(strict=True)
 
 # Find all feature selected parquet files

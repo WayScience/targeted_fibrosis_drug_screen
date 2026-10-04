@@ -78,10 +78,16 @@ for BATCH in "${BATCH_LIST[@]}"; do
     python nbconverted/2.single_cell_processing.py
 
     # -----------------------------
+    # Position correction (batch)
+    # -----------------------------
+    echo ">>> Applying position correction for ${BATCH}"
+    python nbconverted/3b.apply_position_correction.py
+
+    # -----------------------------
     # Bulk aggregation (batch)
     # -----------------------------
     echo ">>> Aggregating batch ${BATCH}"
-    python nbconverted/3.aggregate_single_cells.py
+    python nbconverted/4.bulk_processing.py
 
     echo ">>> Completed batch ${BATCH}"
 done

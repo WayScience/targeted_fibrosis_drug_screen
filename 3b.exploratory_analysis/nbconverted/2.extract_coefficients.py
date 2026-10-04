@@ -96,7 +96,7 @@ combined_coefs.sort_values(by="Coefficient", ascending=True).head(10)
 
 # directory with normalized data
 data_dir = pathlib.Path(
-    "../3.preprocessing_features/data/single_cell_profiles"
+    "../3.image_based_profiling/data/single_cell_profiles"
 ).resolve(strict=True)
 
 # get all of the files with normalized data and concat
