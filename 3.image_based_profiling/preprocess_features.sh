@@ -83,12 +83,6 @@ for BATCH in "${BATCH_LIST[@]}"; do
     echo ">>> Applying position correction for ${BATCH}"
     python nbconverted/3b.apply_position_correction.py
 
-    # -----------------------------
-    # Bulk aggregation (batch)
-    # -----------------------------
-    echo ">>> Aggregating batch ${BATCH}"
-    python nbconverted/4.bulk_processing.py
-
     echo ">>> Completed batch ${BATCH}"
 done
 
