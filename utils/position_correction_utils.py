@@ -162,10 +162,15 @@ def build_well_medians(
 def compound_table(
     well_medians: pd.DataFrame, features: list[str], min_cells: int = 50
 ) -> tuple[np.ndarray, pd.DataFrame]:
-    """Build one profile per compound well, averaged over replicate plates.
+    """Summarize feature profiles per compound by averaging well-level medians replication plates.
+    This function assumes the compound replication is done by replicating plates with identical platemap. 
+    In effect this results in aggregated profiles at the platemap level by mean of well median. 
 
-    Each platemap is centered on its own mean so that overall platemap level does not
-    enter the position estimate.
+    Each platemap is mean-centered across compound wells, 
+    so that global platemap to platemap feature variations (offsets) are removed.
+    This ensures that the subsequent positional tilt fitting learns positional bias 
+    universally manifested across all platemaps rather than be distracted by 
+    non-positional tech variation.  
 
     Parameters
     ----------
