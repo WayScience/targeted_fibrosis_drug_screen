@@ -59,7 +59,7 @@ def discover_normalized_profiles(base_dir: str | pathlib.Path) -> pd.DataFrame:
     Returns
     -------
     pd.DataFrame
-        One row per plate with columns "plate", "platemap" (int) and "path".
+        One row per plate single cell profile file with columns "plate", "platemap" (int) and "path".
     """
     records = []
     for path in sorted(
