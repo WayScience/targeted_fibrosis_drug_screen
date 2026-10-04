@@ -78,7 +78,33 @@ def discover_normalized_profiles(base_dir: str | pathlib.Path) -> pd.DataFrame:
 
 
 def _plate_well_medians(path: pathlib.Path, plate: str, platemap: int) -> pd.DataFrame:
-    """Median profile of every well on one plate."""
+    """Aggregate one plate from single cells to one median profile per well.
+
+    Each morphology feature is summarized by the median across all cells in a well.
+    Treatment and cell-type metadata are taken from the first cell in each well and
+    are therefore assumed to be constant within a well. The number of cells contributing
+    to each median is retained in ``n`` for downstream filtering and quality control.
+
+    Parameters
+    ----------
+    path : pathlib.Path
+        Path to a normalized single-cell Parquet file containing ``Metadata_Well``,
+        ``Metadata_treatment``, ``Metadata_cell_type``, and morphology features.
+        Feature columns are identified as columns whose names do not start with
+        ``"Metadata_"``.
+    plate : str
+        Identifier of the physical plate represented by ``path``.
+    platemap : int
+        Platemap identifier describing the treatment layout used on the plate.
+
+    Returns
+    -------
+    pd.DataFrame
+        One row per well with columns ``plate``, ``platemap``, ``well``,
+        ``treatment``, ``cell_type``, ``n``, and the median value of each morphology
+        feature. At this stage, replicate physical plates remain separate; averaging
+        across replicate plates occurs downstream.
+    """
     cells = pd.read_parquet(path)
     features = [c for c in cells.columns if not c.startswith("Metadata_")]
     grouped = cells.groupby("Metadata_Well", sort=True)
