@@ -6,17 +6,30 @@ The screen has 44 plates (11 platemap layouts with 4 replicate plates each) in t
 
 ```mermaid
 flowchart TD
-    A["<b>CellProfiler SQLite outputs</b>"] --> B["<b>Convert to parquet</b><br/><code>cytotable.convert</code>"]
-    B --> C["<b>Single-cell QC</b><br/><code>cosmicqc.find_outliers</code>"]
-    C --> D["<b>Annotate and normalize</b><br/>drop QC-failed cells · join platemap metadata · standardize per plate"]
-    D --> E["<b>Feature select</b><br/>uncorrected profiles"]
-    E --> F[single_cell_profiles/<br/>feature selected]
-    D --> G["<b>Position correction</b><br/>subtract platemap-scaled well-position tilt"]
-    G --> H["<b>Feature select</b>"]
-    H --> I[single_cell_profiles/<br/>position corrected, feature selected]
-    G --> J["<b>Bulk processing</b><br/>aggregate to wells · pool all plates · feature select · sphere"]
-    J --> K[bulk_profiles/]
+    A["CellProfiler SQLite<br/>one file per plate"] --> S0
+    subgraph batch["Per batch (the pipeline script loops over batches)"]
+        S0["<b>Step 0 · Convert</b><br/>CytoTable merges objects into single cells<br/>*_converted.parquet"] --> S1
+        S1["<b>Step 1 · QC</b> (one run per plate)<br/>coSMicQC flags 4 problems<br/>*_qc_labeled.parquet, all cells kept"]
+        S1 --> S2a["<b>Step 2</b><br/>drop QC-failed cells<br/>annotate with platemap metadata<br/>*_sc_annotated"]
+        S2a --> S2n["standardize per plate (z-score)<br/>*_sc_normalized"]
+        S2n --> S2f["feature select<br/>*_sc_feature_selected<br/>(uncorrected, for comparison)"]
+        S2n --> S3b["<b>Step 3b · Apply position correction</b><br/>subtract amplitude × tilt(row, column) from every cell<br/>*_sc_position_corrected"]
+        S3b --> S3f["feature select<br/>*_sc_position_corrected_feature_selected"]
+    end
+    TH[("sc_qc_thresholds.json")] -.-> S1
+    FIT[("position_correction_fit.npz<br/>committed")] -.-> S3b
+    S2n -.-> S3a["<b>Step 3a · Fit and validate</b><br/>analysis, not run by the pipeline script<br/>tilt map + one amplitude per platemap"]
+    S3a -.-> FIT
+    subgraph once["Once, after all batches"]
+        S4a["<b>Step 4 · Bulk</b><br/>aggregate to wells (median)<br/>pool all plates and batches"] --> S4b["feature select, layer 1"]
+        S4b --> S4c["feature select, layer 2<br/>variance on failing DMSO only"]
+        S4c --> S4d["sphere (ZCA-cor)<br/>fit on failing DMSO of all plates<br/>*_feature_selected_spherized"]
+    end
+    S3b --> S4a
 ```
+
+Dotted arrows show inputs that a step reads.
+The pipeline script does not run Step 3a.
 
 ## Steps
 
