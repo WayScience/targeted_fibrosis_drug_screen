@@ -51,11 +51,13 @@ barcode_platemap_df = pd.read_csv(
 )
 
 # operations to perform for feature selection
+# pycytominer applies them in this order, so we first drop features with missing
+# values and blocklisted features, and then apply the variance and correlation filters
 feature_select_ops = [
+    "drop_na_columns",
+    "blocklist",
     "variance_threshold",
     "correlation_threshold",
-    "blocklist",
-    "drop_na_columns",
 ]
 
 

@@ -29,11 +29,13 @@ fit_path = pathlib.Path("./3a.position_correction/position_correction_fit.npz").
 )
 
 # operations to perform for feature selection (same as step 2)
+# pycytominer applies them in this order, so we first drop features with missing
+# values and blocklisted features, and then apply the variance and correlation filters
 feature_select_ops = [
+    "drop_na_columns",
+    "blocklist",
     "variance_threshold",
     "correlation_threshold",
-    "blocklist",
-    "drop_na_columns",
 ]
 
 fit = pcu.load_fit(fit_path)

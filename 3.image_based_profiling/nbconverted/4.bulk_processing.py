@@ -1,329 +1,202 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Generate well-level bulk profiles profiles
+# # Generate well-level bulk profiles
 # 
-# NOTE: We are normalizing the bulk-profile plates to the negative controls as the "standard".
+# This is the final step of the module.
+# We aggregate the position-corrected single-cell profiles from step 3b to the well level (median per well) and pool the wells of **all plates in all batches**.
+# The single-cell profiles are already standardized (z-scored using all cells on each plate) and corrected for plate-position effects, so we do not normalize the bulk profiles again.
+# 
+# We then perform one feature selection and one sphering on the pooled profiles, with the negative controls (failing-cell DMSO) of all plates as the reference population.
+# 
+# **Input** (per plate, from step 3b): `<plate>_sc_position_corrected.parquet`
+# 
+# **Outputs** (in `data/bulk_profiles/`):
+# 
+# - `bulk_position_corrected_feature_selected.parquet`: pooled well-level profiles of all plates after feature selection
+# - `bulk_position_corrected_feature_selected_spherized.parquet`: pooled well-level profiles of all plates after sphering
+# 
+# Each well keeps its plate, and we add `Metadata_Batch` and `Metadata_Platemap` (from the folder names) so wells can be grouped by batch and platemap downstream.
+# Bulk profiles from earlier runs, which were built from uncorrected cells, are not changed.
 
 # ## Import libraries
 
-# In[1]:
+# In[ ]:
 
 
-import os
 import pathlib
 import pprint
 
 import pandas as pd
-
-from pycytominer import aggregate, annotate, normalize, feature_select
-
+from pycytominer import aggregate, feature_select, normalize
 
 # ## Set paths and variables
 
-# In[2]:
+# In[ ]:
 
-
-# get the batch to process from environment variable
-batch_to_process = os.environ.get("BATCH", "batch_1")
-if batch_to_process is None:
-    raise ValueError(
-        "Please set the BATCH environment variable before running this script."
-    )
 
 # base directory where batches are located
 base_dir = pathlib.Path("./data/").resolve(strict=True)
 
-# Decide what to process
-if batch_to_process:
-    print(f"Processing {batch_to_process}")
-    batch_dirs = [base_dir / batch_to_process]
-else:
-    print("No specific batch set, processing all available batches")
-    batch_dirs = [p for p in base_dir.glob("batch_*") if p.is_dir()]
-
-# path for platemap directory
-platemap_dir = pathlib.Path("../metadata/updated_platemaps/")
-
-# Load the barcode_platemap file
-barcode_platemap_df = pd.read_csv(
-    (platemap_dir / "updated_barcode_platemap.csv").resolve()
+# pooled outputs of all plates
+output_dir = base_dir / "bulk_profiles"
+output_dir.mkdir(parents=True, exist_ok=True)
+output_feature_select_file = (
+    output_dir / "bulk_position_corrected_feature_selected.parquet"
 )
+output_spherized_file = output_dir / "bulk_position_corrected_feature_selected_spherized.parquet"
 
 # operations to perform for feature selection
+# pycytominer applies them in this order, so we first drop features with missing
+# values and blocklisted features, and then apply the variance and correlation filters
 feature_select_ops = [
+    "drop_na_columns",
+    "blocklist",
     "variance_threshold",
     "correlation_threshold",
-    "blocklist",
-    "drop_na_columns",
 ]
 
+# columns that identify a well and are constant within it; used as the aggregation
+# strata so that the well-level metadata are kept
+well_strata = [
+    "Metadata_WellRow",
+    "Metadata_WellCol",
+    "Metadata_heart_number",
+    "Metadata_cell_type",
+    "Metadata_heart_failure_type",
+    "Metadata_treatment",
+    "Metadata_Pathway",
+    "Metadata_Plate",
+    "Metadata_Well",
+]
 
-# ## Set dictionary with plates to process
-
-# In[3]:
-
-
-plate_info_dictionary = {}
-
-# Loop over batches and layouts
-for batch_dir in batch_dirs:
-    layouts = [p for p in batch_dir.iterdir() if p.is_dir()]  # all layouts
-    for layout_dir in layouts:
-        qc_labeled_dir = layout_dir / "qc_labeled_profiles"
-        output_dir = layout_dir / "bulk_profiles"
-        output_spherize_dir = layout_dir / "spherized_bulk_profiles"
-
-        # Create directories once per layout
-        for d in [output_dir, output_spherize_dir]:
-            d.mkdir(parents=True, exist_ok=True)
-
-        # Extract plate names from parquet files
-        parquet_files = list(qc_labeled_dir.glob("*.parquet"))
-        plate_names = [
-            "_".join(f.stem.split("_")[:2]) if len(f.stem.split("_")) >= 2 else f.stem
-            for f in parquet_files
-        ]
-
-        for name in plate_names:
-            # Find the corresponding parquet file
-            matching_files = [f for f in parquet_files if name in f.stem]
-            if not matching_files:
-                continue
-            profile_path = matching_files[0].resolve(strict=True)
-
-            # Find corresponding platemap CSV
-            platemap_row = barcode_platemap_df.loc[
-                barcode_platemap_df["plate_barcode"] == name
-            ]
-            if platemap_row.empty:
-                raise ValueError(f"No platemap found for plate {name}")
-            platemap_path = (
-                platemap_dir / f"{platemap_row['platemap_file'].values[0]}.csv"
-            ).resolve(strict=True)
-
-            # Add to dictionary
-            plate_info_dictionary[name] = {
-                "profile_path": profile_path,
-                "platemap_path": platemap_path,
-                "output_dir": output_dir,
-                "spherize_output_dir": output_spherize_dir,
-            }
-
-# View dictionary
-print("Number of plates to process:", len(plate_info_dictionary))
-pprint.pprint(plate_info_dictionary, indent=4)
+# negative control wells used as the reference population
+neg_control_query = "Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'"
 
 
-# ## Process data with pycytominer
+# ## Set list of plates to process
 # 
+# We process the position-corrected profiles of every plate in every batch.
 
-# In[4]:
+# In[ ]:
 
 
-for plate, info in plate_info_dictionary.items():
-    output_dir = info["output_dir"]
-    print("Performing preprocessing on", plate, output_dir)
-
-    # Use the output_dir from the dictionary for this specific plate
-    output_dir = info["output_dir"]
-
-    # generating all output file paths using the output_dir from the dictionary
-    output_annotated_file = str(output_dir / f"{plate}_bulk_annotated.parquet")
-    output_normalized_file = str(output_dir / f"{plate}_bulk_normalized.parquet")
-    output_feature_select_file = str(
-        output_dir / f"{plate}_bulk_feature_selected.parquet"
+plate_info_list = [
+    {
+        "profile_path": profile_path,
+        "batch": profile_path.parents[2].name,  # e.g. batch_1
+        "platemap": profile_path.parents[1].name,  # e.g. platemap_1
+    }
+    for profile_path in sorted(
+        base_dir.glob(
+            "batch_*/platemap_*/single_cell_profiles/*_sc_position_corrected.parquet"
+        )
     )
+]
 
-    # loading profiles
-    profile_df = pd.read_parquet(info["profile_path"])
-    platemap_df = pd.read_csv(info["platemap_path"])
+# View list
+print("Number of plates to process:", len(plate_info_list))
+pprint.pprint(plate_info_list[:3], indent=4)
 
-    # Drop all rows in the profiles that failed any Metadata_cqc columns
-    cqc_columns = [col for col in profile_df.columns if col.startswith("Metadata_cqc")]
-    if cqc_columns:
-        profile_df = profile_df[~profile_df[cqc_columns].any(axis=1)]
 
-    # Step 1: Aggregate single-cell data to the well-level using the median
-    print("Performing aggregation for", plate, "...")
-    aggregated_df = aggregate(
+# ## Aggregate to the well level and pool all plates
+# 
+# For each plate, we compute the median profile of each well.
+# QC-failed cells were already removed in step 2 and the profiles are already annotated, so the well-level metadata are kept by using them as the aggregation strata.
+# We then concatenate the wells of all plates.
+
+# In[ ]:
+
+
+well_profiles = []
+
+for plate_info in plate_info_list:
+    print("Performing aggregation for", plate_info["profile_path"].name, "...")
+    profile_df = pd.read_parquet(plate_info["profile_path"])
+    well_df = aggregate(
         population_df=profile_df,
         operation="median",
-        strata=["Image_Metadata_Plate", "Image_Metadata_Well"],
+        strata=well_strata,
     )
+    well_df.insert(0, "Metadata_Platemap", plate_info["platemap"])
+    well_df.insert(0, "Metadata_Batch", plate_info["batch"])
+    well_profiles.append(well_df)
 
-    # Step 2: Annotation
-    print("Performing annotation for", plate, "...")
-    annotate(
-        profiles=aggregated_df,
-        platemap=platemap_df,
-        join_on=["Metadata_well_position", "Image_Metadata_Well"],
-        output_type="parquet",
-        output_file=output_annotated_file,
-    )
-
-    # Load the annotated parquet file to fix metadata columns names
-    annotated_df = pd.read_parquet(output_annotated_file)
-
-    # Rename columns
-    annotated_df.rename(columns={"Image_Metadata_Site": "Metadata_Site"}, inplace=True)
-
-    # Save annotated profiles back to parquet
-    annotated_df.to_parquet(output_annotated_file, index=False)
-
-    # Step 3: Normalization (mad robustize)
-    # Per plate normalization using the negative controls as the reference population
-    print("Performing normalization for", plate, "...")
-    neg_control_query = "Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'"
-    normalize(
-        profiles=annotated_df,
-        method="mad_robustize",
-        samples=neg_control_query,
-        output_type="parquet",
-        output_file=output_normalized_file,
-    )
-
-    # Step 4: Per plate feature selection
-    print("Performing feature selection for", plate, "...")
-    feature_select(
-        profiles=output_normalized_file,
-        operation=feature_select_ops,
-        na_cutoff=0,
-        blocklist_file="./blocklist_features.txt",
-        corr_threshold=0.95,
-        freq_cut=0.05,
-        output_type="parquet",
-        output_file=output_feature_select_file,
-    )
-
-    print(
-        f"Aggregation, annotation, normalization, and feature selection complete for {plate}"
-    )
+pooled_df = pd.concat(well_profiles, ignore_index=True)
+print("Pooled well-level profiles:", pooled_df.shape)
+print("Plates:", pooled_df["Metadata_Plate"].nunique())
+print("Negative control wells:", len(pooled_df.query(neg_control_query)))
 
 
-# ## Sphering profiles
+# ## Feature selection and sphering
 # 
-# We concatenate all normalized replicate plates of the same platemap and perform a two-layer feature selection procedure.
+# We perform a two-layer feature selection procedure on the pooled profiles.
 # 
-# In the first layer, we apply feature selection to the concatenated normalized profiles.
-# In the second layer, we remove low variance features in the concatenated normalized profiles _for the DMSO control wells only_.
+# In the first layer, we apply feature selection to the pooled profiles.
+# In the second layer, we remove low variance features in the pooled profiles _for the DMSO control wells only_.
 # 
-# We then apply a sphering transform using this concatenated feature selected data.
-# We use the negative-control wells as the reference population to decorrelate the features to place profiles on a shared control-based covariance scale.
+# We then apply a sphering transform using this feature selected data.
+# We use the negative-control wells of all plates as the reference population to decorrelate the features to place profiles on a shared control-based covariance scale.
 # 
 # ### Parameters:
 # 
-# - `neg_control_query`: pandas query string that selects the control wells used to fit both standardization and sphering. Here, the reference population is failing-cell DMSO wells.
+# - `neg_control_query`: pandas query string that selects the control wells used for the second feature selection layer and to fit the sphering. Here, the reference population is failing-cell DMSO wells.
 
-# In[5]:
-
-
-# setting negative control query 
-neg_control_query = "Metadata_treatment == 'DMSO' and Metadata_cell_type == 'failing'"
-
-# Group annotated replicate profiles by plate map for pooled normalization and 
-# sphering outputs. 
-# {"platemap_1": {"replicate_paths": [path1, path2], "spherized_output_dir": path}, ...}
-normalized_replicate_plates = {}
-
-for plate_barcode, info in plate_info_dictionary.items():
-    # Example key: platemap_1, platemap_2, etc.
-    plate_key = info["output_dir"].parent.name
-
-    # Path to the well-level normalized profile generated in the previous step.
-    normalized_plate_path = (
-        info["output_dir"] / f"{plate_barcode}_bulk_normalized.parquet"
-    )
-
-    # Start a new group the first time we see this plate map.
-    if plate_key not in normalized_replicate_plates:
-        normalized_replicate_plates[plate_key] = {
-            "replicate_paths": [],
-            "spherized_output_dir": info["spherize_output_dir"],
-        }
-
-    # Add this physical replicate plate to its plate-map group.
-    normalized_replicate_plates[plate_key]["replicate_paths"].append(
-        normalized_plate_path
-    )
-
-# sort based on plate key
-normalized_replicate_plates = dict(sorted(normalized_replicate_plates.items()))
+# In[ ]:
 
 
-# In[8]:
+# step 1: Apply feature selection on the pooled profiles to get a common set of
+# features for sphering.
+print("Feature selecting the pooled profiles...")
+feature_select_df = feature_select(
+    profiles=pooled_df,
+    operation=feature_select_ops,
+    # drop every feature with a missing value (the pycytominer default allows 5%)
+    na_cutoff=0,
+    blocklist_file="./blocklist_features.txt",
+    # 0.95 is less strict than the pycytominer default of 0.9, so fewer correlated
+    # features are removed and more features remain for the sphering
+    corr_threshold=0.95,
+    # 0.05 is the pycytominer default for the most common value of a feature
+    freq_cut=0.05,
+    output_file=output_feature_select_file,
+    output_type="parquet",
+)
+
+# step 2: Remove features with too little variation inside the exact control
+# population used to fit spherization.
+print("Feature selecting with variance threshold within negative controls only...")
+zero_negcon_var_fs_df = feature_select(
+    profiles=feature_select_df,
+    operation="variance_threshold",
+    # pycytominer defaults. The sphering fits on the negative controls only, and a
+    # feature with no variation in them causes a divide-by-zero
+    freq_cut=0.05,
+    unique_cut=0.01,
+    samples=neg_control_query,
+)
+
+# step 3: Spherize/whiten all profiles using the pooled negative controls as the
+# reference population.
+print("Sphering using the pooled negative controls...")
+normalize(
+    profiles=zero_negcon_var_fs_df,
+    method="spherize",
+    samples=neg_control_query,
+    # pycytominer defaults: center on the negative controls, ZCA-cor sphering, and a
+    # small epsilon that keeps the inversion of the control covariance stable
+    spherize_center=True,
+    spherize_method="ZCA-cor",
+    spherize_epsilon=1e-6,
+    output_file=output_spherized_file,
+    output_type="parquet",
+)
+
+print(f"Saved feature-selected profiles to {output_feature_select_file}")
+print(f"Saved spherized profiles to {output_spherized_file}")
 
 
-# Sphering step:
-# Process each plate map after pooling its replicate plates.
-for plate_key, plate_info in normalized_replicate_plates.items():
-    replicate_paths = sorted(plate_info["replicate_paths"])
-    spherized_output_dir = plate_info["spherized_output_dir"]
-
-    # All replicate paths in this group share the same bulk output directory.
-    output_dir = replicate_paths[0].parent
-    spherized_output_dir.mkdir(parents=True, exist_ok=True)
-
-    # Platemap-level outputs created from pooled replicate plates.
-    output_feature_select_file = (
-        output_dir / f"{plate_key}_replicate_bulk_feature_selected.parquet"
-    )
-    output_spherized_file = (
-        spherized_output_dir / f"{plate_key}_replicate_bulk_spherized.parquet"
-    )
-
-    # step 1: concat mad-normalized replicate plates before feature selection
-    print(f"Concatenating replicate plates for {plate_key}...")
-    concat_replicate_df = pd.concat(
-        [pd.read_parquet(path) for path in replicate_paths],
-        ignore_index=True,
-    ).reset_index(drop=True)
-
-    # step 2a: Apply feature selection on the pooled replicate plates to get a common 
-    # set of features for sphering.
-    print(f"Feature selecting {plate_key}...")
-    feature_select_df = feature_select(
-        profiles=concat_replicate_df,
-        operation=feature_select_ops,
-        na_cutoff=0,
-        blocklist_file="./blocklist_features.txt",
-        corr_threshold=0.95,
-        freq_cut=0.05,
-        output_file=output_feature_select_file,
-        output_type="parquet",
-    )
-
-    # step 2b: Remove features with too little variation inside the exact control
-    # population used to fit spherization.
-    print(f"Feature selecting {plate_key} with variance threshold "
-          "within negative controls only...")
-    zero_negcon_var_fs_df = feature_select(
-        profiles=feature_select_df,
-        operation="variance_threshold",
-        freq_cut=0.05,
-        unique_cut=0.01,
-        samples=neg_control_query,
-    )
-
-    # step 3: Spherize/whiten all profiles using the pooled negative controls as the
-    # reference population.
-    print(f"Sphering {plate_key} using pooled negative controls...")
-    normalize(
-        profiles=zero_negcon_var_fs_df,
-        method="spherize",
-        samples=neg_control_query,
-        spherize_center=True,
-        spherize_method="ZCA-cor",
-        spherize_epsilon=1e-6,
-        output_file=output_spherized_file,
-        output_type="parquet",
-    )
-
-    print(f"Saved feature-selected profiles to {output_feature_select_file}")
-    print(f"Saved spherized profiles to {output_spherized_file}")
-
-
-# In[9]:
+# In[ ]:
 
 
 # Check an example output file
