@@ -47,11 +47,13 @@ output_feature_select_file = (
 output_spherized_file = output_dir / "bulk_position_corrected_feature_selected_spherized.parquet"
 
 # operations to perform for feature selection
+# pycytominer applies them in this order, so we first drop features with missing
+# values and blocklisted features, and then apply the variance and correlation filters
 feature_select_ops = [
+    "drop_na_columns",
+    "blocklist",
     "variance_threshold",
     "correlation_threshold",
-    "blocklist",
-    "drop_na_columns",
 ]
 
 # columns that identify a well and are constant within it; used as the aggregation
@@ -149,9 +151,13 @@ print("Feature selecting the pooled profiles...")
 feature_select_df = feature_select(
     profiles=pooled_df,
     operation=feature_select_ops,
+    # drop every feature with a missing value (the pycytominer default allows 5%)
     na_cutoff=0,
     blocklist_file="./blocklist_features.txt",
+    # 0.95 is less strict than the pycytominer default of 0.9, so fewer correlated
+    # features are removed and more features remain for the sphering
     corr_threshold=0.95,
+    # 0.05 is the pycytominer default for the most common value of a feature
     freq_cut=0.05,
     output_file=output_feature_select_file,
     output_type="parquet",
@@ -163,6 +169,8 @@ print("Feature selecting with variance threshold within negative controls only..
 zero_negcon_var_fs_df = feature_select(
     profiles=feature_select_df,
     operation="variance_threshold",
+    # pycytominer defaults. The sphering fits on the negative controls only, and a
+    # feature with no variation in them causes a divide-by-zero
     freq_cut=0.05,
     unique_cut=0.01,
     samples=neg_control_query,
@@ -175,6 +183,8 @@ normalize(
     profiles=zero_negcon_var_fs_df,
     method="spherize",
     samples=neg_control_query,
+    # pycytominer defaults: center on the negative controls, ZCA-cor sphering, and a
+    # small epsilon that keeps the inversion of the control covariance stable
     spherize_center=True,
     spherize_method="ZCA-cor",
     spherize_epsilon=1e-6,

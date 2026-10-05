@@ -123,7 +123,7 @@ Starting from the QC-labeled profiles of each plate, we use pycytominer to:
 1. **Drop QC-failed cells** — remove every cell that any `Metadata_cqc_failed_*` column flags
 2. **Annotate** — join well-level metadata (treatment, cell type, heart, pathway) from the platemap files in `../metadata/updated_platemaps/`, using `updated_barcode_platemap.csv` to find each plate's platemap
 3. **Normalize** — standardize (z-score) each plate's features using all cells on the plate as the reference
-4. **Feature select** — apply variance threshold, correlation threshold, blocklist, and drop-NA-columns filters
+4. **Feature select** — apply drop-NA-columns, blocklist, variance threshold, and correlation threshold filters
 
 The step writes these outputs to `single_cell_profiles/`:
 
@@ -164,7 +164,7 @@ Step 2 already standardizes the single-cell profiles per plate and Step 3b corre
 flowchart TD
     A["<b>Position-corrected single cells</b><br/>every plate, every batch (Step 3b)<br/>standardized, QC-passing cells"] --> B["<b>Aggregate</b><br/>median per well, keeping well metadata<br/><code>pycytominer.aggregate</code>"]
     B --> C["<b>Concatenate</b><br/>wells of all plates"]
-    C --> D["<b>Feature select layer 1</b><br/>variance · correlation · blocklist · drop-NA<br/><code>pycytominer.feature_select</code>"]
+    C --> D["<b>Feature select layer 1</b><br/>drop-NA · blocklist · variance · correlation<br/><code>pycytominer.feature_select</code>"]
     D --> E[bulk_profiles/<br/>feature selected]
     D --> F["<b>Feature select layer 2</b><br/>variance threshold on DMSO wells only<br/><code>pycytominer.feature_select</code>"]
     F --> G["<b>Spherize</b><br/>ZCA-cor fit on all failing DMSO wells<br/><code>pycytominer.normalize</code>"]
@@ -179,7 +179,7 @@ We start from the `<plate>_sc_position_corrected.parquet` files and:
 1. **Aggregate** — compute the median profile of each well, using the plate, well, and well-level metadata (treatment, cell type, heart, and pathway) as strata
    Step 2 already removed the QC-failed cells.
 2. **Concatenate** — pool the wells of all plates, adding `Metadata_Batch` and `Metadata_Platemap` (from the folder names) so downstream steps can group wells
-3. **Feature select (layer 1)** — apply variance threshold, correlation threshold, blocklist, and drop-NA-columns filters to the pooled profiles to obtain a common feature set
+3. **Feature select (layer 1)** — apply drop-NA-columns, blocklist, variance threshold, and correlation threshold filters to the pooled profiles to obtain a common feature set
 4. **Feature select (layer 2)** — apply a second variance threshold filter using only the DMSO negative-control wells, removing features with too little variation in the reference population
 5. **Spherize** — apply ZCA-cor sphering (with centering and epsilon=1e-6), which we fit on the failing-cell DMSO wells of all plates, to decorrelate features and place all profiles on a shared control-based covariance scale
 
