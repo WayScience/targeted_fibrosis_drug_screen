@@ -1,7 +1,7 @@
 # Illumination correction & whole image quality control (QC)
 
 In this module, we apply a modified version of the CellProfiler illumination correction pipeline from the [cellpainting_predicts_cardiac_fibroblasts](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis) repository.
-We have modified the pipeline to update the quality control thresholds per channel [see below for moe info].
+We have modified the pipeline to update the quality control thresholds per channel [see below for more info].
 
 ## CellProfiler pipeline
 
@@ -21,7 +21,7 @@ If one channel in an image set fails the QC flag, then the whole image set is sk
 
 For further information on why we originally chose these features and what they measure, please refer to this [README](https://github.com/WayScience/cellpainting_predicts_cardiac_fibrosis/blob/main/1.preprocessing_data/README.md) from the `cellpainting_predicts_cardiac_fibrosis` repository.
 
-After the CellProfiler pipeline is ran, the next step is the QC report which will generate a platemap figure to show the distribution of passing FOVs across wells.
+After the CellProfiler pipeline runs, the whole image QC results can be summarized with the notebooks in [`1.whole_image_qc`](../1.whole_image_qc/).
 
 ### Correct for uneven illumination
 
@@ -39,12 +39,3 @@ source perform_ic.sh
 
 **It took approximately 1 hour and 50 minutes to run illumination correction on 4 plates at the same time with 1,500 image sets (group of channels per FOV) per plate using a Linux-based machine running Pop_OS! LTS 22.04 with an AMD Ryzen 7 3700X 8-Core Processor.**
 **There is a total of 16 CPUs with 125 GB of MEM.**
-
-## Perform QC results reporting
-
-To perform QC results reporting, you must move into the [`qc_update`](./qc_update/) folder and run the bash script [`perform_image_qc`](./qc_update/perform_image_qc.sh) using the command below.
-
-```bash
-# Make sure your current working dir is the qc_update folder
-source perform_image_qc.sh
-```

@@ -12,7 +12,7 @@ flowchart TD
     A["CellProfiler SQLite<br/>one file per plate"] --> S0
     subgraph plate["Per plate: each of the 44 plates is processed on its own"]
         S0["<b>Step 0 · Convert</b><br/>CytoTable merges objects into single cells<br/>*_converted.parquet"] --> S1
-        S1["<b>Step 1 · QC</b><br/>coSMicQC flags 4 problems<br/>using this plate's thresholds<br/>*_qc_labeled.parquet, all cells kept"] --> S2a
+        S1["<b>Step 1a · QC</b><br/>coSMicQC flags 4 problems<br/>using this plate's thresholds<br/>*_qc_labeled.parquet, all cells kept"] --> S2a
         S2a["<b>Step 2</b><br/>drop QC-failed cells<br/>annotate with platemap metadata<br/>*_sc_annotated"] --> S2n
         S2n["standardize (z-score)<br/>reference: all cells on this plate<br/>*_sc_normalized"] --> S3b
         S2n --> S2f["feature select<br/>on this plate's cells<br/>*_sc_feature_selected<br/>(uncorrected, for comparison)"]
@@ -33,7 +33,8 @@ The pipeline script does not run Step 3a.
 | Step | Notebook or folder | What it does | Main outputs |
 |---|---|---|---|
 | 0 | [`0.convert_cytotable.ipynb`](0.convert_cytotable.ipynb) | Convert CellProfiler SQLite files to parquet | `converted_profiles/` |
-| 1 | [`1.sc_quality_control.ipynb`](1.sc_quality_control.ipynb) | Label cells that fail single-cell QC | `qc_labeled_profiles/`, `qc_figures/` |
+| 1a | [`1a.sc_quality_control.ipynb`](1a.sc_quality_control.ipynb) | Label cells that fail single-cell QC | `qc_labeled_profiles/`, `qc_figures/` |
+| 1b | [`1b.sc_qc_results.ipynb`](1b.sc_qc_results.ipynb) | Summarize the percentage of cells that fail single-cell QC per plate | `qc_figures/` |
 | 2 | [`2.single_cell_processing.ipynb`](2.single_cell_processing.ipynb) | Drop QC-failed cells, annotate, normalize, and feature select single cells | `single_cell_profiles/` (`*_sc_annotated`, `*_sc_normalized`, `*_sc_feature_selected`) |
 | 3a | [`3a.position_correction/`](3a.position_correction/) | Estimate and validate the plate-position correction | `position_correction_fit.npz` and results |
 | 3b | [`3b.apply_position_correction.ipynb`](3b.apply_position_correction.ipynb) | Apply the correction, then feature select | `single_cell_profiles/` (`*_sc_position_corrected`, `*_sc_position_corrected_feature_selected`) |
@@ -44,13 +45,14 @@ The pipeline script does not run Step 3a.
 ```text
 4.image_based_profiling/
 ├── 0.convert_cytotable.ipynb            Step 0
-├── 1.sc_quality_control.ipynb           Step 1
+├── 1a.sc_quality_control.ipynb          Step 1a
+├── 1b.sc_qc_results.ipynb               Step 1b: summarize single-cell QC failures per plate
 ├── 2.single_cell_processing.ipynb       Step 2
 ├── 3a.position_correction/              Step 3a: fit and validate the correction (committed fit and results)
 ├── 3b.apply_position_correction.ipynb   Step 3b
 ├── 4.bulk_processing.ipynb              Step 4
 ├── nbconverted/                         script version of each step
-├── optimize_thresholds_noteboooks/      per-plate notebooks that derive the QC thresholds
+├── optimize_thresholds_notebooks/       per-plate notebooks that derive the QC thresholds
 ├── sc_qc_thresholds.json                QC thresholds for each platemap and plate
 ├── blocklist_features.txt               features that feature selection removes
 ├── qc_figures/                          QC outlier figures
@@ -92,7 +94,7 @@ We use [CytoTable](https://github.com/cytomining/CytoTable) with the `cellprofil
 We extend the preset to include the image site and cell count, and the image path columns.
 The step writes the outputs to `converted_profiles/` as `<plate>_converted.parquet`.
 
-### Step 1 — Single-cell quality control ([`1.sc_quality_control.ipynb`](1.sc_quality_control.ipynb))
+### Step 1a — Single-cell quality control ([`1a.sc_quality_control.ipynb`](1a.sc_quality_control.ipynb))
 
 We perform single-cell QC using [coSMicQC](https://github.com/cytomining/coSMicQC).
 coSMicQC identifies outlier cells with z-score thresholds on morphology features.
@@ -106,8 +108,13 @@ Each cell receives four pass or fail labels (`Metadata_cqc_failed_*` columns):
 | `blurry_cells` | out-of-focus cells | actin granularity |
 
 Each platemap and plate has its own thresholds in `sc_qc_thresholds.json`.
-We derived them in the per-plate notebooks in `optimize_thresholds_noteboooks/`.
+We derived them in the per-plate notebooks in `optimize_thresholds_notebooks/`.
 The pipeline script runs the notebook once per plate with papermill, passing the platemap and plate as parameters.
+
+### Step 1b — Summarize single-cell QC failures ([`1b.sc_qc_results.ipynb`](1b.sc_qc_results.ipynb))
+
+This step reads every `<plate>_qc_labeled.parquet` file in `data/`, labels each plate with an alias (for example `1A` to `1D` for platemap 1), and plots the percentage of cells that fail any single-cell QC label per plate.
+It writes the figure to `qc_figures/`.
 
 ---
 
