@@ -60,8 +60,8 @@ for BATCH in "${BATCH_LIST[@]}"; do
             plate_id=$(basename "$plate_dir")
             echo "   ⏱ Starting QC for plate ${plate_id}"
 
-            papermill 1.sc_quality_control.ipynb \
-                ./papermill_outputs/1.sc_quality_control_${platemap_layout}_${plate_id}.ipynb \
+            papermill 1a.sc_quality_control.ipynb \
+                ./papermill_outputs/1a.sc_quality_control_${platemap_layout}_${plate_id}.ipynb \
                 -p platemap_layout "${platemap_layout}" \
                 -p plate_id "${plate_id}" &   # run in background
         done
