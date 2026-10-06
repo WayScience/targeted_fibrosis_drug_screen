@@ -6,24 +6,21 @@ The screen has 44 plates (11 platemap layouts with 4 replicate plates each) in t
 
 ```mermaid
 flowchart TD
-    A["CellProfiler SQLite<br/>one file per plate"] --> S0
-    subgraph batch["Per batch (the pipeline script loops over batches)"]
-        S0["<b>Step 0 · Convert</b><br/>CytoTable merges objects into single cells<br/>*_converted.parquet"] --> S1
-        S1["<b>Step 1 · QC</b> (one run per plate)<br/>coSMicQC flags 4 problems<br/>*_qc_labeled.parquet, all cells kept"]
-        S1 --> S2a["<b>Step 2</b><br/>drop QC-failed cells<br/>annotate with platemap metadata<br/>*_sc_annotated"]
-        S2a --> S2n["standardize per plate (z-score)<br/>*_sc_normalized"]
-        S2n --> S2f["feature select<br/>*_sc_feature_selected<br/>(uncorrected, for comparison)"]
-        S2n --> S3b["<b>Step 3b · Apply position correction</b><br/>subtract amplitude × tilt(row, column) from every cell<br/>*_sc_position_corrected"]
-        S3b --> S3f["feature select<br/>*_sc_position_corrected_feature_selected"]
+    subgraph fitgrp["Across platemaps: compound wells of all platemaps"]
+        S3a["<b>Step 3a · Fit and validate</b><br/>analysis, not run by the pipeline script<br/>one shared tilt map<br/>one amplitude per platemap"] --> FIT[("position_correction_fit.npz<br/>committed")]
     end
-    TH[("sc_qc_thresholds.json")] -.-> S1
-    FIT[("position_correction_fit.npz<br/>committed")] -.-> S3b
-    S2n -.-> S3a["<b>Step 3a · Fit and validate</b><br/>analysis, not run by the pipeline script<br/>tilt map + one amplitude per platemap"]
-    S3a -.-> FIT
-    subgraph once["Once, after all batches"]
-        S4a["<b>Step 4 · Bulk</b><br/>aggregate to wells (median)<br/>pool all plates and batches"] --> S4b["feature select, layer 1"]
-        S4b --> S4c["feature select, layer 2<br/>variance on failing DMSO only"]
-        S4c --> S4d["sphere (ZCA-cor)<br/>fit on failing DMSO of all plates<br/>*_feature_selected_spherized"]
+    A["CellProfiler SQLite<br/>one file per plate"] --> S0
+    subgraph plate["Per plate: each of the 44 plates is processed on its own"]
+        S0["<b>Step 0 · Convert</b><br/>CytoTable merges objects into single cells<br/>*_converted.parquet"] --> S1
+        S1["<b>Step 1 · QC</b><br/>coSMicQC flags 4 problems<br/>using this plate's thresholds<br/>*_qc_labeled.parquet, all cells kept"] --> S2a
+        S2a["<b>Step 2</b><br/>drop QC-failed cells<br/>annotate with platemap metadata<br/>*_sc_annotated"] --> S2n
+        S2n["standardize (z-score)<br/>reference: all cells on this plate<br/>*_sc_normalized"] --> S3b
+        S2n --> S2f["feature select<br/>on this plate's cells<br/>*_sc_feature_selected<br/>(uncorrected, for comparison)"]
+        S3b["<b>Step 3b · Apply position correction</b><br/>subtract shared tilt(row, column)<br/>× this platemap's amplitude from every cell<br/>*_sc_position_corrected"] --> S3f["feature select<br/>on this plate's cells<br/>*_sc_position_corrected_feature_selected"]
+    end
+    FIT -.-> S3b
+    subgraph pooled["Across all 44 plates: pooled wells"]
+        S4a["<b>Step 4 · Bulk</b><br/>aggregate each plate to wells (median)<br/>pool the wells of all plates"] --> S4b["feature select<br/>on all pooled wells<br/>*_feature_selected"]
     end
     S3b --> S4a
 ```
@@ -40,7 +37,7 @@ The pipeline script does not run Step 3a.
 | 2 | [`2.single_cell_processing.ipynb`](2.single_cell_processing.ipynb) | Drop QC-failed cells, annotate, normalize, and feature select single cells | `single_cell_profiles/` (`*_sc_annotated`, `*_sc_normalized`, `*_sc_feature_selected`) |
 | 3a | [`3a.position_correction/`](3a.position_correction/) | Estimate and validate the plate-position correction | `position_correction_fit.npz` and results |
 | 3b | [`3b.apply_position_correction.ipynb`](3b.apply_position_correction.ipynb) | Apply the correction, then feature select | `single_cell_profiles/` (`*_sc_position_corrected`, `*_sc_position_corrected_feature_selected`) |
-| 4 | [`4.bulk_processing.ipynb`](4.bulk_processing.ipynb) | Aggregate position-corrected cells to wells, pool all plates, feature select once, and sphere once | `data/bulk_profiles/` |
+| 4 | [`4.bulk_processing.ipynb`](4.bulk_processing.ipynb) | Aggregate position-corrected cells to wells, pool all plates, and feature select once | `data/bulk_profiles/` |
 
 ## Module contents
 
@@ -74,7 +71,6 @@ data/
 │                                <plate>_sc_position_corrected.parquet
 │                                <plate>_sc_position_corrected_feature_selected.parquet
 └── bulk_profiles/               bulk_position_corrected_feature_selected.parquet
-                                 bulk_position_corrected_feature_selected_spherized.parquet
 ```
 
 ## Run the pipeline
@@ -170,18 +166,15 @@ For each plate, the step reads `<plate>_sc_normalized.parquet` and writes two fi
 ## Bulk processing
 
 Bulk processing is the final step of the module.
-It aggregates the position-corrected single-cell profiles from Step 3b to the well level, pools the wells of all plates in all batches, then performs one feature selection and one sphering on the pooled profiles.
+It aggregates the position-corrected single-cell profiles from Step 3b to the well level, pools the wells of all plates in all batches, then performs one feature selection on the pooled profiles.
 Step 2 already standardizes the single-cell profiles per plate and Step 3b corrects their position, so bulk processing needs no separate normalization step.
 
 ```mermaid
 flowchart TD
     A["<b>Position-corrected single cells</b><br/>every plate, every batch (Step 3b)<br/>standardized, QC-passing cells"] --> B["<b>Aggregate</b><br/>median per well, keeping well metadata<br/><code>pycytominer.aggregate</code>"]
     B --> C["<b>Concatenate</b><br/>wells of all plates"]
-    C --> D["<b>Feature select layer 1</b><br/>drop-NA · blocklist · variance · correlation<br/><code>pycytominer.feature_select</code>"]
+    C --> D["<b>Feature select</b><br/>drop-NA · blocklist · variance · correlation<br/><code>pycytominer.feature_select</code>"]
     D --> E[bulk_profiles/<br/>feature selected]
-    D --> F["<b>Feature select layer 2</b><br/>variance threshold on DMSO wells only<br/><code>pycytominer.feature_select</code>"]
-    F --> G["<b>Spherize</b><br/>ZCA-cor fit on all failing DMSO wells<br/><code>pycytominer.normalize</code>"]
-    G --> H[bulk_profiles/<br/>spherized]
 ```
 
 ### Step 4 — Bulk profiling ([`4.bulk_processing.ipynb`](4.bulk_processing.ipynb))
@@ -192,13 +185,10 @@ We start from the `<plate>_sc_position_corrected.parquet` files and:
 1. **Aggregate** — compute the median profile of each well, using the plate, well, and well-level metadata (treatment, cell type, heart, and pathway) as strata
    Step 2 already removed the QC-failed cells.
 2. **Concatenate** — pool the wells of all plates, adding `Metadata_Batch` and `Metadata_Platemap` (from the folder names) so downstream steps can group wells
-3. **Feature select (layer 1)** — apply drop-NA-columns, blocklist, variance threshold, and correlation threshold filters to the pooled profiles to obtain a common feature set
-4. **Feature select (layer 2)** — apply a second variance threshold filter using only the DMSO negative-control wells, removing features with too little variation in the reference population
-5. **Spherize** — apply ZCA-cor sphering (with centering and epsilon=1e-6), which we fit on the failing-cell DMSO wells of all plates, to decorrelate features and place all profiles on a shared control-based covariance scale
+3. **Feature select** — apply drop-NA-columns, blocklist, variance threshold, and correlation threshold filters to the pooled profiles to obtain a common feature set
 
-Step 4 writes both outputs, which cover all plates, to `data/bulk_profiles/`:
+Step 4 writes its output, which covers all plates, to `data/bulk_profiles/`:
 
-- `bulk_position_corrected_feature_selected.parquet`: pooled profiles after layer 1 feature selection
-- `bulk_position_corrected_feature_selected_spherized.parquet`: pooled profiles after sphering
+- `bulk_position_corrected_feature_selected.parquet`: pooled profiles after feature selection
 
 ---
