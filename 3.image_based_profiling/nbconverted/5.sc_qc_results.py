@@ -20,7 +20,7 @@ sns.set_theme(style="whitegrid")
 
 
 # Load all qc_labeled_profiles files and add Metadata_layout from grandparent folder
-data_folder = Path("../3.image_based_profiling/data")
+data_folder = Path("data")
 qc_files = list(data_folder.rglob("*qc_labeled.parquet"))
 
 df_list = []
@@ -129,6 +129,6 @@ plt.legend(fontsize=14)
 plt.tight_layout()
 
 # Save the figure
-plt.savefig("./figures/QC_results_by_plate_slide.png", dpi=300)
+plt.savefig("./qc_figures/QC_results_by_plate_slide.png", dpi=300)
 plt.show()
 
