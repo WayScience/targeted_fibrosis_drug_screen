@@ -1,20 +1,17 @@
-# Targeted Fibrosis Drug Screen
+# Cardiac Fibrosis Rescue Screen Profiling
 
-In this repository, we perform image analysis and image-based profiling on a cardiac fibroblast drug screen and will apply a machine learning model generated to predict healthy versus failing cells to identify optimal compounds to treat fibrosis.
+This repository contains the image analysis and image-based profiling pipeline for a cardiac fibroblast drug screen.
+It turns raw Cell Painting images into single-cell and bulk (well-level) morphology profiles for the 44 screen plates and the validation plate.
+This repository does not train models or call hits.
+A separate repository uses the profiles for those analyses.
 
-## Plate map details
+## The screen
 
-There are 11 plate map layouts, with 4 replicates per layout.
-There are a total of 44 plates with 550 small molecule treatments and two controls (DMSO treated failing and non-failing/healthy cells).
-We include another positive control using TGFRi on the 11th platemap layout (transforming growth factor beta inhibitor or TGF-β inhibitor).
-
-For this dataset, the Cell Painting staining switches the cytoplasmic RNA/nucleoli stain for a specific F-actin stain to image the following organelles (with mapping to respective channel):
-
-- Nuclei (d4)
-- Endoplasmic Reticulum (d3)
-- Golgi/Plasma Membrane (d2)
-- Mitochondria (d1)
-- F-actin (d0)
+- 11 plate map layouts with 4 replicate plates each (44 plates in three batches), plus one validation plate
+- 550 small molecule treatments and two controls: DMSO-treated failing and non-failing (healthy) cells
+- A TGF-β receptor inhibitor positive control on the 11th, partial layout
+- A modified Cell Painting stain that swaps the RNA/nucleoli stain for F-actin, giving five channels:
+  nuclei (d4), endoplasmic reticulum (d3), Golgi/plasma membrane (d2), mitochondria (d1), and F-actin (d0)
 
 ![example_platemap_full](./metadata/platemap_fig/example_platemap_full_plates.png)
 
@@ -22,22 +19,41 @@ For this dataset, the Cell Painting staining switches the cytoplasmic RNA/nucleo
 
 ![example_platemap_partial](./metadata/platemap_fig/example_platemap_partial_plate.png)
 
-> This plate map layout specifically for plate 11 which is a partial plate.
+> This plate map layout is specific to plate 11, which is a partial plate.
+
+## Pipeline
+
+Each numbered module has a README with details and a bash script that runs it.
+
+| Module | What it does |
+|---|---|
+| [`0.download_data`](./0.download_data/) | Instructions for downloading the images |
+| [`1.whole_image_qc`](./1.whole_image_qc/) | Flag over-saturated and blurry images with CellProfiler |
+| [`2.illumination_correction`](./2.illumination_correction/) | Correct uneven illumination and skip images that fail QC |
+| [`3.cellprofiler_processing`](./3.cellprofiler_processing/) | Segment cells and extract morphology features with CellProfiler |
+| [`4.image_based_profiling`](./4.image_based_profiling/) | Convert features to parquet, filter poor-quality cells, normalize, correct plate-position effects, and aggregate to **single-cell** and **bulk** profiles |
+| [`5.validation-plate-profiling`](./5.validation-plate-profiling/) | Runs the same steps (illumination correction through bulk profiles) on the validation plate |
+
+Supporting folders:
+
+- [`metadata`](./metadata/): plate maps and barcodes, including treatment and pathway annotations
+- [`utils`](./utils/): shared helper functions
+- [`environments`](./environments/): conda environments
 
 ## Environments
 
-We utilize environments defined in the [environments folder](./environments/).
+1. [CellProfiler environment](./environments/cellprofiler_env.yml) (`fibrosis_cp_env`): CellProfiler, for image QC, illumination correction, and feature extraction (modules 1, 2, 3, and the validation plate equivalents)
+2. [Preprocessing environment](./environments/preprocessing_env.yml) (`fibrosis_preprocessing_env`): pycytominer, CytoTable, and coSMicQC, for image-based profiling (module 4 and the validation plate profiling)
 
-1. [CellProfiler environment](./environments/cellprofiler_env.yml): This environment installs CellProfiler, which we use for the illumination correction and feature extraction modules.
-2. [R environment](./environments/r_fibrosis_env.yml): This environment is specific to R, which we use for generating figures.
-3. [Preprocessing environment](./environments/preprocessing_env.yml): This environment installs preprocessing softwares (pycytominer, CytoTable, coSMicQC) to format the morphological readouts as single-cell profiles.
-4. [Machine learning environment](./environments/machine_learning_env.yml): This environment is used in the module for applying the pre-trained model on the data and evaluating the results for "hits" that could be reversing fibrosis.
-5. [Targeted fibrosis ML environment](./environments/targeted_fibrosis_ml_env.yml): This environment installs the `cfret_ml` helper package (from [3a.train_dmso_logistic_regression_models](./3a.train_dmso_logistic_regression_models/)) in editable mode, along with its pinned dependencies from that package's `pyproject.toml`. Requires Python ==3.11. Used for training and re-training the DMSO logistic regression models and any downstream notebook that imports from `cfret_ml`.
-
-These environments can be installed either via conda or mamba.
-Below is an example of how to install via the terminal.
+Create an environment with conda or mamba from the root of this repository:
 
 ```bash
-# Make sure to be in this repo as the current directory
-mamba env create -f ...
+mamba env create -f environments/preprocessing_env.yml
 ```
+
+[`environments/hpc_create_envs.sh`](./environments/hpc_create_envs.sh) creates all environments on a Slurm cluster.
+
+## Outputs
+
+The pipeline produces single-cell and bulk profiles, which module 4 documents in detail.
+Large intermediate files, such as images and parquet files, are not tracked by git.
