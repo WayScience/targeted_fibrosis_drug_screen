@@ -90,7 +90,7 @@ done
 # Bulk profiles (all batches)
 # -----------------------------
 # Aggregates the position-corrected profiles of every plate in every batch, then
-# performs one pooled feature selection and sphering. It reads all batches, so it
+# performs one pooled feature selection. It reads all batches, so it
 # runs once after the batch loop.
 echo ">>> Generating pooled bulk profiles for all batches"
 python nbconverted/4.bulk_processing.py
