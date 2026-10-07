@@ -49,7 +49,7 @@ import position_correction_utils as pcu
 
 
 output_dir = pathlib.Path(".")
-figure_dir = output_dir / "figures"
+figure_dir = output_dir / "figures" / "validation"
 figure_dir.mkdir(parents=True, exist_ok=True)
 
 # well-level summary written by 0.fit_position_correction.ipynb

@@ -49,7 +49,7 @@ data_dir = pathlib.Path(os.environ.get("DATA_DIR", "../data"))
 n_jobs = int(os.environ.get("N_JOBS", "4"))
 
 output_dir = pathlib.Path(".")
-figure_dir = output_dir / "figures"
+figure_dir = output_dir / "figures" / "fit"
 figure_dir.mkdir(parents=True, exist_ok=True)
 
 # well-level summary is cached because reading every plate is slow

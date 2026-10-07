@@ -3,7 +3,7 @@ library(dplyr)
 library(readr)
 library(cowplot)
 
-figure_dir <- "figures"
+figure_dir <- file.path("figures", "effect")
 dir.create(figure_dir, recursive = TRUE, showWarnings = FALSE)
 
 read_result <- function(name) {
