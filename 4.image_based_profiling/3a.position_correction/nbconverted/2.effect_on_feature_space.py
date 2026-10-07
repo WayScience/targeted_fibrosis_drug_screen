@@ -55,7 +55,8 @@ for path in (fit_path, well_medians_path):
         raise FileNotFoundError(f"Input does not exist: {path}. Run 0.fit_position_correction.ipynb first.")
 
 # folder for the tables
-results_dir = pathlib.Path(".")
+results_dir = pathlib.Path("results")
+results_dir.mkdir(exist_ok=True)
 
 # number of principal components of the uncorrected wells
 n_components = 10

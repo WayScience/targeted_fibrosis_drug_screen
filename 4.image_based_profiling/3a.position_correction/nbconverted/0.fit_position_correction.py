@@ -51,6 +51,8 @@ n_jobs = int(os.environ.get("N_JOBS", "4"))
 output_dir = pathlib.Path(".")
 figure_dir = output_dir / "figures" / "fit"
 figure_dir.mkdir(parents=True, exist_ok=True)
+results_dir = output_dir / "results"
+results_dir.mkdir(parents=True, exist_ok=True)
 
 # well-level summary is cached because reading every plate is slow
 well_medians_cache = output_dir / "well_medians.parquet"
@@ -100,7 +102,7 @@ amplitudes = pd.DataFrame(
         for platemap in sorted(fit["amplitudes"])
     ]
 )
-amplitudes.to_csv(output_dir / "platemap_amplitudes.csv", index=False)
+amplitudes.to_csv(results_dir / "platemap_amplitudes.csv", index=False)
 pcu.save_fit(fit, output_dir / "position_correction_fit.npz")
 amplitudes.round(3)
 

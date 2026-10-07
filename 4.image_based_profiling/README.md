@@ -156,8 +156,11 @@ We estimate the tilt from the normalized profiles of all plates and study its ef
 - [`1.validate_position_correction.ipynb`](3a.position_correction/1.validate_position_correction.ipynb) tests the correction on held-out platemaps.
 - [`2.effect_on_feature_space.ipynb`](3a.position_correction/2.effect_on_feature_space.ipynb) shows what the correction does to the features and to the well profiles.
   It measures the size of the tilt of each feature family, and it projects the wells into the principal components of the uncorrected wells before and after the correction.
-  It saves `tilt_size_by_feature.csv`, `well_pca_scores.csv`, and `pc_variance_explained_by_row.csv` in the folder.
+  It saves `tilt_size_by_feature.csv`, `well_pca_scores.csv`, and `pc_variance_explained_by_row.csv` in `results/`.
 - [`3.plot_effect_on_feature_space.ipynb`](3a.position_correction/3.plot_effect_on_feature_space.ipynb) (R) draws the figures of those tables in `figures/effect/`: `tilt_size_by_feature_family.png`, `well_pca_before_after_by_row.png`, and `plate_layout_top_row_pc_before_after.png`.
+
+The tables of the notebooks (`platemap_amplitudes.csv`, `row_prediction_per_platemap.csv`, `row_prediction_validation.csv`, and the three above) are in `results/`, next to `figures/`.
+The fit stays in the folder, because step 3b reads `position_correction_fit.npz` from there.
 
 The figures are in one folder of `figures/` for each notebook: `fit/` (`tilt_size_and_amplitudes.png`), `validation/` (`row_prediction_validation.png`), and `effect/`.
 

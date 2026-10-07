@@ -7,7 +7,7 @@ figure_dir <- file.path("figures", "effect")
 dir.create(figure_dir, recursive = TRUE, showWarnings = FALSE)
 
 read_result <- function(name) {
-    readr::read_csv(name, show_col_types = FALSE)
+    readr::read_csv(file.path("results", name), show_col_types = FALSE)
 }
 
 tilt_sizes <- read_result("tilt_size_by_feature.csv")
