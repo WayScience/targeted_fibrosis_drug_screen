@@ -3,18 +3,18 @@
 
 # # Effect of the plate-position correction on the feature space
 # 
-# `fit_position_correction.ipynb` estimates a plate-position effect (the "tilt") in the single-cell features, and `../3b.apply_position_correction.ipynb` subtracts it from every cell.
+# `0.fit_position_correction.ipynb` estimates a plate-position effect (the "tilt") in the single-cell features, and `../3b.apply_position_correction.ipynb` subtracts it from every cell.
 # The tilt is an additive row plus column effect of the well position, estimated for each feature.
 # The correction subtracts the tilt, scaled by one amplitude for each platemap, from every cell.
 # 
 # This notebook computes what we need to show the effect of the correction on the features and on the well profiles, and saves it as tables.
-# `plot_effect_on_feature_space.ipynb` draws the figures:
+# `3.plot_effect_on_feature_space.ipynb` draws the figures:
 # 
 # 1. The size of the tilt for each feature family (compartment, measurement type, and channel).
 # 2. The wells in the two principal components that depend most on the plate row, before and after the correction, and the displacement of each well.
 # 3. The principal component that depends most on the plate row, drawn on the plate grid before and after the correction.
 # 
-# **Inputs** (in this folder, from `fit_position_correction.ipynb`)
+# **Inputs** (in this folder, from `0.fit_position_correction.ipynb`)
 # 
 # - `position_correction_fit.npz`: the tilt map and the amplitudes of the platemaps.
 # - `well_medians.parquet`: the median profile of every well of every plate before the correction. The fit notebook caches it, and git ignores it.
@@ -52,7 +52,7 @@ fit_path = pathlib.Path("position_correction_fit.npz")
 well_medians_path = pathlib.Path("well_medians.parquet")
 for path in (fit_path, well_medians_path):
     if not path.exists():
-        raise FileNotFoundError(f"Input does not exist: {path}. Run fit_position_correction.ipynb first.")
+        raise FileNotFoundError(f"Input does not exist: {path}. Run 0.fit_position_correction.ipynb first.")
 
 # folder for the tables
 results_dir = pathlib.Path(".")

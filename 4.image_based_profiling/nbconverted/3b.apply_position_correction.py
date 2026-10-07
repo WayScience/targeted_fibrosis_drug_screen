@@ -23,7 +23,7 @@ else:
     print("No specific batch set, processing all available batches")
     batch_dirs = [p for p in base_dir.glob("batch_*") if p.is_dir()]
 
-# position correction fit written by 3a.position_correction/fit_position_correction.ipynb
+# position correction fit written by 3a.position_correction/0.fit_position_correction.ipynb
 fit_path = pathlib.Path("./3a.position_correction/position_correction_fit.npz").resolve(
     strict=True
 )
@@ -51,7 +51,7 @@ for batch_dir in batch_dirs:
         if platemap not in fit["amplitudes"]:
             raise ValueError(
                 f"No amplitude for {layout_dir.name} in the position correction fit. "
-                "Rerun 3a.position_correction/fit_position_correction.ipynb."
+                "Rerun 3a.position_correction/0.fit_position_correction.ipynb."
             )
 
         profile_dir = layout_dir / "single_cell_profiles"

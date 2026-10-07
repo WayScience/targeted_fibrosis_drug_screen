@@ -152,14 +152,14 @@ The step writes these outputs to `single_cell_profiles/`:
 Where a well sits on the plate shifts its profile in a consistent, feature-specific direction (a "tilt") that is unrelated to the well contents.
 We estimate the tilt from the normalized profiles of all plates and study its effect in four notebooks, each with a script in `nbconverted/`:
 
-- [`fit_position_correction.ipynb`](3a.position_correction/fit_position_correction.ipynb) estimates one tilt that all platemaps share and one amplitude per platemap, and writes `position_correction_fit.npz` along with diagnostics.
-- [`validate_position_correction.ipynb`](3a.position_correction/validate_position_correction.ipynb) tests the correction on held-out platemaps.
-- [`effect_on_feature_space.ipynb`](3a.position_correction/effect_on_feature_space.ipynb) shows what the correction does to the features and to the well profiles.
+- [`0.fit_position_correction.ipynb`](3a.position_correction/0.fit_position_correction.ipynb) estimates one tilt that all platemaps share and one amplitude per platemap, and writes `position_correction_fit.npz` along with diagnostics.
+- [`1.validate_position_correction.ipynb`](3a.position_correction/1.validate_position_correction.ipynb) tests the correction on held-out platemaps.
+- [`2.effect_on_feature_space.ipynb`](3a.position_correction/2.effect_on_feature_space.ipynb) shows what the correction does to the features and to the well profiles.
   It measures the size of the tilt of each feature family, and it projects the wells into the principal components of the uncorrected wells before and after the correction.
   It saves `tilt_size_by_feature.csv`, `well_pca_scores.csv`, and `pc_variance_explained_by_row.csv` in the folder.
-- [`plot_effect_on_feature_space.ipynb`](3a.position_correction/plot_effect_on_feature_space.ipynb) (R) draws the figures of those tables in `figures/`: `tilt_size_by_feature_family.png`, `well_pca_before_after_by_row.png`, and `plate_layout_top_row_pc_before_after.png`.
+- [`3.plot_effect_on_feature_space.ipynb`](3a.position_correction/3.plot_effect_on_feature_space.ipynb) (R) draws the figures of those tables in `figures/`: `tilt_size_by_feature_family.png`, `well_pca_before_after_by_row.png`, and `plate_layout_top_row_pc_before_after.png`.
 
-The two notebooks that investigate the effect read `position_correction_fit.npz` and the `well_medians.parquet` cache, which `fit_position_correction.ipynb` writes and git ignores, so run the fit notebook first.
+The two notebooks that investigate the effect read `position_correction_fit.npz` and the `well_medians.parquet` cache, which `0.fit_position_correction.ipynb` writes and git ignores, so run the fit notebook first.
 The helper functions are in `utils/position_correction_effect_utils.py`.
 
 ### Step 3b — Apply the position correction ([`3b.apply_position_correction.ipynb`](3b.apply_position_correction.ipynb))

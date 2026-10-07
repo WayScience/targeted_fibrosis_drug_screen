@@ -3,7 +3,7 @@
 
 # # Validate the plate-position correction
 # 
-# `fit_position_correction.ipynb` fits the tilt on all platemaps, so it cannot show that the correction works.
+# `0.fit_position_correction.ipynb` fits the tilt on all platemaps, so it cannot show that the correction works.
 # Here we test the correction on data the tilt did not see.
 # 
 # **Question:** after the correction, can a classifier still tell which plate row a compound well came from?
@@ -52,11 +52,11 @@ output_dir = pathlib.Path(".")
 figure_dir = output_dir / "figures"
 figure_dir.mkdir(parents=True, exist_ok=True)
 
-# well-level summary written by fit_position_correction.ipynb
+# well-level summary written by 0.fit_position_correction.ipynb
 well_medians_cache = output_dir / "well_medians.parquet"
 if not well_medians_cache.exists():
     raise FileNotFoundError(
-        f"{well_medians_cache} not found. Run fit_position_correction.ipynb first."
+        f"{well_medians_cache} not found. Run 0.fit_position_correction.ipynb first."
     )
 
 n_shuffles = 10  # shuffled-label repetitions per held-out platemap

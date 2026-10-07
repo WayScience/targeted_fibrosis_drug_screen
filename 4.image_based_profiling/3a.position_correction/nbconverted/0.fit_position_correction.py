@@ -224,4 +224,4 @@ print(
 # - **Amplitudes are relative.** Only the tilt scaled by the amplitude is identified, so a typical amplitude is about 1.
 # - **Features with missing values** are dropped and cannot be corrected.
 # - The fit here uses every platemap, so it cannot show that the correction works.
-#   See `validate_position_correction.ipynb` for held-out validation.
+#   See `1.validate_position_correction.ipynb` for held-out validation.
