@@ -3,7 +3,7 @@
 
 # # Validate the plate-position correction
 # 
-# `fit_position_correction.ipynb` fits the tilt on all platemaps, so it cannot show that the correction works.
+# `0.fit_position_correction.ipynb` fits the tilt on all platemaps, so it cannot show that the correction works.
 # Here we test the correction on data the tilt did not see.
 # 
 # **Question:** after the correction, can a classifier still tell which plate row a compound well came from?
@@ -49,14 +49,16 @@ import position_correction_utils as pcu
 
 
 output_dir = pathlib.Path(".")
-figure_dir = output_dir / "figures"
+figure_dir = output_dir / "figures" / "validation"
 figure_dir.mkdir(parents=True, exist_ok=True)
+results_dir = output_dir / "results"
+results_dir.mkdir(parents=True, exist_ok=True)
 
-# well-level summary written by fit_position_correction.ipynb
+# well-level summary written by 0.fit_position_correction.ipynb
 well_medians_cache = output_dir / "well_medians.parquet"
 if not well_medians_cache.exists():
     raise FileNotFoundError(
-        f"{well_medians_cache} not found. Run fit_position_correction.ipynb first."
+        f"{well_medians_cache} not found. Run 0.fit_position_correction.ipynb first."
     )
 
 n_shuffles = 10  # shuffled-label repetitions per held-out platemap
@@ -263,7 +265,7 @@ results = pd.DataFrame(
     },
     index=["1. raw", "2. corrected", "3. shuffled labels"],
 )
-results.round(3).to_csv(output_dir / "row_prediction_validation.csv")
+results.round(3).to_csv(results_dir / "row_prediction_validation.csv")
 print(results.round(3).to_string())
 
 for label, column in [("macro AUC", "macro_auc"), ("row B AUC", "row_b_auc")]:
@@ -298,7 +300,7 @@ for platemap in platemaps:
         }
     )
 per_platemap = pd.DataFrame(per_platemap)
-per_platemap.round(3).to_csv(output_dir / "row_prediction_per_platemap.csv", index=False)
+per_platemap.round(3).to_csv(results_dir / "row_prediction_per_platemap.csv", index=False)
 print(per_platemap.round(3).to_string(index=False))
 
 fig, axes = plt.subplots(1, 2, figsize=(11, 4), gridspec_kw={"width_ratios": [1.3, 1]})

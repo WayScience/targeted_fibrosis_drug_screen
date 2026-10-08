@@ -49,8 +49,10 @@ data_dir = pathlib.Path(os.environ.get("DATA_DIR", "../data"))
 n_jobs = int(os.environ.get("N_JOBS", "4"))
 
 output_dir = pathlib.Path(".")
-figure_dir = output_dir / "figures"
+figure_dir = output_dir / "figures" / "fit"
 figure_dir.mkdir(parents=True, exist_ok=True)
+results_dir = output_dir / "results"
+results_dir.mkdir(parents=True, exist_ok=True)
 
 # well-level summary is cached because reading every plate is slow
 well_medians_cache = output_dir / "well_medians.parquet"
@@ -100,7 +102,7 @@ amplitudes = pd.DataFrame(
         for platemap in sorted(fit["amplitudes"])
     ]
 )
-amplitudes.to_csv(output_dir / "platemap_amplitudes.csv", index=False)
+amplitudes.to_csv(results_dir / "platemap_amplitudes.csv", index=False)
 pcu.save_fit(fit, output_dir / "position_correction_fit.npz")
 amplitudes.round(3)
 
@@ -224,4 +226,4 @@ print(
 # - **Amplitudes are relative.** Only the tilt scaled by the amplitude is identified, so a typical amplitude is about 1.
 # - **Features with missing values** are dropped and cannot be corrected.
 # - The fit here uses every platemap, so it cannot show that the correction works.
-#   See `validate_position_correction.ipynb` for held-out validation.
+#   See `1.validate_position_correction.ipynb` for held-out validation.
