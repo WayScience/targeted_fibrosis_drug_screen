@@ -3,7 +3,7 @@
 This repository contains the image analysis and image-based profiling pipeline for a cardiac fibroblast drug screen.
 It turns raw Cell Painting images into single-cell and bulk (well-level) morphology profiles for the 44 screen plates and the validation plate.
 This repository does not train models or call hits.
-A separate repository uses the profiles for those analyses.
+The [cardiac_fibrosis_rescue_screen_hit_calling](https://github.com/WayScience/cardiac_fibrosis_rescue_screen_hit_calling) repository uses the profiles for those analyses.
 
 ## The screen
 
