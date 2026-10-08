@@ -28,11 +28,11 @@ cp_output*
 runinfo*
 
 # Ignore preprocessed parquet files since they are too large for GitHub
-3.image_based_profiling/data*
-5.validation_plate/2.preprocessing_features/data*
+4.image_based_profiling/data*
+5.validation_plate_profiling/2.preprocessing_features/data*
 
 # Ignore the cached well-level summary used to fit the position correction
-3.image_based_profiling/3a.position_correction/well_medians.parquet
+4.image_based_profiling/3a.position_correction/well_medians.parquet
 
 # Ignore vscode specific files
 .vscode*
@@ -40,22 +40,6 @@ runinfo*
 # Ignore macOS Finder metadata files
 .DS_Store
 
-# Ignore model files/folders as though are downloaded in the notebook
-label_encoder*
-models*
-
-# Ignore bash scripts to run full modules
-run_training_data.sh
-
-# Ignore datasplit folders which is a lot of files
-**/datasplits/*
-
-# Ignore model eval JSON files under plot dir which are just high level logs of single model eval runs
-**/eval_plots/**/*.json
-**/eval_plots/**/*.png
-!**/eval_plots/*.png
-
-# Ignore model 
 
 # PYTHON SPECIFIC IGNORED FILES
 #######################################
