@@ -6,7 +6,7 @@ ModuleCount:20
 HasImagePlaneDetails:False
 
 LoadData:[module_num:1|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Input data file location:Default Input Folder|targeted_fibrosis_drug_screen/5.validation-plate-profiling/1.cellprofiler_processing/loaddata_csvs
+    Input data file location:Default Input Folder|targeted_fibrosis_drug_screen/5.validation_plate_profiling/1.cellprofiler_processing/loaddata_csvs
     Name of the file:loaddata_with_illum_CARD-CelIns-CX7_260803130001.csv
     Load images based on this data?:Yes
     Base image location:Default Input Folder|

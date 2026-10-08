@@ -32,7 +32,7 @@ Each numbered module has a README with details and a bash script that runs it.
 | [`2.illumination_correction`](./2.illumination_correction/) | Correct uneven illumination and skip images that fail QC |
 | [`3.cellprofiler_processing`](./3.cellprofiler_processing/) | Segment cells and extract morphology features with CellProfiler |
 | [`4.image_based_profiling`](./4.image_based_profiling/) | Convert features to parquet, filter poor-quality cells, normalize, correct plate-position effects, and aggregate to **single-cell** and **bulk** profiles |
-| [`5.validation-plate-profiling`](./5.validation-plate-profiling/) | Runs the same steps (illumination correction through bulk profiles) on the validation plate |
+| [`5.validation_plate_profiling`](./5.validation_plate_profiling/) | Runs the same steps (illumination correction through bulk profiles) on the validation plate |
 
 Supporting folders:
 

@@ -29,7 +29,7 @@ runinfo*
 
 # Ignore preprocessed parquet files since they are too large for GitHub
 4.image_based_profiling/data*
-5.validation-plate-profiling/2.preprocessing_features/data*
+5.validation_plate_profiling/2.preprocessing_features/data*
 
 # Ignore the cached well-level summary used to fit the position correction
 4.image_based_profiling/3a.position_correction/well_medians.parquet
