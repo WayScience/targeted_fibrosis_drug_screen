@@ -9,7 +9,6 @@ The [cardiac_fibrosis_rescue_screen_hit_calling](https://github.com/WayScience/c
 
 - 11 plate map layouts with 4 replicate plates each (44 plates in three batches), plus one validation plate
 - 550 small molecule treatments and two controls: DMSO-treated failing and non-failing (healthy) cells
-- A TGF-β receptor inhibitor positive control on the 11th, partial layout
 - A modified Cell Painting stain that swaps the RNA/nucleoli stain for F-actin, giving five channels:
   nuclei (d4), endoplasmic reticulum (d3), Golgi/plasma membrane (d2), mitochondria (d1), and F-actin (d0)
 
